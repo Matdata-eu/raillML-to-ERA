@@ -33,7 +33,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # KilometricPost structure:
 #   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
-#   - era:kilometer → km number (xsd:integer)
+#   - era:kilometer → km number (xsd:double)
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → reference to micro-level LinearElement
@@ -110,7 +110,7 @@ WHERE {
     BIND (xsd:double(?measureStr) AS ?measure)
     
     # Calculate kilometric post number (rounded to nearest km)
-    BIND (xsd:integer(ROUND(?measure / 1000.0)) AS ?kmNumber)
+    BIND (xsd:double(FLOOR(?measure / 1000.0)) AS ?kmNumber)
     
     # Calculate offset from kilometric post
     BIND (?measure - (?kmNumber * 1000.0) AS ?kmOffset)

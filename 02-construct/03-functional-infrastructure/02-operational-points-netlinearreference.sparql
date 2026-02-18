@@ -240,11 +240,11 @@ WHERE {
 
     # Start LRS
     BIND (xsd:double(?startMeasure) AS ?startMeasureDouble)
-    BIND (xsd:integer(ROUND(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
+    BIND (xsd:double(FLOOR(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
     BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
     # End LRS
     BIND (xsd:double(?endMeasure) AS ?endMeasureDouble)
-    BIND (xsd:integer(ROUND(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
+    BIND (xsd:double(FLOOR(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
     BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
   }
 

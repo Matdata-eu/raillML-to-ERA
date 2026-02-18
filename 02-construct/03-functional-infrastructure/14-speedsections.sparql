@@ -75,8 +75,8 @@ WHERE {
       ?trackAssoc xyz:netElementRef ?sharedNetElementRef .
       # Only link to running tracks (not sidings)
       FILTER (?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"))
-      BIND (STRDT(?maxSpeedStr, xsd:integer) AS ?speedInt)
-      # Convert maxSpeed string to integer (km/h)
+      # Convert maxSpeed string to integer (km/h), handling decimal notation
+      BIND (xsd:integer(xsd:decimal(?maxSpeedStr)) AS ?speedInt)
     }
     GROUP BY ?trackId
   }

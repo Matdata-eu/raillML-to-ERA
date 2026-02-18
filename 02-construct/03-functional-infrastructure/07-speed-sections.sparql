@@ -33,7 +33,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # KilometricPost structure:
 #   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
-#   - era:kilometer → km number (xsd:integer)
+#   - era:kilometer → km number (xsd:double)
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → reference to micro-level LinearElement
@@ -176,7 +176,7 @@ WHERE {
   BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
   
   # Calculate start KilometricPost (round to nearest km)
-  BIND (xsd:integer(ROUND(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
+  BIND (xsd:double(FLOOR(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
   BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
   
   # Calculate start offset from km post
@@ -194,7 +194,7 @@ WHERE {
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?speedSectionId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
   
   # Calculate end KilometricPost (round to nearest km)
-  BIND (xsd:integer(ROUND(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
+  BIND (xsd:double(FLOOR(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
   BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
   
   # Calculate end offset from km post

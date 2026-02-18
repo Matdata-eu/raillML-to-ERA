@@ -106,7 +106,7 @@ WHERE {
                  xyz:measure ?measureStr .
     
     BIND (xsd:double(?measureStr) AS ?measure)
-    BIND (xsd:integer(ROUND(?measure / 1000.0)) AS ?kmNumber)
+    BIND (xsd:double(FLOOR(?measure / 1000.0)) AS ?kmNumber)
     BIND (?measure - (?kmNumber * 1000.0) AS ?kmOffset)
   }
     

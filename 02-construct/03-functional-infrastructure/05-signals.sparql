@@ -139,7 +139,7 @@ WHERE {
   
   # Calculate kilometric post number (rounded to nearest km)
   # KP = ROUND(measure / 1000) - convert to integer to avoid scientific notation in URIs
-  BIND (xsd:integer(ROUND(?measure / 1000.0)) AS ?kmNumber)
+  BIND (xsd:double(FLOOR(?measure / 1000.0)) AS ?kmNumber)
   
   # Calculate offset from kilometric post
   # offset = measure - (KP * 1000)
