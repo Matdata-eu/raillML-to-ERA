@@ -1,0 +1,114 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.12 — ETCS (functional resource)
+# Maps railml:etcsArea → era:ETCS instances linked from era:RunningTrack
+#
+# Source: 4 railML etcsArea instances (trp679, trp680, trp687, trp772)
+#
+# ETCS is a FUNCTIONAL RESOURCE (not a subclass of era:InfrastructureElement):
+#   - ❌ Does NOT have era:netReference property
+#   - ✅ Referenced FROM tracks via era:etcs property
+#   - ✅ Linked to tracks via shared netElement references (same pattern as ContactLineSystem)
+#
+# Source properties:
+#   - xyz:id — unique identifier (e.g., "trp679", "trp680")
+#   - xyz:mVersion — ETCS system version (e.g., "33")
+#   - fx:name/xyz:description — ETCS level description (e.g., "ETCS L2w/oS", "ETCS L2wS")
+#   - fx:linearLocation/fx:associatedNetElement — coverage area (shared with tracks)
+#
+# Target properties (era:ETCS):
+#   - era:etcsLevel — ETCS level (SKOS Concept) — REQUIRED
+#     → Mapped from name description:
+#       - "ETCS L2w/oS" or "ETCS L2wS" → concepts/etcs-levels/20 (Level 2)
+#       - "ETCS L1" → concepts/etcs-levels/10 (Level 1)
+#   - era:etcsSystemVersion — M_VERSION value (xsd:integer)
+#     → Mapped from xyz:mVersion attribute
+#   - rdfs:label — human-readable label from ETCS description
+#   - era:inCountry → country:NOR (Norway)
+#   - era:infrastructureManager → OrganisationRole (hardcoded to 0076_IM for workshop)
+#
+# Track linking pattern:
+#   - Find tracks sharing the same netElementRef as ETCS area
+#   - Create era:etcs property from track to ETCS instance
+#   - Only link to running tracks (mainTrack, secondaryTrack, connectingTrack)
+#   - Do NOT link to sidings
+#
+# URI Patterns:
+#   ETCS: http://data.europa.eu/949/functionalInfrastructure/etcs/{id}
+#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+#
+# Workshop Notes:
+#   - ETCS level parsed from description string (L1, L2, etc.)
+#   - All instances use system version 33 in sample data
+#   - Coverage areas span multiple netElements (similar to electrification sections)
+
+CONSTRUCT {
+  # ETCS resource
+  ?eraETCS a era:ETCS ;
+           rdfs:label ?etcsLabel ;
+           era:etcsSystemVersion ?mVersionInt ;
+           era:etcsLevel ?etcsLevelConcept ;
+           era:inCountry country:NOR ;
+           era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
+  
+  # Link from Track to ETCS (via shared netElements)
+  ?eraTrack era:etcs ?eraETCS .
+}
+WHERE {
+  # Get ETCS areas
+  ?etcsArea a railml:etcsArea ;
+            xyz:id ?etcsId ;
+            xyz:mVersion ?mVersion .
+  
+  # Get ETCS level from name description
+  OPTIONAL {
+    ?etcsArea fx:name ?nameNode .
+    ?nameNode xyz:description ?etcsDescription .
+  }
+  
+  # Get associated netElements for ETCS coverage area
+  ?etcsArea fx:linearLocation ?etcsLinLoc .
+  ?etcsLinLoc fx:associatedNetElement ?etcsAssoc .
+  ?etcsAssoc xyz:netElementRef ?sharedNetElementRef .
+  
+  # Convert mVersion to integer
+  BIND (xsd:integer(?mVersion) AS ?mVersionInt)
+  
+  # Map ETCS level description to ERA SKOS concept
+  # Parse level from description (e.g., "ETCS L2w/oS" → Level 2)
+  BIND(
+    IF(CONTAINS(?etcsDescription, "L2"), <http://data.europa.eu/949/concepts/etcs-levels/20>,
+    IF(CONTAINS(?etcsDescription, "L1"), <http://data.europa.eu/949/concepts/etcs-levels/10>,
+    IF(CONTAINS(?etcsDescription, "L3"), <http://data.europa.eu/949/concepts/etcs-levels/30>,
+    <http://data.europa.eu/949/concepts/etcs-levels/20>)))  # Default to L2 if not specified
+    AS ?etcsLevelConcept
+  )
+  
+  # Create label from ETCS description
+  BIND(IF(BOUND(?etcsDescription), ?etcsDescription, CONCAT("ETCS v", ?mVersion)) AS ?etcsLabel)
+  
+  # Find tracks sharing the same netElement reference
+  ?track a railml:track ;
+         xyz:id ?trackId ;
+         xyz:type ?trackType .
+  
+  ?track fx:linearLocation ?trackLinLoc .
+  ?trackLinLoc fx:associatedNetElement ?trackAssoc .
+  ?trackAssoc xyz:netElementRef ?sharedNetElementRef .
+  
+  # Only link to running tracks (not sidings)
+  FILTER(?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"))
+  
+  # Mint URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/etcs/", ?etcsId)) AS ?eraETCS)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+}
+ORDER BY ?etcsId ?trackId

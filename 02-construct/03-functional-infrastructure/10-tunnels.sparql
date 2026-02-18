@@ -1,0 +1,264 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.10 — Tunnels (functional infrastructure)
+# Maps railML overCrossing with constructionType="tunnel" → era:Tunnel
+#
+# Source: railML tunnel instances (overCrossing with constructionType="tunnel")
+#  
+# Target: era:Tunnel with properties:
+#   - era:tunnelIdentification (string identifier, REQUIRED by SHACL minCount=1 - from xyz:id)
+#   - rdfs:label (tunnel name from fx:name, optional)
+#   - era:inCountry → country:NOR (Norway country code)
+#   - era:infrastructureManager (OrganisationRole)
+#     → For workshop: all tunnels assigned to organisations/0076_IM (Belgian IM)
+#   - era:lineReferenceTunnelStart → NetPointReference (tunnel entrance)
+#   - era:lineReferenceTunnelEnd → NetPointReference (tunnel exit)
+#
+# Optional Properties (included for workshop completeness with conservative defaults):
+#   - era:lengthOfTunnel → calculated from start/end positions (double)
+#   - era:complianceInfTsi → true (boolean)
+#   - era:crossSectionArea → 50 (integer - m²)
+#   - era:dieselThermalAllowed → true (boolean)
+#   - era:hasEmergencyPlan → true (boolean)
+#   - era:hasEvacuationAndRescuePoints → true (boolean)
+#   - era:hasWalkway → true (boolean)
+#   - era:maxTunnelSpeed → 120 (integer - km/h)
+#   - era:nationalRollingStockFireCategory → "A" (string)
+#   - era:rollingStockFireCategory → concepts/rolling-stock-fire/10 (SKOS Concept - Category A)
+#
+# NetPointReference structure:
+#   - era:hasTopoCoordinate → TopologicalCoordinate
+#   - era:hasLrsCoordinate → LinearPositioningSystemCoordinate
+#
+# LinearPositioningSystemCoordinate structure:
+#   - era:kmPost → KilometricPost (reference to km post)
+#   - era:offsetFromKilometricPost → offset in meters (xsd:double)
+#
+# KilometricPost structure:
+#   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
+#   - era:kilometer → km number (xsd:integer)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → reference to micro-level LinearElement
+#   - era:offsetFromOrigin → position on element (xsd:double)
+#
+# Tunnel start/end extraction pattern:
+#   Each railML tunnel has areaLocation with multiple associatedNetElement entries.
+#   Start point: posBegin of segment with sequence=1 (or lowest sequence)
+#   End point: posEnd of segment with highest sequence value
+#
+# URI Patterns:
+#   Tunnel: http://data.europa.eu/949/functionalInfrastructure/tunnels/{id}
+#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_start
+#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_end
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{tunnelId}_{start_or_end}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{tunnelId}_{start_or_end}_{positioningSystemRef}_{measure}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+#   Geometry (start): http://data.europa.eu/949/geometry/{tunnelId}_start (added by post-processing)
+#   Geometry (end): http://data.europa.eu/949/geometry/{tunnelId}_end (added by post-processing)
+
+CONSTRUCT {
+  # Tunnel resource
+  ?eraTunnel a era:Tunnel ;
+             era:tunnelIdentification ?tunnelId ;
+             rdfs:label ?tunnelName ;
+             era:inCountry country:NOR ;
+             era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+             era:lineReferenceTunnelStart ?startPointRef ;
+             era:lineReferenceTunnelEnd ?endPointRef ;
+             # Optional properties with conservative defaults for workshop
+             era:lengthOfTunnel ?tunnelLength ;
+             era:complianceInfTsi true ;
+             era:crossSectionArea 50 ;
+             era:dieselThermalAllowed true ;
+             era:hasEmergencyPlan true ;
+             era:hasEvacuationAndRescuePoints true ;
+             era:hasWalkway true ;
+             era:maxTunnelSpeed 120 ;
+             era:nationalRollingStockFireCategory "A" ;
+             era:rollingStockFireCategory <http://data.europa.eu/949/concepts/rolling-stock-fire/10> .
+
+  # Adding a dummy document
+  ?eraTunnel era:document <http://data.europa.eu/949/documents/skienstunnelen> .
+  <http://data.europa.eu/949/documents/skienstunnelen> a era:Document;
+            era:documentUrl "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx" .
+
+  # Start point NetPointReference
+  ?startPointRef a era:NetPointReference ;
+                 era:hasTopoCoordinate ?startTopoCoord ;
+                 era:hasLrsCoordinate ?startLrsCoord .
+
+  # Start TopologicalCoordinate
+  ?startTopoCoord a era:TopologicalCoordinate ;
+                  era:onLinearElement ?startLinearElement ;
+                  era:offsetFromOrigin ?startPosDouble .
+  
+  # Start LinearPositioningSystemCoordinate
+  ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
+                 era:kmPost ?startKmPost ;
+                 era:offsetFromKilometricPost ?startKmOffset .
+  
+  # Start KilometricPost
+  ?startKmPost a era:KilometricPost ;
+               era:hasLRS ?eraLPS ;
+               era:kilometer ?startKmNumber .
+
+  # End point NetPointReference
+  ?endPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?endTopoCoord ;
+               era:hasLrsCoordinate ?endLrsCoord .
+
+  # End TopologicalCoordinate
+  ?endTopoCoord a era:TopologicalCoordinate ;
+                era:onLinearElement ?endLinearElement ;
+                era:offsetFromOrigin ?endPosDouble .
+  
+  # End LinearPositioningSystemCoordinate
+  ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
+               era:kmPost ?endKmPost ;
+               era:offsetFromKilometricPost ?endKmOffset .
+  
+  # End KilometricPost
+  ?endKmPost a era:KilometricPost ;
+             era:hasLRS ?eraLPS ;
+             era:kilometer ?endKmNumber .
+}
+WHERE {
+  # Get all tunnels (overCrossing with constructionType="tunnel")
+  ?tunnel a railml:overCrossing ;
+          xyz:id ?tunnelId ;
+          xyz:constructionType "tunnel" .
+
+  # Mint ERA Tunnel URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tunnels/", ?tunnelId)) AS ?eraTunnel)
+
+  # Get tunnel name (optional)
+  OPTIONAL {
+    ?tunnel fx:name ?nameNode .
+    ?nameNode xyz:name ?tunnelName .
+  }
+
+  # Get area location with associated net elements
+  ?tunnel fx:areaLocation ?areaLoc .
+  
+  # ===== START POINT (first segment) =====
+  {
+    SELECT ?tunnel (MIN(?seq) AS ?minSequence)
+    WHERE {
+      ?tunnel fx:areaLocation/fx:associatedNetElement ?assoc .
+      OPTIONAL { ?assoc xyz:sequence ?seqVal . }
+      BIND (COALESCE(?seqVal, "1") AS ?seq)
+    }
+    GROUP BY ?tunnel
+  }
+  
+  ?areaLoc fx:associatedNetElement ?startAssocNode .
+  OPTIONAL { ?startAssocNode xyz:sequence ?startSeqValue . }
+  BIND (COALESCE(?startSeqValue, "1") AS ?startSequence)
+  FILTER(?startSequence = ?minSequence)
+  
+  ?startAssocNode xyz:netElementRef ?startNetElementRef ;
+                  xyz:posBegin ?startPos .
+  
+  BIND (xsd:double(?startPos) AS ?startPosDouble)
+  
+  # Dereference start netElement
+  ?startNetElement a railml:netElement ;
+                   xyz:id ?startNetElementRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?startNetElementRef)) AS ?startLinearElement)
+  
+  # Mint start point URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_start_", ?startNetElementRef, "_", STR(?startPos))) AS ?startTopoCoord)
+  
+  # Get start LRS coordinates (optional)
+  OPTIONAL {
+    ?startAssocNode fx:linearCoordinateBegin ?startLinCoord .
+    ?startLinCoord xyz:measure ?startMeasure ;
+                   xyz:positioningSystemRef ?posSystemRef .
+    
+    BIND (xsd:double(?startMeasure) AS ?startMeasureDouble)
+    
+    # Dereference LinearPositioningSystem
+    ?lps a railml:linearPositioningSystem ;
+         xyz:id ?posSystemRef .
+    BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+    
+    # Calculate start KilometricPost
+    BIND (xsd:integer(ROUND(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
+    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+    
+    # Calculate start offset
+    BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
+    
+    # Mint start LRS coordinate URI
+    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+  }
+
+  # ===== END POINT (last segment) =====
+  {
+    SELECT ?tunnel (MAX(?seq) AS ?maxSequence)
+    WHERE {
+      ?tunnel fx:areaLocation/fx:associatedNetElement ?assoc .
+      OPTIONAL { ?assoc xyz:sequence ?seqVal . }
+      BIND (COALESCE(?seqVal, "1") AS ?seq)
+    }
+    GROUP BY ?tunnel
+  }
+  
+  ?areaLoc fx:associatedNetElement ?endAssocNode .
+  OPTIONAL { ?endAssocNode xyz:sequence ?endSeqValue . }
+  BIND (COALESCE(?endSeqValue, "1") AS ?endSequence)
+  FILTER(?endSequence = ?maxSequence)
+  
+  ?endAssocNode xyz:netElementRef ?endNetElementRef ;
+                xyz:posEnd ?endPos .
+  
+  BIND (xsd:double(?endPos) AS ?endPosDouble)
+  
+  # Dereference end netElement
+  ?endNetElement a railml:netElement ;
+                 xyz:id ?endNetElementRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?endNetElementRef)) AS ?endLinearElement)
+  
+  # Mint end point URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_end_", ?endNetElementRef, "_", STR(?endPos))) AS ?endTopoCoord)
+  
+  # Get end LRS coordinates (optional)
+  OPTIONAL {
+    ?endAssocNode fx:linearCoordinateEnd ?endLinCoord .
+    ?endLinCoord xyz:measure ?endMeasure ;
+                 xyz:positioningSystemRef ?posSystemRef .  # Same positioning system
+    
+    BIND (xsd:double(?endMeasure) AS ?endMeasureDouble)
+    
+    # Calculate end KilometricPost
+    BIND (xsd:integer(ROUND(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
+    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+    
+    # Calculate end offset
+    BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
+    
+    # Mint end LRS coordinate URI
+    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  }
+  
+  OPTIONAL {
+    # Get tunnel length
+    ?tunnel fx:length ?lengthNode .
+    ?lengthNode xyz:type "physical" ;
+                xyz:value ?tunnelLengthStr .
+    BIND (STRDT(?tunnelLengthStr, xsd:double) AS ?tunnelLength)
+  }
+}
+ORDER BY ?tunnelId

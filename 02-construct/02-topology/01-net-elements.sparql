@@ -1,0 +1,100 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+# Phase 2.1 — Net Elements (topology) — MICRO TOPOLOGY ONLY
+# Maps railml:netElement → era:LinearElement (micro-level elements only)
+#
+# Source population filtering:
+#   Uses networks/network/level[@descriptionLevel="Micro"]/networkResource/@ref
+#   to identify the 143 micro-level network resources listed in the registry.
+#
+# Only micro-level netElements are mapped. Meso-level elements are excluded.
+# Any references to meso-level elements in functional infrastructure must be resolved
+# to their constituent micro elements.
+#
+# Geometry mapping:
+#   NetElements get geometry from spotElementProjection coordinates linked via
+#   intrinsicCoordinate IDs. Uses nested SELECT to aggregate coordinates into LINESTRING.
+#   Coordinates are transformed to WGS84 lat/lon in the North Sea region for demo purposes.
+#
+# Deprecated vocabulary AVOIDED:
+#   - era:elementPart (property) → not used
+#   - era:currentlyValid (property) → deprecated, no replacement
+#   - era:NonLinearElement (class) → not used
+#
+# URI Pattern: http://data.europa.eu/949/topology/netElements/{id}
+CONSTRUCT {
+  ?eraLinearElement a era:LinearElement ;
+                    rdfs:label ?netElementId ;
+                    era:lengthOfNetLinearElement ?lengthDouble ;
+                    gsp:hasGeometry ?geometry .
+  
+  ?geometry a gsp:Geometry .
+  ?geometry gsp:asWKT ?wkt .
+}
+WHERE {
+  # Get all netElement IDs that are listed in the Micro level
+  ?networks fx:network/fx:level ?level .
+  ?level xyz:descriptionLevel "Micro" .
+  ?level fx:networkResource/xyz:ref ?netElementId .
+  
+  # Get the actual netElement with that ID
+  ?ne a railml:netElement ;
+      xyz:id ?netElementId .
+  
+  # Length is optional - not all netElements have it
+  OPTIONAL {
+    ?ne xyz:length ?lengthStr .
+    BIND (xsd:double(?lengthStr) AS ?lengthDouble)
+  }
+  
+  # Mint ERA URI for this micro-level element
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementId)) AS ?eraLinearElement)
+  
+  # --- GEOMETRY MAPPING (optional) ---
+  # Uses nested SELECT to aggregate spotElementProjection coordinates into LINESTRING.
+  # Maps through: netElement → associatedPositioningSystem → intrinsicCoordinate@id
+  #               spotElementProjection@refersToElement = intrinsicCoordinate@id
+  OPTIONAL {
+    {
+      SELECT ?netElementId 
+             (GROUP_CONCAT(?coordPair; separator=", ") AS ?coordString)
+      WHERE {
+        # Get intrinsicCoordinate IDs for this netElement
+        ?ne2 a railml:netElement ;
+             xyz:id ?netElementId .
+        ?ne2 fx:associatedPositioningSystem ?aps .
+        ?aps fx:intrinsicCoordinate ?ic .
+        ?ic xyz:id ?icId .
+        
+        # Find spotElementProjection that references this intrinsicCoordinate
+        ?viz a railml:infrastructureVisualization .
+        ?viz fx:spotElementProjection ?sep .
+        ?sep xyz:refersToElement ?icId .
+        ?sep fx:coordinate ?coord .
+        ?coord xyz:x ?x ; xyz:y ?y .
+        
+        # Transform to WGS84 (use decimal to avoid scientific notation)
+        # The resulting coordinates are somewhere in the North Sea region, for demo purposes
+        BIND (3.0 + (xsd:decimal(?x) / 10000.0) AS ?coordLon)
+        BIND (53.0 + (xsd:decimal(?y) / 10000.0) AS ?coordLat)
+        
+        # Create coordinate pair string
+        BIND (CONCAT(STR(?coordLon), " ", STR(?coordLat)) AS ?coordPair)
+      }
+      GROUP BY ?netElementId
+    }
+    
+    # Mint geometry URI using netElementId (ensures each netElement has unique geometry)
+    BIND (IRI(CONCAT("http://data.europa.eu/949/geometry/netElement_", ?netElementId)) AS ?geometry)
+    
+    # Create WKT LINESTRING from aggregated coordinates
+    BIND (STRDT(CONCAT("LINESTRING(", ?coordString, ")"), 
+                gsp:wktLiteral) AS ?wkt)
+  }
+}

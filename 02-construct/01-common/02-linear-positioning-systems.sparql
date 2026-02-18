@@ -1,0 +1,32 @@
+# Query: 02-linear-positioning-systems.sparql
+# Purpose: Map railML linearPositioningSystem to era:LinearPositioningSystem
+# Target: http://localhost:8082/jena-fuseki/era-advanced-example/sparql
+#
+# This query transforms railML linearPositioningSystem elements into ERA
+# LinearPositioningSystem resources representing line referencing systems.
+#
+# Target ERA ontology properties:
+#   - dct:identifier (xsd:string) - positioning system identifier
+#
+# These resources are referenced by KilometricPost and SectionOfLine resources.
+# Note: era:lineId will be added later when lines are mapped (11-sections-of-line.sparql)
+
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dct: <http://purl.org/dc/terms/>
+
+CONSTRUCT {
+  ?eraLPS a era:LinearPositioningSystem ;
+          dct:identifier ?lpsId .
+}
+WHERE {
+  # Extract railML linearPositioningSystem elements
+  ?lps a railml:linearPositioningSystem ;
+       xyz:id ?lpsId .
+  
+  # Mint ERA URI: linearPositioningSystems/{id}
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?lpsId)) AS ?eraLPS)
+}

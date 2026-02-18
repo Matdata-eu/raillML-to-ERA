@@ -1,0 +1,101 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.2c — Operational Point Ownership Relationships
+# Maps operational point ownership to functional infrastructure using era:hasPart
+#
+# Source: railML operational points with opEquipment section
+#  
+# Target properties:
+#   - era:hasPart — references to owned functional infrastructure elements
+#
+# Owned elements:
+#   - Platform edges (via ownsInfrastructureElement referencing platform edges)
+#   - Signals (via ownsSignal)
+#   - Tracks and sidings (spatial match: tracks/sidings that intersect OP area location)
+#
+# URI Patterns:
+#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
+#   PlatformEdge: http://data.europa.eu/949/functionalInfrastructure/platformEdges/{id}
+#   Signal: http://data.europa.eu/949/functionalInfrastructure/signals/{id}
+#   RunningTrack/Siding: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+
+CONSTRUCT {
+  # Operational Point owns platform edges
+  ?eraOp era:hasPart ?eraPlatformEdge .
+
+  # Operational Point owns signals
+  ?eraOp era:hasPart ?eraSignal .
+
+  # Operational Point owns tracks/sidings (spatial match)
+  ?eraOp era:hasPart ?eraTrack .
+}
+WHERE {
+  # Get operational point
+  ?opp a railml:operationalPoint ;
+       xyz:id ?oppId .
+
+  # Mint ERA OperationalPoint URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+
+  {
+    # === PLATFORM EDGES ===
+    # Get platform edges owned by this operational point (via ownsInfrastructureElement)
+    ?opp fx:opEquipment ?opEquip .
+    ?opEquip fx:ownsInfrastructureElement ?infraNode .
+    ?infraNode xyz:ref ?infraRef .
+    
+    # Check if this infrastructure element is a platform edge
+    ?platformEdge a railml:platformEdge ;
+                  xyz:id ?infraRef .
+    
+    # Mint ERA PlatformEdge URI
+    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/platformEdges/", ?infraRef)) AS ?eraPlatformEdge)
+  }
+  UNION
+  {
+    # === SIGNALS ===
+    # Get signals owned by this operational point
+    ?opp fx:opEquipment ?opEquip .
+    ?opEquip fx:ownsSignal ?signalNode .
+    ?signalNode xyz:ref ?signalRef .
+    
+    # Mint ERA Signal URI
+    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/signals/", ?signalRef)) AS ?eraSignal)
+  }
+  UNION
+  {
+    # === TRACKS AND SIDINGS ===
+    # Get tracks/sidings that spatially intersect with the operational point's area location
+    # Match: tracks whose linearLocation references netElements within the OP's areaLocation
+    
+    # Get OP's area location (meso/macro level net elements)
+    ?opp fx:areaLocation ?areaLoc .
+    ?areaLoc fx:associatedNetElement ?areaAssocNode .
+    ?areaAssocNode xyz:netElementRef ?mesoMacroRef .
+    
+    # Find meso/macro net element and get its micro children
+    ?mesoMacro a railml:netElement ;
+               xyz:id ?mesoMacroRef ;
+               fx:relation ?relNode .
+    ?relNode fx:navigability ?navNode .
+    ?navNode xyz:ref ?microRef .
+    
+    # Find tracks with linear locations referencing these micro elements
+    ?track a railml:track ;
+           xyz:id ?trackId ;
+           fx:linearLocation ?trackLoc .
+    ?trackLoc fx:associatedNetElement ?trackAssocNode .
+    ?trackAssocNode xyz:netElementRef ?microRef .
+    
+    # Mint ERA Track URI (handles both RunningTrack and Siding)
+    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  }
+}
+ORDER BY ?oppId

@@ -1,0 +1,118 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.2b — Operational Points: NetPointReference (from spotLocation)
+# Maps railml:operationalPoint with spotLocation → era:OperationalPoint with era:NetPointReference
+#
+# Source: Operational points with spotLocation on micro-level elements
+#
+# Strategy: spotLocation mapping
+#   - railML operational points have spotLocations on micro-level elements
+#   - These are reference positions, used as stable points to measure timetable activities
+#   - Map directly to ERA NetPointReference (similar to signals)
+#
+# Target properties (SHACL-compliant):
+#   - era:netReference — REQUIRED (minCount=1) → era:NetPointReference
+#
+# NetPointReference structure:
+#   - era:hasTopoCoordinate → era:TopologicalCoordinate
+#   - era:hasLrsCoordinate → era:LinearPositioningSystemCoordinate (if available)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → era:LinearElement (micro-level netElement)
+#   - era:offsetFromOrigin → xsd:double (position in meters)
+#
+# LinearPositioningSystemCoordinate structure (if linearCoordinate present):
+#   - era:kmPost → era:KilometricPost (inferred from measure)
+#   - era:offsetFromKilometricPost → xsd:double
+#
+# KilometricPost structure (shared resource):
+#   - era:hasLRS → era:LinearPositioningSystem
+#   - era:kilometer → xsd:double
+#
+# URI Patterns:
+#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
+#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{spotLocationId}
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{spotLocId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{spotLocId}_{positioningSystemRef}_{measure}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   LinearPositioningSystem: http://data.europa.eu/949/linearPositioningSystems/{positioningSystemRef}
+
+CONSTRUCT {
+  # Operational Point
+  ?eraOp a era:OperationalPoint ;
+         era:netReference ?netPointRef .
+
+  # NetPointReference (one per spotLocation)
+  ?netPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?topoCoord ;
+               era:hasLrsCoordinate ?lrsCoord .
+
+  ?topoCoord a era:TopologicalCoordinate ;
+             era:onLinearElement ?eraLinearElement ;
+             era:offsetFromOrigin ?posDouble .
+
+  # LinearPositioningSystemCoordinate (if available)
+  ?lrsCoord a era:LinearPositioningSystemCoordinate ;
+            era:kmPost ?kmPost ;
+            era:offsetFromKilometricPost ?kmOffset .
+
+  # KilometricPost (shared resource)
+  ?kmPost a era:KilometricPost ;
+          era:hasLRS ?eraLPS ;
+          era:kilometer ?kmNumber .
+}
+WHERE {
+  # Get all operational points
+  ?op a railml:operationalPoint ;
+      xyz:id ?oppId .
+
+  # Mint ERA OperationalPoint URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+      
+  ?op fx:spotLocation ?spotLoc .
+  ?spotLoc xyz:id ?spotLocId ;
+           xyz:netElementRef ?spotNetElementRef ;
+           xyz:pos ?posStr .
+  
+  # Verify this is a micro-level element
+  ?spotNetElement a railml:netElement ;
+                  xyz:id ?spotNetElementRef ;
+                  xyz:length ?spotLength .
+  
+  FILTER NOT EXISTS { ?spotNetElement fx:elementCollectionUnordered ?coll . }
+  
+  BIND (xsd:double(?posStr) AS ?posDouble)
+  
+  # Mint LinearElement URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?spotNetElementRef)) AS ?eraLinearElement)
+  
+  # Mint NetPointReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?spotLocId)) AS ?netPointRef)
+  
+  # Mint TopologicalCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?spotLocId, "_", ?spotNetElementRef, "_", STR(?posDouble))) AS ?topoCoord)
+  
+  # LRS coordinates (if available)
+  OPTIONAL {
+    ?spotLoc fx:linearCoordinate ?linearCoord .
+    ?linearCoord xyz:positioningSystemRef ?positioningSystemRef ;
+                 xyz:measure ?measureStr .
+    
+    BIND (xsd:double(?measureStr) AS ?measure)
+    BIND (xsd:integer(ROUND(?measure / 1000.0)) AS ?kmNumber)
+    BIND (?measure - (?kmNumber * 1000.0) AS ?kmOffset)
+  }
+    
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?spotLocId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
+
+}
+ORDER BY ?oppId ?netPointRef

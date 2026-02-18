@@ -1,0 +1,85 @@
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+
+# This CONSTRUCT query transforms XML data into RDF, normalizing URIs and handling RDF container predicates.
+# See https://github.com/w3c-facade-x/meetings/tree/main/meetings/2026-01-12 for the rationale behind the one-eyed-graph approach
+CONSTRUCT {
+  # Output triples: new subject, final predicate, new object.
+  ?newS ?finalPred ?newO .
+  # If the predicate is a numeric RDF container (rdf:_n), attach the order number to the object.
+  ?newO fx:order ?orderNum .
+}
+WHERE {
+  # Use SPARQL Anything to access and parse the remote XML file as RDF.
+  SERVICE <x-sparql-anything:> {
+    # Set properties for the service: media type, location, and blank node handling.
+    fx:properties fx:media-type "application/xml" ;
+                  fx:location "2025-11-03_railML_AdvancedExample_v14_railML3.2_patched.xml" ;
+                  fx:blank-nodes "false" .
+    # Access the generated RDF graph.
+    GRAPH ?g {
+      ?s ?p ?o .
+    }
+    # Check if the current subject is the root of the document.
+    BIND (EXISTS { ?s a fx:root } AS ?isRoot)
+    # Create a new subject URI: if root, use a fixed URI; otherwise, transform the original URI.
+    BIND (IF(?isRoot, IRI("http://sparql.xyz/facade-x/data/Root"), IRI(CONCAT("http://sparql.xyz/facade-x/data/", STRAFTER(str(?s), "#/")))) AS ?newS)
+    # Create a new object: if it's a URI from the document, transform it; otherwise, keep as is.
+    BIND (IF(isURI(?o) && CONTAINS(str(?o), "#/"), IRI(CONCAT("http://sparql.xyz/facade-x/data/", STRAFTER(str(?o), "#/"))), ?o) AS ?newO)
+    # Detect if the predicate is a numeric RDF container (rdf:_n).
+    BIND (regex(str(?p), "^http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#_[0-9]+$") AS ?isNumPred)
+    
+    # --- Optional: Get the type of the object if it's a URI and the predicate is numeric ---
+    OPTIONAL {
+      FILTER (isURI(?o) && ?isNumPred)
+      GRAPH ?g {
+        ?o rdf:type ?oType .
+      }
+      FILTER (?oType != fx:root)
+    }
+    
+    # --- Optional: Detect if the subject only has rdf:_1 (for fx:value mapping) ---
+    OPTIONAL {
+      FILTER (?isNumPred && ?p = rdf:_1 && isLiteral(?o))
+      FILTER NOT EXISTS {
+        GRAPH ?g {
+          ?s rdf:_2 ?any .
+        }
+      }
+      # Mark that fx:value should be used as the predicate.
+      BIND (true AS ?useFxValue)
+    }
+    
+    # --- Optional: Extract the order number from the predicate if it's numeric ---
+    OPTIONAL {
+      FILTER (?isNumPred)
+      BIND (STRAFTER(str(?p), "_") AS ?orderNum)
+    }
+    
+    # --- Calculate the final predicate to use in the output triple ---
+    # If the predicate is numeric:
+    #   - If only rdf:_1 exists, use fx:value.
+    #   - If the object has a type, use a predicate based on its type.
+    #   - Otherwise, keep the original predicate.
+    # If not numeric, keep the original predicate.
+    BIND (
+      IF(
+        ?isNumPred,
+        IF(
+          bound(?useFxValue),
+          fx:value,
+          IF(
+            bound(?oType),
+            IRI(CONCAT("http://sparql.xyz/facade-x/ns/", STRAFTER(str(?oType), "#"))),
+            ?p
+          )
+        ),
+        ?p
+      ) AS ?finalPred
+    )
+    
+    # --- Filter out predicates that already have the xyz: prefix and are numeric ---
+    FILTER (!STRSTARTS(str(?p), "http://sparql.xyz/facade-x/data/") || !?isNumPred)
+  }
+}

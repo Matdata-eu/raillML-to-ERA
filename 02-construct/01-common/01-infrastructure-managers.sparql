@@ -1,0 +1,60 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+# Phase 1.1 — Infrastructure Managers (updated for non-deprecated ERA vocabulary)
+# Maps railml:organizationalUnit (with fx:isInfrastructureManager) → era:Body + era:OrganisationRole
+#
+# Uses the n-ary organisation role pattern:
+#   era:Body → era:role → era:OrganisationRole → era:hasOrganisationRole → skos:Concept
+#
+# Deprecated vocabulary AVOIDED:
+#   - era:InfrastructureManager (class) → replaced by era:Body
+#   - era:imCode (property)             → replaced by era:organisationCode (on Body) and era:infrastructureManager on resources
+#
+# Source instances: 4 organizational units that are infrastructure managers
+#   im01 (code: BN), oru598 (railML factory), oru719 (Kudowa railways), oru720 (Wachau infrastructure)
+CONSTRUCT {
+  # The organisation entity
+  ?eraBody a era:Body ;
+           era:organisationCode ?eraCode ;
+           era:role ?eraOrgRole ;
+           rdfs:label ?name .
+  # The n-ary role relationship
+  ?eraOrgRole a era:OrganisationRole ;
+              era:hasOrganisationRole <http://data.europa.eu/949/concepts/organisation-roles/IM> ;
+              era:roleOf ?eraBody .
+
+}
+WHERE {
+  # Match organizational units that have an isInfrastructureManager child
+  ?ou a railml:organizationalUnit ;
+      xyz:id ?id ;
+      fx:isInfrastructureManager ?imNode .
+  OPTIONAL {
+    ?ou xyz:code ?railmlCode
+  }
+
+  # 
+  BIND (IF(!BOUND(?railmlCode),'9999',IF(?railmlCode = 'BN','0076',?railmlCode)) AS ?eraCode)
+  
+  # Mint ERA URIs from the railML id / for the sake of the workshop, we will be hardcoding the ERA code to BaneNOR's 0076
+  # BIND (IRI(CONCAT("http://data.europa.eu/949/organisations/", ?eraCode)) AS ?eraBody)
+  # BIND (IRI(CONCAT("http://data.europa.eu/949/organisations/", ?eraCode, "_IM")) AS ?eraOrgRole)
+  BIND (IRI("http://data.europa.eu/949/organisations/0076") AS ?eraBody)
+  BIND (IRI("http://data.europa.eu/949/organisations/0076_IM") AS ?eraOrgRole)
+  
+  # Optional: name from nested name element
+  OPTIONAL {
+    ?ou fx:name ?nameNode .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?name)
+  }
+}

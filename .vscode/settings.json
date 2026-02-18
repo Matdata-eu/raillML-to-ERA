@@ -1,0 +1,5 @@
+{
+    "glspc.serverPath": "C:\\Users\\mathi\\.local\\bin\\qlue-ls.exe server",
+    "glspc.languageId": "sparql",
+    "glspc.serverCommandArguments": ["server"]
+}

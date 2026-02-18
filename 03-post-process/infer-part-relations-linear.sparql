@@ -1,0 +1,67 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Infer isPartOf and hasPart relations between infrastructure elements based on topology
+# 
+# Logic:
+# - Point elements belong to linear elements (tracks) when positioned within their extent
+# - Linear elements belong to aggregate elements (sections) when extents overlap
+# - Point elements belong to aggregate elements (operational points) when sharing topology
+#
+# Master parts: RunningTrack, OperationalPoint, SectionOfLine
+#
+# Relations:
+# - era:isPartOf (from child to parent)
+# - era:hasPart (from parent to child, inverse of isPartOf)
+
+INSERT {
+  ?childElement era:isPartOf ?masterPart .
+  ?masterPart era:hasPart ?childElement .
+}
+WHERE {
+  VALUES ?masterPartType { era:RunningTrack era:Siding era:Track era:OperationalPoint era:SectionOfLine }
+  {
+    # Define master part types (parent elements that contain other elements)
+    ?masterPart a ?masterPartType .
+    ?masterPart era:netReference ?masterNetLinRef .
+    ?masterNetLinRef a era:NetLinearReference .
+  }
+  UNION
+  {
+    ?masterPart a ?masterPartType .
+    ?masterPart era:netReference ?masterNetAreaRef .
+    ?masterNetAreaRef a era:NetAreaReference ;
+                      era:includes ?includeList .
+    ?includeList rdf:rest*/rdf:first ?masterNetLinRef .
+  }
+  ?masterNetLinRef era:startsAt ?masterStartRef ;
+                   era:endsAt ?masterEndRef .
+  ?masterStartRef era:hasTopoCoordinate ?masterStartCoord .
+  ?masterStartCoord era:onLinearElement ?linearElement ;
+                    era:offsetFromOrigin ?masterStartOffset .
+  ?masterEndRef era:hasTopoCoordinate ?masterEndCoord .
+  ?masterEndCoord era:onLinearElement ?linearElement ;
+                  era:offsetFromOrigin ?masterEndOffset .
+                  
+  # CASE B: Linear elements
+  # Linear elements are part of master when their extents overlap
+  ?childElement a ?pointType ;
+                era:netReference ?childNetRef .
+
+  VALUES ?pointType { era:RunningTrack era:Siding era:Track era:Tunnel era:Bridge era:PlatformEdge }
+  # Filter to linear element types
+  FILTER (?pointType != ?masterPartType)
+  # Get child element's extent
+  ?childNetRef a era:NetLinearReference ;
+               era:startsAt ?childStartRef ;
+               era:endsAt ?childEndRef .
+  ?childStartRef era:hasTopoCoordinate ?childStartCoord .
+  ?childStartCoord era:onLinearElement ?linearElement ;
+                   era:offsetFromOrigin ?childStartOffset .
+  ?childEndRef era:hasTopoCoordinate ?childEndCoord .
+  ?childEndCoord era:onLinearElement ?linearElement ;
+                 era:offsetFromOrigin ?childEndOffset .
+  FILTER ((?childStartOffset >= ?masterStartOffset && ?childStartOffset <= ?masterEndOffset) || (?childEndOffset >= ?masterStartOffset && ?childEndOffset <= ?masterEndOffset))
+}

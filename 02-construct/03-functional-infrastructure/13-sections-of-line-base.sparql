@@ -1,0 +1,117 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.9 — Sections of Line (Base Properties)
+# Maps railml:line → era:SectionOfLine
+#
+# Mapping logic:
+#   - Lines WITH belongsToParent → era:SectionOfLine (actual sections)
+#   - Lines WITHOUT belongsToParent → era:nationalLine property value (parent line identifier)
+#
+# For sections (lines with belongsToParent):
+#   - opStart/opEnd calculated from netRelations on the meso netElement
+#   - The line has a linearLocation on a meso netElement
+#   - That meso netElement has max 2 netRelations
+#   - The other netElements of those netRelations are used in operational point areaLocations
+#
+# Target properties:
+#   era:infrastructureManager → era:Body
+#   era:inCountry → xsd:string (country code)
+#   era:solNature → skos:Concept
+#   era:nationalLine → xsd:string (from parent line name)
+#   era:opStart → era:OperationalPoint
+#   era:opEnd → era:OperationalPoint
+#
+# URI Pattern: http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/{id}
+
+CONSTRUCT {
+  ?eraSol a era:SectionOfLine ;
+          era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+          era:inCountry country:NOR ;
+          era:solNature ?eraSolNature ;
+          era:nationalLine ?nationalLineName ;
+          era:opStart ?eraOpStart ;
+          era:opEnd ?eraOpEnd .
+}
+WHERE {
+  # Get lines WITH belongsToParent (child lines = actual sections)
+  ?line a railml:line ;
+        xyz:id ?lineId ;
+        xyz:belongsToParent ?parentLineId .
+
+  # Mint ERA SectionOfLine URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/", ?lineId)) AS ?eraSol)
+
+  # Get parent line to extract nationalLine name
+  ?parentLine a railml:line ;
+              xyz:id ?parentLineId ;
+              fx:name ?parentNameNode .
+  ?parentNameNode xyz:name ?nationalLineNameStr ;
+                  xyz:language ?nationalLineLang .
+  
+  # Create language-tagged string for nationalLine
+  BIND (STRLANG(?nationalLineNameStr, ?nationalLineLang) AS ?nationalLineName)
+
+  # Get the meso netElement from this line's linearLocation
+  ?line fx:linearLocation ?linLoc .
+  ?linLoc fx:associatedNetElement ?assocNetElem .
+  ?assocNetElem xyz:netElementRef ?mesoElementRef .
+
+  # Find netRelations involving this meso element
+  # Pattern 1: meso element is in elementA
+  OPTIONAL {
+    ?nr1 a railml:netRelation ;
+         fx:elementA ?elA1 ;
+         fx:elementB ?elB1 ;
+         xyz:positionOnA ?posA1 .
+    ?elA1 xyz:ref ?mesoElementRef .
+    ?elB1 xyz:ref ?otherElement1 .
+    
+    # Find operational point with areaLocation on otherElement1
+    ?op1 a railml:operationalPoint ;
+         xyz:id ?oppId1 ;
+         fx:areaLocation/fx:associatedNetElement/xyz:netElementRef ?otherElement1 .
+    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId1)) AS ?eraOp1)
+    BIND (?posA1 AS ?position1)
+  }
+
+  # Pattern 2: meso element is in elementB
+  OPTIONAL {
+    ?nr2 a railml:netRelation ;
+         fx:elementA ?elA2 ;
+         fx:elementB ?elB2 ;
+         xyz:positionOnB ?posB2 .
+    ?elB2 xyz:ref ?mesoElementRef .
+    ?elA2 xyz:ref ?otherElement2 .
+    
+    # Find operational point with areaLocation on otherElement2
+    ?op2 a railml:operationalPoint ;
+         xyz:id ?oppId2 ;
+         fx:areaLocation/fx:associatedNetElement/xyz:netElementRef ?otherElement2 .
+    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId2)) AS ?eraOp2)
+    BIND (?posB2 AS ?position2)
+  }
+
+  # Assign opStart and opEnd based on positions
+  # Position "0" = origin/start, position "1" = end
+  BIND (
+    IF(BOUND(?eraOp1) && ?position1 = "0", ?eraOp1,
+      IF(BOUND(?eraOp2) && ?position2 = "0", ?eraOp2, ?null)
+    ) AS ?eraOpStart
+  )
+  BIND (
+    IF(BOUND(?eraOp1) && ?position1 = "1", ?eraOp1,
+      IF(BOUND(?eraOp2) && ?position2 = "1", ?eraOp2, ?null)
+    ) AS ?eraOpEnd
+  )
+
+  # Default: solNature = "Line"
+  BIND (IRI("http://data.europa.eu/949/concepts/sol-natures/01") AS ?eraSolNature)
+}

@@ -1,0 +1,69 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+# Phase 2.2 — Net Relations (topology) — MICRO TOPOLOGY ONLY
+# Maps railml:netRelation → era:NetRelation
+#
+# Source population filtering:
+#   Only includes netRelations where BOTH elementA and elementB reference
+#   micro-level netElements (those listed in networks/network/level[@descriptionLevel="Micro"])
+#   Result: 89 micro-level netRelations (out of 97 total)
+#
+# ERA properties (all non-deprecated, domain: era:NetRelation):
+#   era:elementA             → era:LinearElement
+#   era:elementB             → era:LinearElement
+#   era:isOnOriginOfElementA → xsd:boolean
+#   era:isOnOriginOfElementB → xsd:boolean
+#   era:navigability         → skos:Concept (scheme: concepts/navigabilities/Navigabilities)
+#
+# Position mapping: railML "0" = origin (true), "1" = end (false)
+#
+# URI Pattern: http://data.europa.eu/949/topology/netRelations/{id}
+CONSTRUCT {
+  ?eraNetRelation a era:NetRelation ;
+                  era:elementA ?eraElementA ;
+                  era:elementB ?eraElementB ;
+                  era:isOnOriginOfElementA ?isOnOriginA ;
+                  era:isOnOriginOfElementB ?isOnOriginB ;
+                  era:navigability ?eraNavigability .
+}
+WHERE {
+  ?nr a railml:netRelation ;
+      xyz:id ?id .
+  
+  # Mint ERA URI for this relation
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netRelations/", ?id)) AS ?eraNetRelation)
+  
+  # Filter: elements must be in the micro level
+  ?networks fx:network/fx:level ?level .
+  ?level xyz:descriptionLevel "Micro" .
+  ?level fx:networkResource/xyz:ref ?refA .
+  ?level fx:networkResource/xyz:ref ?refB .
+
+  # --- Element A: dereference the ref string to mint an ERA LinearElement URI ---
+  ?nr fx:elementA ?elANode .
+  ?elANode xyz:ref ?refA .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?refA)) AS ?eraElementA)
+    
+  # --- Element B: dereference the ref string to mint an ERA LinearElement URI ---
+  ?nr fx:elementB ?elBNode .
+  ?elBNode xyz:ref ?refB .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?refB)) AS ?eraElementB)
+  
+  # --- Position on A: "0" = origin (true), "1" = end (false) ---
+  ?nr xyz:positionOnA ?posA .
+  BIND (IF(?posA = "0",true,false) AS ?isOnOriginA)
+  
+  # --- Position on B: "0" = origin (true), "1" = end (false) ---
+  ?nr xyz:positionOnB ?posB .
+  BIND (IF(?posB = "0",true,false) AS ?isOnOriginB)
+  
+  # --- Navigability: map string value to SKOS concept URI ---
+  ?nr xyz:navigability ?navValue .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/concepts/navigabilities/", ?navValue)) AS ?eraNavigability)
+}

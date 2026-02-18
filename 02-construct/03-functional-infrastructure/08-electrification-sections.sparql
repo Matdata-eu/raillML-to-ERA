@@ -1,0 +1,247 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.8 — Electrification Sections (functional infrastructure)
+# Maps railml:electrificationSection → era:ContactLineSystem
+#
+# Source: 16 railML electrification section instances
+# Data Coverage: 7 electrified (with hasContactWire), 9 non-electrified
+#  
+# IMPORTANT: ContactLineSystem is NOT a subclass of InfrastructureElement and thus does NOT have era:netReference.
+# Instead, Tracks reference ContactLineSystems via era:contactLineSystem property.
+#
+# Mapped ContactLineSystem properties (9 of 10 discovered + infrastructure metadata):
+#   - era:contactLineSystemType — SKOS Concept (REQUIRED)
+#     → Conditional: hasContactWire present → 10 (OCL), absent → 40 (Not electrified)
+#   - era:conditionalRegenerativeBrake — SKOS Concept
+#     → From energyCatenary/allowsRegenerativeBraking: true → 10 (allowed), false → 50 (not allowed)
+#   - era:currentLimitationRequired — xsd:boolean
+#     → From energyRollingstock/requiresPowerLimitation
+#   - era:energySupplySystem — SKOS Concept
+#     → From electrificationSystemRef → electrificationSystem voltage+frequency:
+#       • 25000V + 50Hz → AC10 (AC 25kV-50Hz)
+#       • 3000V + 0Hz → DC30 (DC 3kV)
+#   - era:maxCurrentStandstillPantograph — xsd:integer
+#     → Fixed value: 200 amperes (applied only to electrified sections)
+#   - era:maxTrainCurrent — xsd:integer
+#     → From energyCatenary/maxTrainCurrent/maxCurrent (takes MAX if multiple entries)
+#   - era:maximumContactWireHeight — xsd:double (meters)
+#     → From hasContactWire/maxHeight
+#   - era:minimumContactWireHeight — xsd:double (meters)
+#     → From hasContactWire/minHeight
+#   - era:tsiPantographHead — SKOS Concept
+#     → From energyPantograph/compliantTSITypes: "tsi1950" → 10, "tsi2000_2260" → 30
+#   - era:inCountry — country:NOR (hardcoded for workshop)
+#   - era:infrastructureManager — organisations/0076_IM (hardcoded for workshop)
+#
+# Mapped Track properties (pantograph spacing requirements):
+#   - era:trackRaisedPantographsDistanceAndSpeed → era:RaisedPantographsDistanceAndSpeed
+#     → Links Track to pantograph spacing requirements (avoids deprecated property)
+#     → One instance per electrification section with pantographSpacing data
+#     → RaisedPantographsDistanceAndSpeed instance properties:
+#       • era:raisedPantographsNumber — xsd:integer (from pantographSpacing/numberPantographsRaised)
+#       • era:raisedPantographsDistance — xsd:integer (from pantographSpacing/spacingPantographsRaised, in meters)
+#
+# Unmapped properties (available in ERA ontology but no source data):
+#   - era:conditionsAppliedRegenerativeBraking — Document
+#   - era:conditionsChargingElectricEnergyStorage — xsd:anyURI
+#   - era:energySupplySystemTSICompliant — xsd:boolean
+#   - era:permissionChargingElectricEnergyTractionStandstill — xsd:boolean
+#   - era:umax2 — xsd:integer (Umax2 for French network)
+#
+# Linking pattern:
+#   Tracks and ContactLineSystems share netElements in railML.
+#   This SPARQL file constructs:
+#   1. ContactLineSystem resources (one per electrificationSection)
+#   2. era:contactLineSystem property on Track resources that share netElements
+#
+# URI Patterns:
+#   ContactLineSystem: http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/{id}
+#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+#   RaisedPantographsDistanceAndSpeed: http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/{electrificationSectionId}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+
+CONSTRUCT {
+  # ContactLineSystem resource (one per electrificationSection)
+  ?eraContactLineSystem a era:ContactLineSystem ;
+                        era:contactLineSystemType ?contactLineSystemTypeConcept ;
+                        era:conditionalRegenerativeBrake ?regenerativeBrakeConcept ;
+                        era:currentLimitationRequired ?currentLimitationRequired ;
+                        era:energySupplySystem ?energySupplySystemConcept ;
+                        era:maxCurrentStandstillPantograph ?maxCurrentStandstill ;
+                        era:maxTrainCurrent ?maxTrainCurrentValue ;
+                        era:maximumContactWireHeight ?maxWireHeight ;
+                        era:minimumContactWireHeight ?minWireHeight ;
+                        era:tsiPantographHead ?tsiPantographConcept ;
+                        era:inCountry country:NOR ;
+                        era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
+
+  # Track references ContactLineSystem (via shared netElements)
+  ?eraTrack era:contactLineSystem ?eraContactLineSystem ;
+            era:trackRaisedPantographsDistanceAndSpeed ?raisedPantographsInstance .
+  
+  # RaisedPantographsDistanceAndSpeed instance (pantograph spacing requirements)
+  ?raisedPantographsInstance a era:RaisedPantographsDistanceAndSpeed ;
+                              era:raisedPantographsNumber ?pantographsNumber ;
+                              era:raisedPantographsDistance ?pantographsDistance .
+}
+WHERE {
+  # Get all electrification sections
+  ?electrificationSection a railml:electrificationSection ;
+                          xyz:id ?electrificationSectionId .
+
+  # Mint ERA ContactLineSystem URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/", ?electrificationSectionId)) AS ?eraContactLineSystem)
+
+  # Check for hasContactWire property (indicates electrified section)
+  OPTIONAL { ?electrificationSection xyz:contactLineType ?hasContactLineType . }
+
+  # Conditional mapping for contactLineSystemType:
+  # - If hasContactWire present → concept 10 (Overhead contact line)
+  # - If hasContactWire absent → concept 40 (Not electrified)
+  BIND (IF(BOUND(?hasContactLineType) && ?hasContactLineType != "none",
+           IRI("http://data.europa.eu/949/concepts/contact-line-systems/10"),
+           IRI("http://data.europa.eu/949/concepts/contact-line-systems/40")
+       ) AS ?contactLineSystemTypeConcept)
+
+  # Get regenerative braking permission from energyCatenary (only for electrified sections)
+  OPTIONAL {
+    ?electrificationSection fx:energyCatenary ?energyCatenary .
+    ?energyCatenary xyz:allowsRegenerativeBraking ?allowsRegenerativeBraking .
+    
+    # Map boolean to SKOS concept: true → 10 (allowed), false → 50 (not allowed)
+    BIND (IF(?allowsRegenerativeBraking = "true",
+             IRI("http://data.europa.eu/949/concepts/regenerative-braking/10"),
+             IRI("http://data.europa.eu/949/concepts/regenerative-braking/50")
+         ) AS ?regenerativeBrakeConcept)
+  }
+  
+  # Get power limitation requirement from energyRollingstock (only for electrified sections)
+  OPTIONAL {
+    ?electrificationSection fx:energyRollingstock ?energyRS .
+    ?energyRS xyz:requiresPowerLimitation ?requiresPowerLimitationStr .
+    
+    # Convert string "true"/"false" to xsd:boolean
+    BIND (IF(?requiresPowerLimitationStr = "true", true, false) AS ?currentLimitationRequired)
+  }
+  
+  # Get maximum current at standstill per pantograph (fixed value for electrified sections)
+  OPTIONAL {
+    ?electrificationSection fx:hasContactWire ?hasContactWire .
+    BIND (200 AS ?maxCurrentStandstill)
+  }
+  
+  # Get maximum train current from energyCatenary (take maximum value if multiple)
+  OPTIONAL {
+    ?electrificationSection fx:energyCatenary ?energyCatenary .
+    ?energyCatenary fx:maxTrainCurrent ?maxTrainCurrentNode .
+    ?maxTrainCurrentNode xyz:maxCurrent ?maxCurrentStr .
+    
+    # Convert string to integer
+    BIND (xsd:integer(?maxCurrentStr) AS ?maxCurrent)
+  }
+  # Aggregate to get maximum value if there are multiple maxTrainCurrent entries
+  OPTIONAL {
+    SELECT ?electrificationSection (MAX(?maxCurrent) AS ?maxTrainCurrentValue)
+    WHERE {
+      ?electrificationSection fx:energyCatenary ?energyCatenary .
+      ?energyCatenary fx:maxTrainCurrent ?maxTrainCurrentNode .
+      ?maxTrainCurrentNode xyz:maxCurrent ?maxCurrentStr .
+      BIND (xsd:integer(?maxCurrentStr) AS ?maxCurrent)
+    }
+    GROUP BY ?electrificationSection
+  }
+  
+  # Get contact wire heights (only for electrified sections with overhead contact line)
+  OPTIONAL {
+    ?electrificationSection fx:hasContactWire ?contactWire .
+    ?contactWire xyz:maxHeight ?maxHeightStr ;
+                 xyz:minHeight ?minHeightStr .
+    
+    # Convert strings to doubles
+    BIND (xsd:double(?maxHeightStr) AS ?maxWireHeight)
+    BIND (xsd:double(?minHeightStr) AS ?minWireHeight)
+  }
+  
+  # Get TSI compliant pantograph head type
+  OPTIONAL {
+    ?electrificationSection fx:energyPantograph ?energyPanto .
+    ?energyPanto xyz:compliantTSITypes ?tsiType .
+    
+    # Map railML TSI types to ERA concepts
+    BIND (IF(?tsiType = "tsi1950",
+             IRI("http://data.europa.eu/949/concepts/compliant-pantograph-heads/10"),
+             IF(?tsiType = "tsi2000_2260",
+                IRI("http://data.europa.eu/949/concepts/compliant-pantograph-heads/30"),
+                ?UNDEF
+             )
+         ) AS ?tsiPantographConcept)
+  }
+  
+  # Get energy supply system from electrificationSystem reference
+  OPTIONAL {
+    ?electrificationSection xyz:electrificationSystemRef ?elecSysRef .
+    
+    # Find the referenced electrificationSystem in common section
+    ?electrificationSystem a railml:electrificationSystem ;
+                           xyz:id ?elecSysRef ;
+                           xyz:voltage ?voltageStr ;
+                           xyz:frequency ?frequencyStr .
+    
+    # Convert strings to numbers for comparison
+    BIND (xsd:integer(?voltageStr) AS ?voltage)
+    BIND (xsd:integer(?frequencyStr) AS ?frequency)
+    
+    # Map voltage+frequency combinations to ERA energy supply system concepts
+    # AC systems: voltage and frequency matter
+    # DC systems: frequency is 0
+    BIND (IF(?voltage = 25000 && ?frequency = 50,
+             IRI("http://data.europa.eu/949/concepts/energy-supply-systems/AC10"),
+             IF(?voltage = 3000 && ?frequency = 0,
+                IRI("http://data.europa.eu/949/concepts/energy-supply-systems/DC30"),
+                IF(?voltage = 600 && ?frequency = 0,
+                   IRI("http://data.europa.eu/949/concepts/energy-supply-systems/DC80"),
+                   ?UNDEF
+                )
+             )
+         ) AS ?energySupplySystemConcept)
+  }
+  
+  # Get pantograph spacing requirements (for linking to tracks)
+  OPTIONAL {
+    ?electrificationSection fx:pantographSpacing ?pantographSpacing ;
+                          xyz:id ?electrificationSectionId .
+    ?pantographSpacing xyz:numberPantographsRaised ?numPantosStr ;
+                       xyz:spacingPantographsRaised ?spacingStr .
+    
+    # Convert strings to integers
+    BIND (xsd:integer(?numPantosStr) AS ?pantographsNumber)
+    BIND (xsd:integer(?spacingStr) AS ?pantographsDistance)
+    
+    # Mint URI for RaisedPantographsDistanceAndSpeed instance
+    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/", ?electrificationSectionId)) AS ?raisedPantographsInstance)
+  }
+
+  # Get netElements covered by this electrification section
+  ?electrificationSection fx:linearLocation ?elcLinearLoc .
+  ?elcLinearLoc fx:associatedNetElement ?elcAssocNode .
+  ?elcAssocNode xyz:netElementRef ?netElementRef .
+  
+  # Find tracks that share this netElement
+  ?track a railml:track ;
+         xyz:id ?trackId ;
+         fx:linearLocation ?trackLinearLoc .
+  ?trackLinearLoc fx:associatedNetElement ?trackAssocNode .
+  ?trackAssocNode xyz:netElementRef ?netElementRef .
+  
+  # Mint ERA Track URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+}
+ORDER BY ?electrificationSectionId ?trackId

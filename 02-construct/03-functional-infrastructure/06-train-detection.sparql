@@ -1,0 +1,119 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.6 — Train Detection Elements (functional infrastructure)
+# Maps railml:trainDetectionElement → era:TrainDetectionSystem
+#
+# Source: 64 railML trainDetectionElement instances
+#   - 48 insulatedRailJoint (track circuit boundaries)
+#   - 6 axleCounter (axle counting detection points)
+#   - 10 clearancePoint (detection verification points)
+#  
+# Target: era:TrainDetectionSystem with properties:
+#   - era:trainDetectionSystemType (SKOS concept from railML type)
+#   - era:inCountry (country code)
+#   - era:infrastructureManager (OrganisationRole)
+#     → For workshop: all systems assigned to organisations/0076_IM (Belgian IM)
+#
+# NOTE: TrainDetectionSystem is NOT a subclass of era:InfrastructureElement,
+#       so it does NOT have era:netReference property.
+#       Instead, era:Track (specifically era:RunningTrack) links TO the
+#       TrainDetectionSystem via era:trainDetectionSystem property.
+#
+# Topology-based linking to tracks:
+#   This query also creates the era:trainDetectionSystem relationship from
+#   Track resources to TrainDetectionSystem resources by matching positions:
+#   - spotLocation (point): TDS position must be within track segment extent
+#   - linearLocation (extent): TDS extent must overlap with track segment extent
+#
+# Positioning metadata (stored for potential future use):
+#   The spotLocation positioning information (netElementRef, pos, applicationDirection,
+#   linearCoordinate) is used to determine which tracks should link to this detection
+#   system, but is not directly modeled as properties of the TrainDetectionSystem.
+#   
+#   Tracks link to detection systems via topology matching:
+#   - If a track's NetLinearReference spans a LinearElement (via hasSequence)
+#   - And a TrainDetectionSystem is positioned on that same LinearElement
+#   - Then the track has era:trainDetectionSystem linking to that system
+#
+# Type mapping (railML → ERA):
+#   railML "axleCounter" → http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters
+#   railML "insulatedRailJoint" → http://data.europa.eu/949/concepts/train-detection/10 (track circuit)
+#   railML "clearancePoint" → http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters (treated as verification point)
+#
+# URI Patterns:
+#   TrainDetectionSystem: http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/{id}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+
+CONSTRUCT {
+  # Train Detection System resource
+  ?eraTrainDetection a era:TrainDetectionSystem ;
+                     era:trainDetectionSystemType ?eraType ;
+                     era:inCountry country:NOR ;
+                     era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
+  
+  # Link from Track to TrainDetectionSystem (topology-based)
+  ?eraTrack era:trainDetectionSystem ?eraTrainDetection .
+}
+WHERE {
+  # Bind to trainDetectionElements container
+  ?container a railml:trainDetectionElements ;
+             ?hasTDE ?tdeNode .
+
+  # Bind train detection element
+  ?tdeNode xyz:id ?tdeId ;
+           xyz:type ?railmlType ;
+           fx:spotLocation ?spotLoc .
+
+  # Bind spotLocation positioning
+  ?spotLoc xyz:netElementRef ?netElementRef ;
+           xyz:pos ?netElementPos ;
+           xyz:applicationDirection ?appDir .
+
+  BIND(xsd:double(?netElementPos) AS ?tdePos)
+  
+  # Map railML type to ERA trainDetectionSystemType concept
+  BIND(
+    IF(?railmlType = "axleCounter", 
+       <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters>,
+    IF(?railmlType = "insulatedRailJoint",
+       <http://data.europa.eu/949/concepts/train-detection/10>,
+    IF(?railmlType = "clearancePoint",
+       <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters>,
+    <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters>
+    ))) AS ?eraType
+  )
+
+  # URI construction for TrainDetectionSystem
+  BIND(URI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/", ?tdeId)) AS ?eraTrainDetection)
+  
+  # ===== TRACK LINKING (TOPOLOGY-BASED) =====
+  # Find tracks that contain this train detection system based on position overlap
+  
+  # Get all tracks with their linear segments
+  ?track a railml:track ;
+         xyz:id ?trackId ;
+         fx:linearLocation ?trackLinLoc .
+  
+  ?trackLinLoc fx:associatedNetElement ?trackAssocNode .
+  
+  ?trackAssocNode xyz:netElementRef ?netElementRef ;
+                  xyz:posBegin ?trackPosBegin ;
+                  xyz:posEnd ?trackPosEnd .
+  
+  BIND(xsd:double(?trackPosBegin) AS ?trackPosBeginDouble)
+  BIND(xsd:double(?trackPosEnd) AS ?trackPosEndDouble)
+  
+  # Mint ERA Track URI
+  BIND(URI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  
+    # Case 1: spotLocation - check if point is within track extent
+    FILTER(?tdePos >= ?trackPosBeginDouble && ?tdePos <= ?trackPosEndDouble)
+}

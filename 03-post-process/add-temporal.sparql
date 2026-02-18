@@ -1,0 +1,46 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Add TemporalFeature to all InfrastructureElement instances
+# with validFrom date of 2025-01-01T00:00:00
+
+INSERT {
+  ?element era:temporalFeature ?temporal .
+  ?temporal a era:TemporalFeature ;
+    era:validFrom "2025-01-01T00:00:00"^^xsd:dateTime .
+}
+WHERE {
+  # Find all instances whose type is a subclass of InfrastructureElement
+  VALUES ?type {
+    era:InfrastructureElement
+    era:Bridge
+    era:HABD
+    era:KilometricPost
+    era:LevelCrossing
+    era:NationalRailwayLine
+    era:OperationalPoint
+    era:PlatformEdge
+    era:PrimaryLocation
+    era:RadioBlockCenter
+    era:RunningTrack
+    era:SectionOfLine
+    era:Siding
+    era:Signal
+    era:SpecialArea
+    era:SpecialTunnelArea
+    era:Switch
+    era:Track
+    era:Tunnel
+  }
+  ?element a ?type .
+  
+  # Mint temporal feature URI based on element URI
+  BIND(IRI(CONCAT(STR(?element), "/temporal")) AS ?temporal)
+  
+  # Only add if no temporal feature exists yet (idempotent)
+  FILTER NOT EXISTS {
+    ?element era:temporalFeature ?existingTemporal .
+  }
+}

@@ -1,0 +1,150 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.11 — Level Crossings (functional infrastructure)
+# Maps railML levelCrossingIS → era:LevelCrossing
+#
+# Source: railML level crossing instances
+#  
+# Target: era:LevelCrossing with properties:
+#   - rdfs:label (level crossing name from fx:name, optional)
+#   - era:inCountry → country:NOR (Norway country code)
+#   - era:infrastructureManager (OrganisationRole)
+#     → For workshop: all level crossings assigned to organisations/0076_IM (Belgian IM)
+#   - era:netReference (NetPointReference for topological positioning)
+#
+# SHACL Properties: No additional required properties beyond inherited InfrastructureElement constraints
+#
+# NetPointReference structure:
+#   - era:hasTopoCoordinate → TopologicalCoordinate
+#   - era:hasLrsCoordinate → LinearPositioningSystemCoordinate
+#   - gsp:hasGeometry → gsp:Geometry (POINT - added by post-processing script)
+#
+# LinearPositioningSystemCoordinate structure:
+#   - era:kmPost → KilometricPost (reference to km post)
+#   - era:offsetFromKilometricPost → offset in meters (xsd:double)
+#
+# KilometricPost structure:
+#   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
+#   - era:kilometer → km number (xsd:integer)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → reference to micro-level LinearElement
+#   - era:offsetFromOrigin → position on element (xsd:double)
+#
+# Geometry derivation (post-processing):
+#   POINT geometries for NetPointReferences are calculated by a Python script
+#   using linear referencing (Shapely library) to interpolate points along
+#   LinearElement LINESTRING geometries at the offsetFromOrigin position.
+#   This is done AFTER all CONSTRUCT queries complete.
+#
+# Topology linking:
+#   Links to micro-level LinearElements only via spotLocation/netElementRef.
+#   The micro-level filter ensures level crossings only reference micro netElements.
+#
+# URI Patterns:
+#   LevelCrossing: http://data.europa.eu/949/functionalInfrastructure/levelCrossings/{id}
+#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{levelCrossingId}_on_{netElementId}
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{levelCrossingId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{levelCrossingId}_{positioningSystemRef}_{measure}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+#   Geometry: http://data.europa.eu/949/geometry/{lon}/{lat} (using decimal coordinates)
+
+CONSTRUCT {
+  ?eraLevelCrossing a era:LevelCrossing ;
+                    rdfs:label ?levelCrossingName ;
+                    era:inCountry country:NOR ;
+                    era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+                    era:netReference ?netPointRef .
+
+  ?netPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?topoCoord ;
+               era:hasLrsCoordinate ?lrsCoord .
+
+  ?topoCoord a era:TopologicalCoordinate ;
+             era:onLinearElement ?eraLinearElement ;
+             era:offsetFromOrigin ?posDouble .
+  
+  ?lrsCoord a era:LinearPositioningSystemCoordinate ;
+            era:kmPost ?kmPost ;
+            era:offsetFromKilometricPost ?kmOffset .
+  
+  ?kmPost a era:KilometricPost ;
+          era:hasLRS ?eraLPS ;
+          era:kilometer ?kmNumber .
+}
+WHERE {
+  # Get all level crossings
+  ?levelCrossing a railml:levelCrossingIS ;
+                 xyz:id ?levelCrossingId .
+
+  # Mint ERA LevelCrossing URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/levelCrossings/", ?levelCrossingId)) AS ?eraLevelCrossing)
+
+  # Get level crossing name (optional)
+  OPTIONAL {
+    ?levelCrossing fx:name ?nameNode .
+    ?nameNode xyz:name ?levelCrossingName .
+  }
+
+  # Get spot location for topology linking
+  ?levelCrossing fx:spotLocation ?spotLoc .
+  ?spotLoc xyz:netElementRef ?netElementRef ;
+           xyz:pos ?posStr .
+  
+  # Get linear coordinate for LRS positioning (optional)
+  OPTIONAL {
+    ?spotLoc fx:linearCoordinate ?linearCoord .
+    ?linearCoord xyz:positioningSystemRef ?positioningSystemRef ;
+                 xyz:measure ?measureStr .
+    
+    # Convert measure to double
+    BIND (xsd:double(?measureStr) AS ?measure)
+    
+    # Calculate kilometric post number (rounded to nearest km)
+    BIND (xsd:integer(ROUND(?measure / 1000.0)) AS ?kmNumber)
+    
+    # Calculate offset from kilometric post
+    BIND (?measure - (?kmNumber * 1000.0) AS ?kmOffset)
+    
+    # Dereference LinearPositioningSystem
+    ?lps a railml:linearPositioningSystem ;
+         xyz:id ?positioningSystemRef .
+    BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
+    
+    # Mint URIs for LinearPositioningSystemCoordinate and KilometricPost
+    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?levelCrossingId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+  }
+
+  # MICRO TOPOLOGY ONLY: Convert positions on micro topology
+  # Step 1: Check it's in the micro-level registry
+  ?microLevel xyz:descriptionLevel "Micro" .
+  ?microLevel fx:networkResource/xyz:ref ?netElementRef .
+
+  # Step 2: Ensure the netElement actually exists (not just in registry)
+  ?netElement a railml:netElement ;
+              xyz:id ?netElementRef .
+
+  # Mint ERA netElement URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+
+  # Convert position to double for TopologicalCoordinate
+  BIND (xsd:double(?posStr) AS ?posDouble)
+  
+  # Mint URIs for NetPointReference and TopologicalCoordinate
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?levelCrossingId, "_on_", ?netElementRef)) AS ?netPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?levelCrossingId, "_", ?netElementRef, "_", STR(?posDouble))) AS ?topoCoord)
+  
+  # Note: gsp:hasGeometry triples for NetPointReferences are added by
+  # enrich-geometries.py post-processing script using Shapely linear referencing
+}
+ORDER BY ?levelCrossingId

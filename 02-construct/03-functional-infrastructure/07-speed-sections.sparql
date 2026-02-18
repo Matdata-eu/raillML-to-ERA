@@ -1,0 +1,206 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.7 — Speed Sections (functional infrastructure)
+# Maps railml:speedSection → era:SpeedSection
+#
+# Source: 31 railML speed section instances
+#  
+# Target properties:
+#   - era:speedSectionId — string identifier
+#   - era:infrastructureManager — OrganisationRole
+#     → For workshop: all speed sections assigned to organisations/0076_IM (Belgian IM)
+#   - era:netReference — NetLinearReference for linear extent positioning
+#
+# NetLinearReference structure (linear extent, same as tracks and platform edges):
+#   - era:startsAt → NetPointReference (start of extent)
+#   - era:endsAt → NetPointReference (end of extent)
+#
+# NetPointReference structure (for start/end points):
+#   - era:hasTopoCoordinate → TopologicalCoordinate
+#   - era:hasLrsCoordinate → LinearPositioningSystemCoordinate
+#
+# LinearPositioningSystemCoordinate structure:
+#   - era:kmPost → KilometricPost (reference to km post)
+#   - era:offsetFromKilometricPost → offset in meters (xsd:double)
+#
+# KilometricPost structure:
+#   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
+#   - era:kilometer → km number (xsd:integer)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → reference to micro-level LinearElement
+#   - era:offsetFromOrigin → position on element (xsd:double)
+#
+# Speed section linear extent pattern:
+#   Each railML speedSection has linearLocation with associatedNetElement entries.
+#   Typically, speed sections span multiple netElements. The same speedSection ID
+#   will have multiple netElement references, each with their own extent and LRS.
+#
+# URI Patterns:
+#   SpeedSection: http://data.europa.eu/949/functionalInfrastructure/speedSections/{id}
+#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{speedSectionId}_segment_{sequence}
+#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{speedSectionId}_segment_{sequence}_start
+#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{speedSectionId}_segment_{sequence}_end
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{speedSectionId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{speedSectionId}_{segment}_{start_or_end}_{positioningSystemRef}_{measure}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+
+CONSTRUCT {
+  # Speed Section resource
+  ?eraSpeedSection a era:SpeedSection ;
+                   era:speedSectionId ?speedSectionId ;
+                   era:inCountry country:NOR ;
+                   era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+                   era:netReference ?netLinearRef .
+
+  # NetLinearReference (one per associatedNetElement segment)
+  ?netLinearRef a era:NetLinearReference ;
+                era:hasSequence ?sequenceList ;
+                era:startsAt ?startPointRef ;
+                era:endsAt ?endPointRef .
+
+  # RDF List structure for hasSequence (single-element list)
+  ?sequenceList rdf:first ?eraLinearElement ;
+                rdf:rest rdf:nil .
+
+  # Start point NetPointReference
+  ?startPointRef a era:NetPointReference ;
+                 era:hasTopoCoordinate ?startTopoCoord ;
+                 era:hasLrsCoordinate ?startLrsCoord .
+
+  # Start TopologicalCoordinate
+  ?startTopoCoord a era:TopologicalCoordinate ;
+                  era:onLinearElement ?eraLinearElement ;
+                  era:offsetFromOrigin ?posBeginDouble .
+  
+  # Start LinearPositioningSystemCoordinate
+  ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
+                 era:kmPost ?startKmPost ;
+                 era:offsetFromKilometricPost ?startKmOffset .
+  
+  # Start KilometricPost
+  ?startKmPost a era:KilometricPost ;
+               era:hasLRS ?eraLPS ;
+               era:kilometer ?startKmNumber .
+
+  # End point NetPointReference  
+  ?endPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?endTopoCoord ;
+               era:hasLrsCoordinate ?endLrsCoord .
+
+  # End TopologicalCoordinate
+  ?endTopoCoord a era:TopologicalCoordinate ;
+                era:onLinearElement ?eraLinearElement ;
+                era:offsetFromOrigin ?posEndDouble .
+  
+  # End LinearPositioningSystemCoordinate
+  ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
+               era:kmPost ?endKmPost ;
+               era:offsetFromKilometricPost ?endKmOffset .
+  
+  # End KilometricPost
+  ?endKmPost a era:KilometricPost ;
+             era:hasLRS ?eraLPS ;
+             era:kilometer ?endKmNumber .
+}
+WHERE {
+  # Get all speed sections
+  ?speedSection a railml:speedSection ;
+                xyz:id ?speedSectionId .
+
+  # Mint ERA SpeedSection URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/speedSections/", ?speedSectionId)) AS ?eraSpeedSection)
+
+  # Get linear location with associated net elements
+  ?speedSection fx:linearLocation ?linearLoc .
+  ?linearLoc fx:associatedNetElement ?assocNode .
+  
+  # Get net element reference and positions
+  ?assocNode xyz:netElementRef ?netElementRef ;
+             xyz:posBegin ?posBegin ;
+             xyz:posEnd ?posEnd .
+  
+  # Get sequence (for ordering segments, use 1 as default if not present)
+  OPTIONAL { ?assocNode xyz:sequence ?seqValue . }
+  BIND (COALESCE(?seqValue, "1") AS ?sequence)
+  
+  # Convert positions to double
+  BIND (xsd:double(?posBegin) AS ?posBeginDouble)
+  BIND (xsd:double(?posEnd) AS ?posEndDouble)
+  
+  # Dereference netElement to get LinearElement URI
+  ?netElement a railml:netElement ;
+              xyz:id ?netElementRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+
+  # Mint NetLinearReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?speedSectionId, "_segment_", STR(?sequence))) AS ?netLinearRef)
+
+  # Mint sequence list URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?speedSectionId, "_segment_", STR(?sequence), "_seqlist")) AS ?sequenceList)
+
+  # ===== START POINT =====
+  
+  # Mint start point NetPointReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?speedSectionId, "_segment_", STR(?sequence), "_start")) AS ?startPointRef)
+  
+  # Mint start TopologicalCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?speedSectionId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
+  
+  # Get start LRS coordinates
+  ?assocNode fx:linearCoordinateBegin ?startLinCoord .
+  ?startLinCoord xyz:measure ?startMeasure ;
+                 xyz:positioningSystemRef ?posSystemRef .
+  
+  BIND (xsd:double(?startMeasure) AS ?startMeasureDouble)
+  
+  # Get end LRS coordinates
+  ?assocNode fx:linearCoordinateEnd ?endLinCoord .
+  ?endLinCoord xyz:measure ?endMeasure ;
+               xyz:positioningSystemRef ?posSystemRef .  # Same positioning system as start
+  
+  BIND (xsd:double(?endMeasure) AS ?endMeasureDouble)
+  
+  # Dereference LinearPositioningSystem
+  ?lps a railml:linearPositioningSystem ;
+       xyz:id ?posSystemRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+  
+  # Calculate start KilometricPost (round to nearest km)
+  BIND (xsd:integer(ROUND(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+  
+  # Calculate start offset from km post
+  BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
+  
+  # Mint start LinearPositioningSystemCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?speedSectionId, "_segment_", STR(?sequence), "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+
+  # ===== END POINT =====
+  
+  # Mint end point NetPointReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?speedSectionId, "_segment_", STR(?sequence), "_end")) AS ?endPointRef)
+  
+  # Mint end TopologicalCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?speedSectionId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
+  
+  # Calculate end KilometricPost (round to nearest km)
+  BIND (xsd:integer(ROUND(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  
+  # Calculate end offset from km post
+  BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
+  
+  # Mint end LinearPositioningSystemCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?speedSectionId, "_segment_", STR(?sequence), "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+}
+ORDER BY ?speedSectionId ?sequence

@@ -1,0 +1,260 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.2a — Operational Points: NetAreaReference (from areaLocation)
+# Maps railml:operationalPoint with areaLocation → era:OperationalPoint with era:NetAreaReference
+#
+# Source: Operational points with areaLocation on meso/macro topology elements
+#
+# Strategy: areaLocation expansion via NetAreaReference
+#   - railML operational points have areaLocations on meso/macro topology elements (full extent)
+#   - ERA target graph only handles micro-level topology
+#   - Solution: Create one NetAreaReference per areaLocation that includes all constituent micro NetLinearReferences
+#   - The NetAreaReference uses era:includes to point to an rdf:List of NetLinearReferences
+#   - Each micro element becomes one NetLinearReference in the list
+#
+# Target properties (SHACL-compliant):
+#   - era:netReference — REQUIRED (minCount=1) → era:NetAreaReference
+#
+# NetAreaReference structure:
+#   - era:includes → rdf:List of era:NetLinearReference (one per micro element)
+#
+# NetLinearReference structure (per micro element):
+#   - era:hasSequence → rdf:List containing the single LinearElement
+#   - era:startsAt → era:NetPointReference (position 0)
+#   - era:endsAt → era:NetPointReference (position = element length)
+#   Each start/end NetPointReference has:
+#   - era:hasTopoCoordinate → era:TopologicalCoordinate
+#   - era:hasLrsCoordinate → era:LinearPositioningSystemCoordinate (from track coverage)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → era:LinearElement (micro-level netElement)
+#   - era:offsetFromOrigin → xsd:double (position in meters)
+#
+# LinearPositioningSystemCoordinate structure:
+#   - era:kmPost → era:KilometricPost (from track's linearCoordinate)
+#   - era:offsetFromKilometricPost → xsd:double
+#
+# KilometricPost structure (shared resource):
+#   - era:hasLRS → era:LinearPositioningSystem
+#   - era:kilometer → xsd:double
+#
+# URI Patterns:
+#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
+#   NetAreaReference: http://data.europa.eu/949/topology/netAreaReferences/{oppId}_{mesoMacroRef}
+#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{oppId}_{microElementRef}
+#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{oppId}_{microElementRef}_start
+#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{oppId}_{microElementRef}_end
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{oppId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{oppId}_{microElementRef}_{start|end}_{positioningSystemRef}_{measure}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   LinearPositioningSystem: http://data.europa.eu/949/linearPositioningSystems/{positioningSystemRef}
+
+CONSTRUCT {
+  # Operational Point with NetAreaReference
+  ?eraOp a era:OperationalPoint ;
+         era:netReference ?netAreaRef .
+
+  # NetAreaReference (one per areaLocation/meso-macro element)
+  ?netAreaRef a era:NetAreaReference ;
+              era:includes ?includesList .
+
+  # RDF List structure for includes - list node per NetLinearReference
+  ?listNode rdf:first ?netLinearRef ;
+            rdf:rest ?restNode .
+
+  # NetLinearReference (one per micro element in areaLocation)
+  ?netLinearRef a era:NetLinearReference ;
+                era:hasSequence ?sequenceList ;
+                era:startsAt ?startPointRef ;
+                era:endsAt ?endPointRef .
+
+  # RDF List structure for hasSequence (single-element list)
+  ?sequenceList rdf:first ?eraLinearElement ;
+                rdf:rest rdf:nil .
+
+  # Start point
+  ?startPointRef a era:NetPointReference ;
+                 era:hasTopoCoordinate ?startTopoCoord ;
+                 era:hasLrsCoordinate ?startLrsCoord .
+
+  ?startTopoCoord a era:TopologicalCoordinate ;
+                  era:onLinearElement ?eraLinearElement ;
+                  era:offsetFromOrigin ?posBeginDouble .
+
+  ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
+                 era:kmPost ?startKmPost ;
+                 era:offsetFromKilometricPost ?startKmOffset .
+
+  ?startKmPost a era:KilometricPost ;
+               era:hasLRS ?eraLPS ;
+               era:kilometer ?startKmNumber .
+
+  # End point
+  ?endPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?endTopoCoord ;
+               era:hasLrsCoordinate ?endLrsCoord .
+
+  ?endTopoCoord a era:TopologicalCoordinate ;
+                era:onLinearElement ?eraLinearElement ;
+                era:offsetFromOrigin ?posEndDouble .
+
+  ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
+               era:kmPost ?endKmPost ;
+               era:offsetFromKilometricPost ?endKmOffset .
+
+  ?endKmPost a era:KilometricPost ;
+             era:hasLRS ?eraLPS ;
+             era:kilometer ?endKmNumber .
+}
+WHERE {
+  # Get all operational points
+  ?op a railml:operationalPoint ;
+      xyz:id ?oppId .
+
+  # Mint ERA OperationalPoint URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+  
+  ?op fx:areaLocation ?areaLoc .
+  ?areaLoc fx:associatedNetElement ?assocNetElem .
+  ?assocNetElem xyz:netElementRef ?mesoMacroRef .
+  
+  # Mint NetAreaReference URI (one per areaLocation)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef)) AS ?netAreaRef)
+  
+  # Verify this references a meso/macro element
+  ?mesoMacroElement a railml:netElement ;
+                    xyz:id ?mesoMacroRef ;
+                    fx:elementCollectionUnordered ?collection .
+  
+  # Expand to constituent micro elements
+  ?collection fx:elementPart ?elementPart .
+  ?elementPart xyz:ref ?microElementRef .
+  
+  # Get micro element details
+  ?microElement a railml:netElement ;
+                xyz:id ?microElementRef ;
+                xyz:length ?microLength .
+  
+  # Ensure it's truly a micro element (no sub-collections)
+  FILTER NOT EXISTS { ?microElement fx:elementCollectionUnordered ?microColl . }
+  
+  # Linear extent: from 0 to element length
+  BIND (0.0 AS ?posBeginDouble)
+  BIND (xsd:double(?microLength) AS ?posEndDouble)
+  
+  # Mint LinearElement URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?microElementRef)) AS ?eraLinearElement)
+  
+  # Mint NetLinearReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?oppId, "_", ?microElementRef)) AS ?netLinearRef)
+
+  # Mint sequence list URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?oppId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
+  
+  # Build RDF List structure for era:includes
+  # Create list node for this NetLinearReference
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", ?microElementRef)) AS ?listNode)
+  
+  # Determine the next element in the list (sorted by microElementRef)
+  OPTIONAL {
+    ?collection fx:elementPart ?nextElementPart .
+    ?nextElementPart xyz:ref ?nextMicroRef .
+    FILTER (?nextMicroRef > ?microElementRef)
+    # Find the minimum next reference (immediate successor)
+    {
+      SELECT ?oppId ?mesoMacroRef ?microElementRef (MIN(?nextMicroRef) AS ?immediateNext)
+      WHERE {
+        ?op2 a railml:operationalPoint ;
+             xyz:id ?oppId .
+        ?op2 fx:areaLocation ?areaLoc2 .
+        ?areaLoc2 fx:associatedNetElement ?assocNetElem2 .
+        ?assocNetElem2 xyz:netElementRef ?mesoMacroRef .
+        ?mesoMacroElement2 a railml:netElement ;
+                          xyz:id ?mesoMacroRef ;
+                          fx:elementCollectionUnordered ?collection2 .
+        ?collection2 fx:elementPart ?ep1 .
+        ?ep1 xyz:ref ?microElementRef .
+        ?collection2 fx:elementPart ?ep2 .
+        ?ep2 xyz:ref ?nextMicroRef .
+        FILTER (?nextMicroRef > ?microElementRef)
+      }
+      GROUP BY ?oppId ?mesoMacroRef ?microElementRef
+    }
+  }
+  
+  # Bind rest node (points to next list node or rdf:nil)
+  BIND (
+    IF(BOUND(?immediateNext),
+      IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", ?immediateNext)),
+      rdf:nil
+    ) AS ?restNode
+  )
+  
+  # Determine the head of the list (minimum microElementRef)
+  {
+    SELECT ?oppId ?mesoMacroRef (MIN(?microRef) AS ?firstMicroRef)
+    WHERE {
+      ?op3 a railml:operationalPoint ;
+           xyz:id ?oppId .
+      ?op3 fx:areaLocation ?areaLoc3 .
+      ?areaLoc3 fx:associatedNetElement ?assocNetElem3 .
+      ?assocNetElem3 xyz:netElementRef ?mesoMacroRef .
+      ?mesoMacroElement3 a railml:netElement ;
+                        xyz:id ?mesoMacroRef ;
+                        fx:elementCollectionUnordered ?collection3 .
+      ?collection3 fx:elementPart ?ep3 .
+      ?ep3 xyz:ref ?microRef .
+    }
+    GROUP BY ?oppId ?mesoMacroRef
+  }
+  
+  # Bind includesList (head of the list)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", ?firstMicroRef)) AS ?includesList)
+  
+  # Mint start point URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?oppId, "_", ?microElementRef, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?oppId, "_", ?microElementRef, "_0.0")) AS ?startTopoCoord)
+  
+  # Mint end point URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?oppId, "_", ?microElementRef, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?oppId, "_", ?microElementRef, "_", STR(?posEndDouble))) AS ?endTopoCoord)
+
+  # Get LRS coordinates from the track that covers this micro element
+  OPTIONAL {
+    ?track a railml:track ;
+           fx:linearLocation ?linLoc .
+    ?linLoc fx:associatedNetElement ?trackAssoc .
+    ?trackAssoc xyz:netElementRef ?microElementRef ;
+                fx:linearCoordinateBegin ?startLinCoord ;
+                fx:linearCoordinateEnd ?endLinCoord .
+    ?startLinCoord xyz:measure ?startMeasure ;
+                   xyz:positioningSystemRef ?posSystemRef .
+    ?endLinCoord xyz:measure ?endMeasure .
+
+    # Start LRS
+    BIND (xsd:double(?startMeasure) AS ?startMeasureDouble)
+    BIND (xsd:integer(ROUND(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
+    BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
+    # End LRS
+    BIND (xsd:double(?endMeasure) AS ?endMeasureDouble)
+    BIND (xsd:integer(ROUND(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
+    BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
+  }
+
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?oppId, "_", ?microElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?oppId, "_", ?microElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  # LinearPositioningSystem URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+  FILTER(?oppId = "opp141")
+}
+ORDER BY ?oppId ?mesoMacroRef ?microElementRef

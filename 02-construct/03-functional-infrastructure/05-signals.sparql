@@ -1,0 +1,184 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+# Phase 3.5 — Signals (functional infrastructure)
+# Maps railml:signalIS → era:Signal
+#
+# Source: 80 railML signalIS instances
+#  
+# Target: era:Signal with properties:
+#   - era:signalId (string identifier)
+#   - era:signalType (SKOS concept from typeDesignator/rulebook TJN → ERA signal type mapping)
+#   - era:hasOrientation (SKOS concept from applicationDirection) [⚠️ DANGER! Refers to KM direction, not topology direction]
+#   - era:infrastructureManager (OrganisationRole, replaces deprecated imCode)
+#     → For workshop: all signals assigned to organisations/0076_IM (Belgian IM)
+#   - era:netReference (NetPointReference for topological positioning)
+#
+# NetPointReference structure:
+#   - era:hasTopoCoordinate → TopologicalCoordinate
+#   - era:hasLrsCoordinate → LinearPositioningSystemCoordinate
+#   - era:appliesToDirection → (SKOS concept from applicationDirection) towards topology direction
+#   - gsp:hasGeometry → gsp:Geometry (POINT - added by post-processing script)
+#
+# LinearPositioningSystemCoordinate structure:
+#   - era:kmPost → KilometricPost (reference to km post)
+#   - era:offsetFromKilometricPost → offset in meters (xsd:double)
+#
+# KilometricPost structure:
+#   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
+#   - era:kilometer → km number (xsd:double)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → reference to micro-level LinearElement
+#   - era:offsetFromOrigin → position on element (xsd:double)
+#
+# Geometry derivation (post-processing):
+#   POINT geometries for NetPointReferences are calculated by a Python script
+#   using linear referencing (Shapely library) to interpolate points along
+#   LinearElement LINESTRING geometries at the offsetFromOrigin position.
+#   This is done AFTER all CONSTRUCT queries complete.
+#
+# Topology linking:
+#   Links to micro-level LinearElements only via spotLocation/netElementRef.
+#   The micro-level filter ensures signals only reference micro netElements.
+#
+# Application direction mapping:
+#   railML "normal" → ERA concepts/orientations/00 (Normal)
+#   railML "reverse" → ERA concepts/orientations/01 (Opposite)
+#   railML "both" → ERA concepts/orientations/02 (Both)
+#
+# Deprecated properties AVOIDED:
+#   - era:imCode (property) → replaced by era:infrastructureManager
+#
+# URI Patterns:
+#   Signal: http://data.europa.eu/949/functionalInfrastructure/signals/{id}
+#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{signalId}_on_{netElementId}
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{signalId}_{netElementId}_{position}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+#   Geometry: http://data.europa.eu/949/geometry/{lon}/{lat} (using decimal coordinates)
+CONSTRUCT {
+  ?eraSignal a era:Signal ;
+             era:signalId ?signalId ;
+             era:signalType ?eraSignalType ;
+             era:inCountry country:NOR ;
+             # era:hasOrientation ?orientation ; ⚠️ DANGER! Refers to KM direction, not topology direction
+             # Link to infrastructure manager role (for demo purposes, we will link all signals to the same IM, but in a real scenario this would be based on the organizational unit responsible for the signal's location)    
+             era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+             era:netReference ?netPointRef .
+
+  ?netPointRef a era:NetPointReference ;
+               era:appliesToDirection ?orientation ;
+               era:hasTopoCoordinate ?topoCoord ;
+               era:hasLrsCoordinate ?lrsCoord .
+
+  ?topoCoord a era:TopologicalCoordinate ;
+             era:onLinearElement ?eraLinearElement ;
+             era:offsetFromOrigin ?posDouble .
+  
+  ?lrsCoord a era:LinearPositioningSystemCoordinate ;
+            era:kmPost ?kmPost ;
+            era:offsetFromKilometricPost ?kmOffset .
+  
+  ?kmPost a era:KilometricPost ;
+          era:hasLRS ?eraLPS ;
+          era:kilometer ?kmNumber .
+}
+WHERE {
+  # Get all signals
+  ?signal a railml:signalIS ;
+          xyz:id ?signalId .
+
+  # Mint ERA Signal URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/signals/", ?signalId)) AS ?eraSignal)
+
+  # Extract signal type from typeDesignator (TJN rulebook)
+  # TJN codes map to ERA signal type concepts - see TJN-TO-ERA-SIGNAL-TYPE-MAPPING.md
+  ?signal fx:typeDesignator ?typeDesNode .
+  ?typeDesNode xyz:entry ?tjnCode ;
+                xyz:rulebook "TJN" .
+
+  # Map TJN signal codes to ERA signal type SKOS concepts
+  # High-confidence mappings based on Norwegian railway regulations (Kapittel 8):
+  #   §8-10 (Innkjørhovedsignal) → 01 (Home Signal)
+  #   §8-11 (Utkjørhovedsignal)  → 04 (Exit Signal)
+  #   §8-12 (Indre hovedsignal)  → 02 (Intermediate Signal)
+  #   §8-13 (Blokksignal)        → 06 (Block Signal)
+  #   §8-23 (Dvergsignaler)      → 12 (Shunting Signal)
+  FILTER(?tjnCode in ("§8-10", "§8-11", "§8-12", "§8-13", "§8-23"))
+  BIND (
+    IF(?tjnCode = "§8-10", IRI("http://data.europa.eu/949/concepts/signal-types/01"),
+    IF(?tjnCode = "§8-11", IRI("http://data.europa.eu/949/concepts/signal-types/04"),
+    IF(?tjnCode = "§8-12", IRI("http://data.europa.eu/949/concepts/signal-types/02"),
+    IF(?tjnCode = "§8-13", IRI("http://data.europa.eu/949/concepts/signal-types/06"),
+    IF(?tjnCode = "§8-23", IRI("http://data.europa.eu/949/concepts/signal-types/12"),
+    # Default, should not be reached
+    IRI("http://data.europa.eu/949/concepts/signal-types/error")
+    )))))
+    AS ?eraSignalType
+  )
+
+  # Get spot location for topology linking
+  ?signal fx:spotLocation ?spotLoc .
+  ?spotLoc xyz:netElementRef ?netElementRef ;
+           xyz:pos ?posStr ;
+           xyz:applicationDirection ?appDirection .
+  
+  # Get linear coordinate for LRS positioning
+  ?spotLoc fx:linearCoordinate ?linearCoord .
+  ?linearCoord xyz:positioningSystemRef ?positioningSystemRef ;
+               xyz:measure ?measureStr .
+  
+  # Convert measure to double
+  BIND (xsd:double(?measureStr) AS ?measure)
+  
+  # Calculate kilometric post number (rounded to nearest km)
+  # KP = ROUND(measure / 1000) - convert to integer to avoid scientific notation in URIs
+  BIND (xsd:integer(ROUND(?measure / 1000.0)) AS ?kmNumber)
+  
+  # Calculate offset from kilometric post
+  # offset = measure - (KP * 1000)
+  BIND (?measure - (?kmNumber * 1000.0) AS ?kmOffset)
+
+  # MICRO TOPOLOGY ONLY: On convert positions on micro topology
+  # Step 1: Check it's in the micro-level registry
+  ?microLevel xyz:descriptionLevel "Micro" .
+  ?microLevel fx:networkResource/xyz:ref ?netElementRef .
+
+  # Step 2: Ensure the netElement actually exists (not just in registry)
+  ?netElement a railml:netElement ;
+              xyz:id ?netElementRef .
+
+  # Mint ERA netElement URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+
+  # Convert position to double for TopologicalCoordinate
+  BIND (xsd:double(?posStr) AS ?posDouble)
+
+  # Map railML application direction to ERA orientation concepts
+  # "normal" → 00, "reverse" → 01, "both" → 02
+  BIND (IF(?appDirection = "normal",IRI("http://data.europa.eu/949/concepts/orientations/00"),IF(?appDirection = "reverse",IRI("http://data.europa.eu/949/concepts/orientations/01"),IF(?appDirection = "both",IRI("http://data.europa.eu/949/concepts/orientations/02"),?unbound))) AS ?orientation)
+  
+  # Mint URIs for NetPointReference and TopologicalCoordinate
+  # Pattern: Use signal ID + netElement ref for uniqueness
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?signalId, "_on_", ?netElementRef)) AS ?netPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?signalId, "_", ?netElementRef, "_", STR(?posDouble))) AS ?topoCoord)
+  
+  # Mint URIs for LinearPositioningSystemCoordinate and KilometricPost
+  # LinearPositioningSystemCoordinate: unique per signal
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?signalId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+  
+  # KilometricPost: shared resource per positioning system + km number
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+  
+  # LinearPositioningSystem: reference to common resource
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
+  
+  # Note: gsp:hasGeometry triples for NetPointReferences are added by
+  # enrich-geometries.py post-processing script using Shapely linear referencing
+}

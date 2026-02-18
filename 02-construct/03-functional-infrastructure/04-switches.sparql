@@ -1,0 +1,159 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.4 — Switches (functional infrastructure)
+# Maps railml:switchIS → era:Switch
+#
+# Source: 26 railML switchIS instances
+#  
+# Target: era:Switch with properties:
+#   - era:switchId (string identifier)
+#   - rdfs:label (switch name from fx:name)
+#   - era:inCountry (country code)
+#   - era:infrastructureManager (OrganisationRole)
+#     → For workshop: all switches assigned to organisations/0076_IM (Belgian IM)
+#   - era:netReference (NetPointReference for topological positioning)
+#
+# NetPointReference structure:
+#   - era:appliesToDirection (SKOS concept from applicationDirection)
+#   - era:hasTopoCoordinate → TopologicalCoordinate
+#   - era:hasLrsCoordinate → LinearPositioningSystemCoordinate (if available)
+#
+# LinearPositioningSystemCoordinate structure:
+#   - era:kmPost → KilometricPost (reference to km post)
+#   - era:offsetFromKilometricPost → offset in meters (xsd:double)
+#
+# KilometricPost structure:
+#   - era:hasLRS → LinearPositioningSystem (reference to positioning system)
+#   - era:kilometer → km number (xsd:double)
+#
+# TopologicalCoordinate structure:
+#   - era:onLinearElement → reference to micro-level LinearElement
+#   - era:offsetFromOrigin → position on element (xsd:double)
+#
+# Geometry derivation (post-processing):
+#   POINT geometries for NetPointReferences are calculated by a Python script
+#   using linear referencing (Shapely library) to interpolate points along
+#   LinearElement LINESTRING geometries at the offsetFromOrigin position.
+#   This is done AFTER all CONSTRUCT queries complete.
+#
+# Topology linking:
+#   Links to micro-level LinearElements only via spotLocation/netElementRef.
+#   The micro-level filter ensures switches only reference micro netElements.
+#
+# Application direction mapping:
+#   railML "normal" → ERA concepts/orientations/00 (Normal)
+#   railML "reverse" → ERA concepts/orientations/01 (Opposite)
+#   railML "both" → ERA concepts/orientations/02 (Both)
+#
+# URI Patterns:
+#   Switch: http://data.europa.eu/949/functionalInfrastructure/switches/{id}
+#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{switchId}_on_{netElementId}
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{switchId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{switchId}_{positioningSystemRef}_{measure}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
+
+CONSTRUCT {
+  ?eraSwitch a era:Switch ;
+             era:switchId ?switchId ;
+             rdfs:label ?switchName ;
+             era:inCountry country:NOR ;
+             era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+             era:netReference ?netPointRef .
+
+  ?netPointRef a era:NetPointReference ;
+               era:appliesToDirection ?orientation ;
+               era:hasTopoCoordinate ?topoCoord ;
+               era:hasLrsCoordinate ?lrsCoord .
+
+  ?topoCoord a era:TopologicalCoordinate ;
+             era:onLinearElement ?eraLinearElement ;
+             era:offsetFromOrigin ?posDouble .
+
+  # LRS Coordinate (if linearCoordinate available)
+  ?lrsCoord a era:LinearPositioningSystemCoordinate ;
+            era:kmPost ?kmPost ;
+            era:offsetFromKilometricPost ?kmOffset .
+
+  # KilometricPost (shared resource)
+  ?kmPost a era:KilometricPost ;
+          era:hasLRS ?eraLPS ;
+          era:kilometer ?kmNumber .
+}
+WHERE {
+  # Get all switches
+  ?switch a railml:switchIS ;
+          xyz:id ?switchId .
+
+  # Mint ERA Switch URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/switches/", ?switchId)) AS ?eraSwitch)
+
+  # Get switch name
+  OPTIONAL {
+    ?switch fx:name ?nameNode .
+    ?nameNode xyz:name ?switchName .
+  }
+
+  # Get spot location for topological positioning
+  ?switch fx:spotLocation ?spotLoc .
+  ?spotLoc xyz:netElementRef ?neRef ;
+           xyz:pos ?posStr .
+
+  # Convert position to double
+  BIND (xsd:double(?posStr) AS ?posDouble)
+
+  # Mint LinearElement URI (topology reference)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?neRef)) AS ?eraLinearElement)
+
+  # Mint NetPointReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?switchId, "_on_", ?neRef)) AS ?netPointRef)
+
+  # Mint TopologicalCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?switchId, "_", ?neRef, "_", STR(?posDouble))) AS ?topoCoord)
+
+  # Get application direction and map to ERA orientation concept
+  OPTIONAL {
+    ?spotLoc xyz:applicationDirection ?appDirection .
+    
+    # Map railML application directions to ERA orientations
+    BIND (
+      IF(?appDirection = "normal", IRI("http://data.europa.eu/949/concepts/orientations/00"),
+      IF(?appDirection = "reverse", IRI("http://data.europa.eu/949/concepts/orientations/01"),
+      IF(?appDirection = "both", IRI("http://data.europa.eu/949/concepts/orientations/02"),
+      ?unbound)))
+      AS ?orientation
+    )
+  }
+
+  # Get linear coordinate for LRS positioning (if available)
+  OPTIONAL {
+    ?spotLoc fx:linearCoordinate ?linearCoord .
+    
+    ?linearCoord xyz:positioningSystemRef ?positioningSystemRef ;
+                 xyz:measure ?measureStr .
+    
+    # Convert and calculate
+    BIND (xsd:double(?measureStr) AS ?measure)
+    BIND (ROUND(?measure / 1000.0) AS ?kmNumber)
+    BIND ((?measure - (?kmNumber * 1000.0)) AS ?kmOffset)
+    
+    # Mint URIs
+    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", 
+                     ?switchId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+    
+    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", 
+                     ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+    
+    BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", 
+                     ?positioningSystemRef)) AS ?eraLPS)
+  }
+}
+ORDER BY ?switchId

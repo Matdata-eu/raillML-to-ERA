@@ -1,0 +1,86 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.14 — Track Maximum Permitted Speed (functional infrastructure)
+# Adds era:maximumPermittedSpeed property to era:RunningTrack resources
+#
+# Source: 31 railML speed section instances with maxSpeed attribute
+#  
+# Target property:
+#   - era:maximumPermittedSpeed — maximum permitted speed in km/h (xsd:integer)
+#     → Mapped from railML speedSection/@maxSpeed attribute
+#     → Domain: era:RunningTrack or era:CommonCharacteristicsSubset
+#
+# Linking Pattern (Functional Resource Pattern):
+#   Speed sections are NOT infrastructure elements with netReference.
+#   Instead, Tracks reference speed values based on shared netElement topology.
+#   Same pattern as ContactLineSystem (08-electrification-sections.sparql).
+#
+# Implementation:
+#   1. Each railML speedSection covers multiple netElements (via linearLocation/associatedNetElement)
+#   2. Each railML track also covers multiple netElements
+#   3. Link Tracks to speed values when they share netElements
+#   4. Result: era:RunningTrack era:maximumPermittedSpeed ?speed .
+#
+# Speed value mapping:
+#   - Source: railML maxSpeed attribute (decimal, e.g., "40.0", "80.0", "160.0")
+#   - Target: ERA maximumPermittedSpeed (integer, km/h)
+#   - Conversion: Convert string to xsd:integer
+#   - Aggregation: MIN() to get most restrictive speed (SHACL maxCount=1 per track)
+#
+# SHACL Constraint:
+#   Each track can have only ONE maximumPermittedSpeed value (maxCount=1).
+#   When a track overlaps multiple speed sections, take the LOWEST (most restrictive) value.
+#
+# Note: Only RunningTrack resources get speed values (not Sidings).
+#
+# URI Pattern:
+#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+#
+# Example mapping:
+#   railML: <track id="trc1" type="mainTrack"> shares netElement ne_16 with
+#           <speedSection id="sps26_1" maxSpeed="20.0"> on netElement ne_16 AND
+#           <speedSection id="sps30_1" maxSpeed="80.0"> on netElement ne_16
+#   ERA:    tracks/trc1 era:maximumPermittedSpeed 20 .  (takes minimum)
+CONSTRUCT {
+  # Add maximum permitted speed to RunningTrack resources (one value per track)
+  ?eraTrack era:maximumPermittedSpeed ?minMaxSpeed .
+}
+WHERE {
+  {
+  # Nested SELECT to aggregate: take minimum speed per track
+    SELECT ?trackId (MIN(?speedInt) AS ?minMaxSpeed)
+    WHERE {
+      # Get all speed sections with maxSpeed attribute
+      ?speedSection a railml:speedSection ;
+                    xyz:id ?speedSectionId ;
+                    xyz:maxSpeed ?maxSpeedStr .
+      # Get netElement references from speed section's linear location
+      ?speedSection fx:linearLocation ?speedLinLoc .
+      ?speedLinLoc fx:associatedNetElement ?speedAssoc .
+      ?speedAssoc xyz:netElementRef ?sharedNetElementRef .
+      # Find tracks with the same netElement reference
+      ?track a railml:track ;
+             xyz:id ?trackId ;
+             xyz:type ?trackType ;
+             fx:linearLocation ?trackLinLoc .
+      ?trackLinLoc fx:associatedNetElement ?trackAssoc .
+      ?trackAssoc xyz:netElementRef ?sharedNetElementRef .
+      # Only link to running tracks (not sidings)
+      FILTER (?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"))
+      BIND (STRDT(?maxSpeedStr, xsd:integer) AS ?speedInt)
+      # Convert maxSpeed string to integer (km/h)
+    }
+    GROUP BY ?trackId
+  }
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  # Mint ERA Track URI (same pattern as 01-tracks.sparql)
+}
+ORDER BY ?trackId

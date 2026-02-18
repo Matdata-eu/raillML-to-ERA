@@ -1,0 +1,22 @@
+{
+  "servers": {
+    "explorer-one-eyed-graph": {
+      "type": "stdio",
+      "command": "python.exe",
+      "args": [
+        "c:\\Users\\mathi\\Git\\semantic-tools\\mcp-rdf-explorer\\src\\mcp-rdf-explorer\\server.py",
+        "--sparql-endpoint",
+        "http://localhost:8082/jena-fuseki/advanced-example-one-eyed/sparql"
+      ]
+    },
+    "explorer-era-ontology": {
+      "type": "stdio",
+      "command": "python.exe",
+      "args": [
+        "c:\\Users\\mathi\\Git\\semantic-tools\\mcp-rdf-explorer\\src\\mcp-rdf-explorer\\server.py",
+        "--sparql-endpoint",
+        "http://localhost:8082/jena-fuseki/era-ontology/sparql"
+      ]
+    }
+  }
+}

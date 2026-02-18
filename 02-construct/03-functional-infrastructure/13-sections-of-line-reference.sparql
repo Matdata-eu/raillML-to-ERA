@@ -1,0 +1,220 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.9 — Sections of Line (Detailed Properties)
+# Adds detailed properties to era:SectionOfLine:
+#   - era:hasPart → links to constituent tracks
+#   - era:netReference → NetAreaReference to micro topology
+#   - era:lengthOfSectionOfLine → total length in meters
+#
+# This file expands the meso element of each section to its constituent micro elements,
+# links tracks that reference those micro elements, and creates NetAreaReference structures.
+#
+# Target properties:
+#   era:hasPart → era:Track (tracks within the section)
+#   era:netReference → era:NetAreaReference (micro topology positioning)
+#   era:lengthOfSectionOfLine → xsd:double (total length in meters)
+
+CONSTRUCT {
+  # SectionOfLine detailed properties
+  ?eraSol era:hasPart ?eraTrack ;
+          era:netReference ?netAreaRef ;
+          era:lengthOfSectionOfLine ?totalLength .
+
+  # NetAreaReference (one per section, covering all micro elements)
+  ?netAreaRef a era:NetAreaReference ;
+              era:includes ?includesList .
+
+  # RDF List structure for includes - list node per NetLinearReference
+  ?listNode rdf:first ?netLinearRef ;
+            rdf:rest ?restNode .
+
+  # NetLinearReference (one per micro element in the meso element)
+  ?netLinearRef a era:NetLinearReference ;
+                era:hasSequence ?sequenceList ;
+                era:startsAt ?startPointRef ;
+                era:endsAt ?endPointRef .
+
+  # RDF List structure for hasSequence (single-element list)
+  ?sequenceList rdf:first ?eraLinearElement ;
+                rdf:rest rdf:nil .
+
+  # Start point
+  ?startPointRef a era:NetPointReference ;
+                 era:hasTopoCoordinate ?startTopoCoord .
+
+  ?startTopoCoord a era:TopologicalCoordinate ;
+                  era:onLinearElement ?eraLinearElement ;
+                  era:offsetFromOrigin 0.0 .
+
+  # End point
+  ?endPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?endTopoCoord .
+
+  ?endTopoCoord a era:TopologicalCoordinate ;
+                era:onLinearElement ?eraLinearElement ;
+                era:offsetFromOrigin ?microLengthDouble .
+}
+WHERE {
+  # Get lines WITH belongsToParent (child lines = actual sections)
+  ?line a railml:line ;
+        xyz:id ?lineId ;
+        xyz:belongsToParent ?parentLineId .
+
+  # Mint ERA SectionOfLine URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/", ?lineId)) AS ?eraSol)
+
+  # Get the meso netElement from this line's linearLocation
+  ?line fx:linearLocation ?linLoc .
+  ?linLoc fx:associatedNetElement ?assocNetElem .
+  ?assocNetElem xyz:netElementRef ?mesoElementRef .
+
+  # ===== MICRO TOPOLOGY EXPANSION =====
+  
+  # Get the meso element and expand to constituent micro elements
+  ?mesoElement a railml:netElement ;
+               xyz:id ?mesoElementRef ;
+               fx:elementCollectionUnordered ?collection .
+  
+  ?collection fx:elementPart ?elementPart .
+  ?elementPart xyz:ref ?microElementRef .
+  
+  # Get micro element details
+  ?microElement a railml:netElement ;
+                xyz:id ?microElementRef ;
+                xyz:length ?microLength .
+  
+  # Ensure it's truly a micro element (no sub-collections)
+  FILTER NOT EXISTS { ?microElement fx:elementCollectionUnordered ?microColl . }
+  
+  BIND (xsd:double(?microLength) AS ?microLengthDouble)
+  
+  # Mint LinearElement URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?microElementRef)) AS ?eraLinearElement)
+  
+  # ===== TRACK LINKING (era:hasPart) =====
+  
+  # Find tracks that have linearLocation on this micro element
+  ?track a railml:track ;
+         xyz:id ?trackId ;
+         fx:linearLocation ?trackLinLoc .
+  
+  ?trackLinLoc fx:associatedNetElement ?trackAssocNode .
+  ?trackAssocNode xyz:netElementRef ?microElementRef .
+  
+  # Mint ERA Track URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  
+  # ===== NET AREA REFERENCE (era:netReference) =====
+  
+  # Mint NetAreaReference URI (one per section)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef)) AS ?netAreaRef)
+  
+  # Mint NetLinearReference URI (one per micro element)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?lineId, "_", ?microElementRef)) AS ?netLinearRef)
+
+  # Mint sequence list URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?lineId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
+  
+  # Mint start point URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?lineId, "_", ?microElementRef, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?lineId, "_", ?microElementRef, "_0.0")) AS ?startTopoCoord)
+  
+  # Mint end point URIs
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?lineId, "_", ?microElementRef, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?lineId, "_", ?microElementRef, "_", STR(?microLengthDouble))) AS ?endTopoCoord)
+
+  # Build RDF List structure for era:includes
+  # Create list node for this NetLinearReference
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef, "_list_", ?microElementRef)) AS ?listNode)
+  
+  # Determine the next element in the list (sorted by microElementRef)
+  OPTIONAL {
+    ?collection fx:elementPart ?nextElementPart .
+    ?nextElementPart xyz:ref ?nextMicroRef .
+    FILTER (?nextMicroRef > ?microElementRef)
+    # Find the minimum next reference (immediate successor)
+    {
+      SELECT ?lineId ?mesoElementRef ?microElementRef (MIN(?nextMicroRef) AS ?immediateNext)
+      WHERE {
+        ?line2 a railml:line ;
+               xyz:id ?lineId ;
+               xyz:belongsToParent ?parentLineId2 ;
+               fx:linearLocation ?linLoc2 .
+        ?linLoc2 fx:associatedNetElement ?assocNetElem2 .
+        ?assocNetElem2 xyz:netElementRef ?mesoElementRef .
+        ?mesoElement2 a railml:netElement ;
+                      xyz:id ?mesoElementRef ;
+                      fx:elementCollectionUnordered ?collection2 .
+        ?collection2 fx:elementPart ?ep1 .
+        ?ep1 xyz:ref ?microElementRef .
+        ?collection2 fx:elementPart ?ep2 .
+        ?ep2 xyz:ref ?nextMicroRef .
+        FILTER (?nextMicroRef > ?microElementRef)
+      }
+      GROUP BY ?lineId ?mesoElementRef ?microElementRef
+    }
+  }
+  
+  # Bind rest node (points to next list node or rdf:nil)
+  BIND (
+    IF(BOUND(?immediateNext),
+      IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef, "_list_", ?immediateNext)),
+      rdf:nil
+    ) AS ?restNode
+  )
+  
+  # Determine the head of the list (minimum microElementRef)
+  {
+    SELECT ?lineId ?mesoElementRef (MIN(?microRef) AS ?firstMicroRef)
+    WHERE {
+      ?line3 a railml:line ;
+             xyz:id ?lineId ;
+             xyz:belongsToParent ?parentLineId3 ;
+             fx:linearLocation ?linLoc3 .
+      ?linLoc3 fx:associatedNetElement ?assocNetElem3 .
+      ?assocNetElem3 xyz:netElementRef ?mesoElementRef .
+      ?mesoElement3 a railml:netElement ;
+                    xyz:id ?mesoElementRef ;
+                    fx:elementCollectionUnordered ?collection3 .
+      ?collection3 fx:elementPart ?ep3 .
+      ?ep3 xyz:ref ?microRef .
+    }
+    GROUP BY ?lineId ?mesoElementRef
+  }
+  
+  # Bind includesList (head of the list)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef, "_list_", ?firstMicroRef)) AS ?includesList)
+  
+  # ===== LENGTH CALCULATION =====
+  
+  # Calculate total length by summing all micro element lengths
+  {
+    SELECT ?lineId ?mesoElementRef (SUM(?len) AS ?totalLength)
+    WHERE {
+      ?line4 a railml:line ;
+             xyz:id ?lineId ;
+             xyz:belongsToParent ?parentLineId4 ;
+             fx:linearLocation ?linLoc4 .
+      ?linLoc4 fx:associatedNetElement ?assocNetElem4 .
+      ?assocNetElem4 xyz:netElementRef ?mesoElementRef .
+      ?mesoElement4 a railml:netElement ;
+                    xyz:id ?mesoElementRef ;
+                    fx:elementCollectionUnordered ?collection4 .
+      ?collection4 fx:elementPart ?ep4 .
+      ?ep4 xyz:ref ?microRef4 .
+      ?microElement4 a railml:netElement ;
+                     xyz:id ?microRef4 ;
+                     xyz:length ?microLen .
+      BIND (xsd:double(?microLen) AS ?len)
+    }
+    GROUP BY ?lineId ?mesoElementRef
+  }
+}

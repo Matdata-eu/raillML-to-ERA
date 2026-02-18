@@ -1,0 +1,104 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.2 — Operational Points (functional infrastructure)
+# Maps railml:operationalPoint → era:OperationalPoint
+#
+# Source: 10 railML operational point instances
+#
+# Target properties (SHACL-compliant):
+#   - era:opName — operational point name (optional)
+#   - era:opType — REQUIRED (exactly 1) SKOS concept
+#   - era:uopid — REQUIRED (exactly 1) unique operational point identifier
+#   - gsp:hasGeometry → gsp:Geometry (POINT from spotElementProjection)
+#   - era:infrastructureManager → era:OrganisationRole (hardcoded to 0076_IM for workshop)
+##
+# Geometry structure (Strategy 2 only, from spotElementProjection):
+#   - gsp:asWKT → WKT POINT literal
+#   - Coordinates transformed from railML visualization to WGS84
+#
+# URI Patterns:
+#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
+#   Geometry: http://data.europa.eu/949/geometry/{?coordLon}/{?coordLat}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop)
+
+CONSTRUCT {
+  # Operational Point
+  ?eraOp a era:OperationalPoint ;
+         era:opName ?opName ;
+         rdfs:label ?opName ;
+         era:opType ?eraOpType ;
+         era:uopid ?uopid ;
+         era:inCountry country:NOR ;
+         era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM>;
+         gsp:hasGeometry ?geometry ;
+         era:hasSchematicOverviewOPDigitalForm "true"^^xsd:boolean . # This is the schematic topology we are using from the screencoordinates
+
+  # Geometry (POINT from spotElementProjection, Strategy 2)
+  ?geometry a gsp:Geometry ;
+            gsp:asWKT ?wkt .
+}
+WHERE {
+  # Get all operational points
+  ?op a railml:operationalPoint ;
+      xyz:id ?oppId .
+
+  # Mint ERA OperationalPoint URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+
+  # Get operational point name
+  OPTIONAL {
+    ?op fx:name ?nameNode .
+    ?nameNode xyz:name ?opName .
+  }
+
+  # Get designator for UOPID
+  OPTIONAL {
+    ?op fx:designator ?designatorNode .
+    ?designatorNode xyz:register '_railML' ;
+                     xyz:entry ?uopid_suffix .
+    BIND(CONCAT('NO', ?uopid_suffix) as ?uopid )
+  }
+
+  # Get operational type and map to ERA concept
+  OPTIONAL {
+    ?op fx:opOperations ?opOperations .
+    ?opOperations fx:opOperation ?opOperation .
+    ?opOperation xyz:operationalType ?opTypeRailML .
+    
+    # Map railML operational types to ERA concepts
+    # Common types: station, passengerStop, borderPoint, junction, etc.
+    BIND (
+      IF(?opTypeRailML = "station", IRI("http://data.europa.eu/949/concepts/op-types/passengerStation"),
+      IF(?opTypeRailML = "passengerStop", IRI("http://data.europa.eu/949/concepts/op-types/passengerStop"),
+      IF(?opTypeRailML = "borderPoint", IRI("http://data.europa.eu/949/concepts/op-types/borderPoint"),
+      IF(?opTypeRailML = "junction", IRI("http://data.europa.eu/949/concepts/op-types/junction"),
+      IF(?opTypeRailML = "technicalChange", IRI("http://data.europa.eu/949/concepts/op-types/systemChange"),
+      IRI("http://data.europa.eu/949/concepts/op-types/station")  # Default to station
+      )))))
+      AS ?eraOpType
+    )
+  }
+
+  # Geometry from spotElementProjection
+  OPTIONAL {
+    ?infVis a railml:infrastructureVisualization .
+    ?infVis fx:spotElementProjection ?spotElemProj .
+    ?spotElemProj xyz:refersToElement ?oppId ;
+                  fx:coordinate ?coordNode .
+    ?coordNode xyz:x ?xStr ;
+                xyz:y ?yStr .
+    BIND (3.0 + xsd:decimal(?xStr) / 10000.0 AS ?coordLon)
+    BIND (53.0 + xsd:decimal(?yStr) / 10000.0 AS ?coordLat)
+    BIND (IRI(CONCAT("http://data.europa.eu/949/geometry/", STR(?coordLon), "/", STR(?coordLat))) AS ?geometry)
+    BIND (STRDT(CONCAT("POINT(", STR(?coordLon), " ", STR(?coordLat), ")"), gsp:wktLiteral) AS ?wkt)
+  }
+}
+ORDER BY ?oppId

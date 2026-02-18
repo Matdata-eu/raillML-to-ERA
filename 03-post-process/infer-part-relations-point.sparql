@@ -1,0 +1,61 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Infer isPartOf and hasPart relations between infrastructure elements based on topology
+# 
+# Logic:
+# - Point elements belong to linear elements (tracks) when positioned within their extent
+# - Linear elements belong to aggregate elements (sections) when extents overlap
+# - Point elements belong to aggregate elements (operational points) when sharing topology
+#
+# Master parts: RunningTrack, OperationalPoint, SectionOfLine
+#
+# Relations:
+# - era:isPartOf (from child to parent)
+# - era:hasPart (from parent to child, inverse of isPartOf)
+
+INSERT {
+  ?childElement era:isPartOf ?masterPart .
+  ?masterPart era:hasPart ?childElement .
+}
+WHERE {
+  VALUES ?masterPartType { era:RunningTrack era:Siding era:Track era:OperationalPoint era:SectionOfLine }
+  {
+    # Define master part types (parent elements that contain other elements)
+    ?masterPart a ?masterPartType .
+    ?masterPart era:netReference ?masterNetLinRef .
+    ?masterNetLinRef a era:NetLinearReference .
+  }
+  UNION
+  {
+    ?masterPart a ?masterPartType .
+    ?masterPart era:netReference ?masterNetAreaRef .
+    ?masterNetAreaRef a era:NetAreaReference ;
+                      era:includes ?includeList .
+    ?includeList rdf:rest*/rdf:first ?masterNetLinRef .
+  }
+  ?masterNetLinRef era:startsAt ?masterStartRef ;
+                   era:endsAt ?masterEndRef .
+  ?masterStartRef era:hasTopoCoordinate ?masterStartCoord .
+  ?masterStartCoord era:onLinearElement ?linearElement ;
+                    era:offsetFromOrigin ?masterStartOffset .
+  ?masterEndRef era:hasTopoCoordinate ?masterEndCoord .
+  ?masterEndCoord era:onLinearElement ?linearElement ;
+                  era:offsetFromOrigin ?masterEndOffset .
+  
+  # CASE A: Point elements
+  # Point elements are part of master when positioned within extent
+  ?childElement a ?pointType ;
+                era:netReference ?pointNetRef .
+  # Filter to point element types
+  FILTER (?pointType IN (era:Signal, era:Switch, era:LevelCrossing))
+  # Get the point's topological coordinate
+  ?pointNetRef a era:NetPointReference ;
+                era:hasTopoCoordinate ?pointTopoCoord .
+  ?pointTopoCoord era:onLinearElement ?linearElement ;
+                  era:offsetFromOrigin ?pointOffset .
+  FILTER (?pointOffset >= ?masterStartOffset && ?pointOffset <= ?masterEndOffset)
+  
+}
