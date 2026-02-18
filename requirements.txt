@@ -3,3 +3,5 @@ requests
 feedparser
 tiktoken
 shapely
+maplib
+rdflib

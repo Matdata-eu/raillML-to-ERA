@@ -1,5 +1,8 @@
 {
     "glspc.serverPath": "C:\\Users\\mathi\\.local\\bin\\qlue-ls.exe server",
     "glspc.languageId": "sparql",
-    "glspc.serverCommandArguments": ["server"]
+    "glspc.serverCommandArguments": [
+        "server"
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:venv"
 }
