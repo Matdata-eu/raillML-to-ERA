@@ -1,6 +1,7 @@
 from maplib import Model
 import polars as pl
 import rdflib
+from rdflib import Graph
 import urllib.request
 import requests
 from pathlib import Path
@@ -209,7 +210,15 @@ try:
 
     # Write validation report
     print("Writing validation report...")
-    validation_model.write("output/validation-report.ttl", format="turtle")
+    # Use N-Triples format for more robust serialization (avoid pretty-printing issues)
+    validation_model.write("output/validation-report.nt", format="ntriples")
+    print("Validation report saved to output/validation-report.nt")
+    
+    # Convert to Turtle format using rdflib for better readability
+    print("Converting to Turtle format using rdflib...")
+    g_validation = Graph()
+    g_validation.parse("output/validation-report.nt", format="ntriples")
+    g_validation.serialize(destination="output/validation-report.ttl", format="turtle")
     print("Validation report saved to output/validation-report.ttl")
 
     query = """
