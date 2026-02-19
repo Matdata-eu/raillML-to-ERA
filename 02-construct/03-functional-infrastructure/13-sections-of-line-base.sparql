@@ -16,10 +16,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - Lines WITHOUT belongsToParent → era:nationalLine property value (parent line identifier)
 #
 # For sections (lines with belongsToParent):
-#   - opStart/opEnd calculated from netRelations on the meso netElement
-#   - The line has a linearLocation on a meso netElement
-#   - That meso netElement has max 2 netRelations
-#   - The other netElements of those netRelations are used in operational point areaLocations
+#   - opStart/opEnd extracted from line name (format: "[opStart]-[opEnd]")
+#   - Operational points are matched by name
 #
 # Target properties:
 #   era:infrastructureManager → era:Body
@@ -33,6 +31,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 CONSTRUCT {
   ?eraSol a era:SectionOfLine ;
+          rdfs:label ?lineName;
           era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
           era:inCountry country:NOR ;
           era:solNature ?eraSolNature ;
@@ -41,10 +40,20 @@ CONSTRUCT {
           era:opEnd ?eraOpEnd .
 }
 WHERE {
-  # Get lines WITH belongsToParent (child lines = actual sections)
+  # Get lines WITH belongsToParent (child lines = actual sections of line)
   ?line a railml:line ;
         xyz:id ?lineId ;
         xyz:belongsToParent ?parentLineId .
+
+  # Get line name (format: "[opStartName]-[opEndName]")
+  OPTIONAL {
+    ?line fx:name ?nameNode .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?lineName)
+  }
 
   # Mint ERA SectionOfLine URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/", ?lineId)) AS ?eraSol)
@@ -59,58 +68,25 @@ WHERE {
   # Create language-tagged string for nationalLine
   BIND (STRLANG(?nationalLineNameStr, ?nationalLineLang) AS ?nationalLineName)
 
-  # Get the meso netElement from this line's linearLocation
-  ?line fx:linearLocation ?linLoc .
-  ?linLoc fx:associatedNetElement ?assocNetElem .
-  ?assocNetElem xyz:netElementRef ?mesoElementRef .
+  # Extract operational point names from line name
+  # Line name format: "[opStart]-[opEnd]"
+  BIND (STR(?nameValue) AS ?lineNameStr)
+  BIND (STRBEFORE(?lineNameStr, "-") AS ?opStartName)
+  BIND (STRAFTER(?lineNameStr, "-") AS ?opEndName)
 
-  # Find netRelations involving this meso element
-  # Pattern 1: meso element is in elementA
-  OPTIONAL {
-    ?nr1 a railml:netRelation ;
-         fx:elementA ?elA1 ;
-         fx:elementB ?elB1 ;
-         xyz:positionOnA ?posA1 .
-    ?elA1 xyz:ref ?mesoElementRef .
-    ?elB1 xyz:ref ?otherElement1 .
-    
-    # Find operational point with areaLocation on otherElement1
-    ?op1 a railml:operationalPoint ;
-         xyz:id ?oppId1 ;
-         fx:areaLocation/fx:associatedNetElement/xyz:netElementRef ?otherElement1 .
-    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId1)) AS ?eraOp1)
-    BIND (?posA1 AS ?position1)
-  }
+  # Find operational points by matching their names
+  # Find opStart
+  ?opStart a railml:operationalPoint ;
+            xyz:id ?opStartId ;
+            fx:designator/xyz:entry ?opStartName .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opStartId)) AS ?eraOpStart)
 
-  # Pattern 2: meso element is in elementB
-  OPTIONAL {
-    ?nr2 a railml:netRelation ;
-         fx:elementA ?elA2 ;
-         fx:elementB ?elB2 ;
-         xyz:positionOnB ?posB2 .
-    ?elB2 xyz:ref ?mesoElementRef .
-    ?elA2 xyz:ref ?otherElement2 .
-    
-    # Find operational point with areaLocation on otherElement2
-    ?op2 a railml:operationalPoint ;
-         xyz:id ?oppId2 ;
-         fx:areaLocation/fx:associatedNetElement/xyz:netElementRef ?otherElement2 .
-    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId2)) AS ?eraOp2)
-    BIND (?posB2 AS ?position2)
-  }
+  # Find opEnd
+  ?opEnd a railml:operationalPoint ;
+          xyz:id ?opEndId ;
+          fx:designator/xyz:entry ?opEndName .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opEndId)) AS ?eraOpEnd)
 
-  # Assign opStart and opEnd based on positions
-  # Position "0" = origin/start, position "1" = end
-  BIND (
-    IF(BOUND(?eraOp1) && ?position1 = "0", ?eraOp1,
-      IF(BOUND(?eraOp2) && ?position2 = "0", ?eraOp2, ?null)
-    ) AS ?eraOpStart
-  )
-  BIND (
-    IF(BOUND(?eraOp1) && ?position1 = "1", ?eraOp1,
-      IF(BOUND(?eraOp2) && ?position2 = "1", ?eraOp2, ?null)
-    ) AS ?eraOpEnd
-  )
 
   # Default: solNature = "Line"
   BIND (IRI("http://data.europa.eu/949/concepts/sol-natures/01") AS ?eraSolNature)
