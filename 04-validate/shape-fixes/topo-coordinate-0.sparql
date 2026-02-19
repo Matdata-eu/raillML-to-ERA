@@ -1,0 +1,7 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX era-sh: <http://data.europa.eu/949/shapes/> 
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+
+DELETE {era-sh:OffsetFromOrigin sh:datatype xsd:positiveInteger .}
+INSERT {era-sh:OffsetFromOrigin sh:datatype xsd:nonNegativeInteger .}
+WHERE {}

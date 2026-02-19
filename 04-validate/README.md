@@ -18,6 +18,25 @@ SHACL validation is performed using [maplib](https://www.data-treehouse.com/), a
 
 ## Validation Script
 
+### Shape Fixes
+
+Before validation, the script automatically applies SPARQL UPDATE queries from the `shape-fixes/` directory to correct known issues in the downloaded SHACL shapes. This allows us to adapt the official ERA shapes to work correctly with our transformation pipeline without modifying the upstream source.
+
+**Location:** `shape-fixes/*.sparql`
+
+Each `.sparql` file in this directory contains a SPARQL UPDATE query that modifies the SHACL shapes graph. Fixes are applied in alphabetical order after downloading and filtering the shapes but before validation.
+
+**Example Use Cases:**
+- Correcting overly restrictive datatype constraints
+- Adjusting cardinality constraints to match actual ERA data
+- Removing constraints that don't apply to our use case
+
+**Current Fixes:**
+- `document-url-iri.sparql` - Changes `era-sh:DocumentUrl` constraint from `sh:datatype xsd:anyURI` to `sh:nodeKind sh:IRI` to accept IRI nodes (not just typed literals)
+- `topo-coordinate-0.sparql` - Changes `era-sh:OffsetFromOrigin` datatype from `xsd:positiveInteger` to `xsd:nonNegativeInteger` to allow zero values
+
+To add a new fix, create a `.sparql` file with a SPARQL UPDATE query (DELETE/INSERT) in the `shape-fixes/` directory.
+
 ### `validate.py`
 
 Performs SHACL validation on the enriched ERA graph.
@@ -31,6 +50,7 @@ Performs SHACL validation on the enriched ERA graph.
 
 **Output:**
 - `validation-report.ttl` - Detailed SHACL validation report (only with valid license)
+- `validation-summary.md` - Human-readable markdown summary of validation results
 - Console output with validation summary
 
 **Usage:**
@@ -41,10 +61,12 @@ python validate.py
 The script will:
 1. Download the latest ERA SHACL shapes from the official repository
 2. Preprocess and load the enriched ERA graph (using rdflib to handle format compatibility)
-3. Load SHACL shapes into a named graph
-4. Perform SHACL validation (requires valid license)
-5. Generate a detailed validation report
-6. Display a summary of any constraint violations
+3. Filter out SHACL constraints with unimplemented GeoSPARQL functions
+4. Apply shape fixes from `shape-fixes/*.sparql` to correct known issues
+5. Load SHACL shapes into a named graph
+6. Perform SHACL validation (requires valid license)
+7. Generate a detailed validation report
+8. Display and save a summary of any constraint violations
 
 ### Technical Notes
 
@@ -56,11 +78,22 @@ You may see warnings about integer conversion (e.g., `'120.0'` being stored as `
 
 ## Validation Report
 
-The validation report (`validation-report.ttl`) contains SHACL validation results showing:
+The validation produces two output files:
+
+### `validation-report.ttl`
+The detailed SHACL validation report in RDF/Turtle format containing:
 - Constraint violations
 - Affected nodes
 - Constraint paths
 - Violation messages
 - Examples of non-conforming data
+
+### `validation-summary.md`
+A human-readable markdown summary with:
+- Overall validation status (✅ PASSED / ❌ FAILED)
+- Timestamp of validation run
+- Table of violations grouped by property path and constraint type
+- Violation counts and example nodes
+- Recommendations for addressing violations
 
 A summary is also printed to the console, grouping violations by path, message, and constraint component.

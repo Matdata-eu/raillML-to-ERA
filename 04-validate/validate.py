@@ -3,6 +3,7 @@ import polars as pl
 import rdflib
 import urllib.request
 from pathlib import Path
+from datetime import datetime
 
 # Define paths
 data_file = Path("../03-post-process/era-graph-enriched.ttl")
@@ -82,6 +83,21 @@ for constraint in shapes_graph.subjects(rdflib.RDF.type, SH.SPARQLConstraint):
             break
 
 print(f"Removed {removed_count} constraint(s) with unimplemented GeoSPARQL functions")
+
+# Apply shape fixes from queries in shape-fixes directory
+if shape_fixes_dir.exists():
+    fix_files = sorted(shape_fixes_dir.glob("*.sparql"))
+    if fix_files:
+        print(f"\nApplying {len(fix_files)} shape fix(es)...")
+        for fix_file in fix_files:
+            print(f"  Applying fix: {fix_file.name}")
+            fix_query = fix_file.read_text(encoding='utf-8')
+            shapes_graph.update(fix_query)
+        print("Shape fixes applied successfully")
+    else:
+        print("\nNo shape fixes found in shape-fixes directory")
+else:
+    print("\nShape-fixes directory not found, skipping fixes")
 
 # Save filtered shapes
 shapes_graph.serialize(destination=str(filtered_shapes_file), format="turtle")
