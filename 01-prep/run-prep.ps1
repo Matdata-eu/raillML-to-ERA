@@ -12,11 +12,11 @@ docker run --rm `
     -jar /app/artifacts/sparql-anything-v1.1.2-beta.jar `
     -q one-eyed-graph.sparql `
     -f TTL `
-    -o one-eyed-graph.ttl
+    -o output/one-eyed-graph.ttl
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "[SUCCESS] Conversion completed successfully!" -ForegroundColor Green
-    Write-Host "Output file: one-eyed-graph.ttl" -ForegroundColor Cyan
+    Write-Host "Output file: output/one-eyed-graph.ttl" -ForegroundColor Cyan
 } else {
     Write-Host "[ERROR] Conversion failed with exit code: $LASTEXITCODE" -ForegroundColor Red
     exit $LASTEXITCODE
@@ -35,7 +35,7 @@ try {
     Write-Host "  Fuseki is available" -ForegroundColor Cyan
 } catch {
     Write-Host "[WARNING] Fuseki is not available at $fusekiUrl" -ForegroundColor Yellow
-    Write-Host "  Skipping Fuseki upload. Data saved locally in one-eyed-graph.ttl" -ForegroundColor Yellow
+    Write-Host "  Skipping Fuseki upload. Data saved locally in output/one-eyed-graph.ttl" -ForegroundColor Yellow
     exit 0
 }
 
@@ -45,7 +45,7 @@ try {
         "Content-Type" = "text/turtle"
     }
     
-    $turtleData = Get-Content -Path "one-eyed-graph.ttl" -Raw -Encoding UTF8
+    $turtleData = Get-Content -Path "output/one-eyed-graph.ttl" -Raw -Encoding UTF8
     
     Invoke-RestMethod -Uri "$fusekiDataEndpoint`?default" `
         -Method POST `
@@ -57,5 +57,5 @@ try {
     Write-Host "  Endpoint: $fusekiUrl" -ForegroundColor Cyan
 } catch {
     Write-Host "[WARNING] Failed to upload to Fuseki: $_" -ForegroundColor Yellow
-    Write-Host "  Data saved locally in one-eyed-graph.ttl" -ForegroundColor Yellow
+    Write-Host "  Data saved locally in output/one-eyed-graph.ttl" -ForegroundColor Yellow
 }

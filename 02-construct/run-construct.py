@@ -44,8 +44,8 @@ OXIGRAPH_UPDATE_ENDPOINT = None  # Will be set after container starts
 CONSTRUCT_DIR = Path("./")
 
 # Input/Output files
-INPUT_TTL_FILE = "../01-prep/one-eyed-graph.ttl"
-OUTPUT_TTL_FILE = "era-graph.ttl"
+INPUT_TTL_FILE = "../01-prep/output/one-eyed-graph.ttl"
+OUTPUT_TTL_FILE = "output/era-graph.ttl"
 
 # Track if Fuseki endpoints are available
 SOURCE_FUSEKI_AVAILABLE = False

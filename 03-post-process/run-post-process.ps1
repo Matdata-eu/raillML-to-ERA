@@ -14,8 +14,8 @@ $fusekiUrl = "http://localhost:8082/jena-fuseki/advanced-example"
 $fusekiQueryEndpoint = "$fusekiUrl/query"
 $fusekiUpdateEndpoint = "$fusekiUrl/update"
 $fusekiDataEndpoint = "$fusekiUrl/data"
-$outputTtlFile = "era-graph-enriched.ttl"
-$inputTtlFile = "..\02-construct\era-graph.ttl"
+$outputTtlFile = "output/era-graph-enriched.ttl"
+$inputTtlFile = "..\02-construct\output\era-graph.ttl"
 
 # Check if Fuseki is available
 $fusekiAvailable = $false
@@ -32,138 +32,54 @@ try {
 }
 Write-Host ""
 
-# Step 1: Add temporal data (if add-temporal.sparql exists and has content)
-if (Test-Path "add-temporal.sparql") {
-    $temporalQuery = Get-Content "add-temporal.sparql" -Raw
-    if ($temporalQuery.Trim().Length -gt 0) {
-        Write-Host "Step 1: Adding temporal data..." -ForegroundColor Green
+# Step 1: Execute SPARQL UPDATE queries
+$sparqlUpdateDir = "sparql-update"
+if (Test-Path $sparqlUpdateDir) {
+    $sparqlFiles = Get-ChildItem -Path $sparqlUpdateDir -Filter "*.sparql" | Sort-Object Name
+    
+    if ($sparqlFiles.Count -gt 0) {
+        Write-Host "Step 1: Executing SPARQL UPDATE queries from $sparqlUpdateDir..." -ForegroundColor Green
+        Write-Host "  Found $($sparqlFiles.Count) SPARQL file(s)" -ForegroundColor Cyan
+        Write-Host ""
         
-        if ($fusekiAvailable) {
-            try {
-                $updateBody = "update=$([System.Uri]::EscapeDataString($temporalQuery))"
-                
-                $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
-                    -Method POST `
-                    -ContentType "application/x-www-form-urlencoded" `
-                    -Body $updateBody `
-                    -ErrorAction Stop
-                
-                Write-Host "  ✓ Temporal data added successfully" -ForegroundColor Green
-            } catch {
-                Write-Host "  ⚠️  WARNING: Failed to add temporal data: $_" -ForegroundColor Yellow
+        $stepCounter = 1
+        foreach ($file in $sparqlFiles) {
+            $stepLabel = "1.$([char](96 + $stepCounter))"
+            $stepCounter++
+            
+            Write-Host "  Step $stepLabel`: Processing $($file.Name)..." -ForegroundColor Cyan
+            
+            $queryContent = Get-Content $file.FullName -Raw
+            if ($queryContent.Trim().Length -eq 0) {
+                Write-Host "    ⚠️  Skipped (file is empty)" -ForegroundColor Yellow
+                continue
             }
-        } else {
-            Write-Host "  ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
+            
+            if ($fusekiAvailable) {
+                try {
+                    $updateBody = "update=$([System.Uri]::EscapeDataString($queryContent))"
+                    
+                    $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
+                        -Method POST `
+                        -ContentType "application/x-www-form-urlencoded" `
+                        -Body $updateBody `
+                        -ErrorAction Stop
+                    
+                    Write-Host "    ✓ Executed successfully" -ForegroundColor Green
+                } catch {
+                    Write-Host "    ⚠️  WARNING: Execution failed: $_" -ForegroundColor Yellow
+                }
+            } else {
+                Write-Host "    ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
+            }
         }
         Write-Host ""
     } else {
-        Write-Host "Step 1: Skipping temporal data (add-temporal.sparql is empty)" -ForegroundColor Yellow
+        Write-Host "Step 1: No SPARQL UPDATE queries found in $sparqlUpdateDir" -ForegroundColor Yellow
         Write-Host ""
     }
 } else {
-    Write-Host "Step 1: Skipping temporal data (add-temporal.sparql not found)" -ForegroundColor Yellow
-    Write-Host ""
-}
-
-# Step 1b: Infer part relations for linear infrastructure
-if (Test-Path "infer-part-relations-linear.sparql") {
-    $partRelationsLinearQuery = Get-Content "infer-part-relations-linear.sparql" -Raw
-    if ($partRelationsLinearQuery.Trim().Length -gt 0) {
-        Write-Host "Step 1b: Inferring isPartOf and hasPart relations (linear infrastructure)..." -ForegroundColor Green
-        
-        if ($fusekiAvailable) {
-            try {
-                $updateBody = "update=$([System.Uri]::EscapeDataString($partRelationsLinearQuery))"
-                
-                $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
-                    -Method POST `
-                    -ContentType "application/x-www-form-urlencoded" `
-                    -Body $updateBody `
-                    -ErrorAction Stop
-                
-                Write-Host "  ✓ Linear part relations inferred successfully" -ForegroundColor Green
-            } catch {
-                Write-Host "  ⚠️  WARNING: Failed to infer linear part relations: $_" -ForegroundColor Yellow
-                Write-Host "     Error: $_" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "  ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
-        }
-        Write-Host ""
-    } else {
-        Write-Host "Step 1b: Skipping linear part relations inference (infer-part-relations-linear.sparql is empty)" -ForegroundColor Yellow
-        Write-Host ""
-    }
-} else {
-    Write-Host "Step 1b: Skipping linear part relations inference (infer-part-relations-linear.sparql not found)" -ForegroundColor Yellow
-    Write-Host ""
-}
-
-# Step 1c: Infer part relations for point infrastructure
-if (Test-Path "infer-part-relations-point.sparql") {
-    $partRelationsPointQuery = Get-Content "infer-part-relations-point.sparql" -Raw
-    if ($partRelationsPointQuery.Trim().Length -gt 0) {
-        Write-Host "Step 1c: Inferring isPartOf and hasPart relations (point infrastructure)..." -ForegroundColor Green
-        
-        if ($fusekiAvailable) {
-            try {
-                $updateBody = "update=$([System.Uri]::EscapeDataString($partRelationsPointQuery))"
-                
-                $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
-                    -Method POST `
-                    -ContentType "application/x-www-form-urlencoded" `
-                    -Body $updateBody `
-                    -ErrorAction Stop
-                
-                Write-Host "  ✓ Point part relations inferred successfully" -ForegroundColor Green
-            } catch {
-                Write-Host "  ⚠️  WARNING: Failed to infer point part relations: $_" -ForegroundColor Yellow
-                Write-Host "     Error: $_" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "  ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
-        }
-        Write-Host ""
-    } else {
-        Write-Host "Step 1c: Skipping point part relations inference (infer-part-relations-point.sparql is empty)" -ForegroundColor Yellow
-        Write-Host ""
-    }
-} else {
-    Write-Host "Step 1c: Skipping point part relations inference (infer-part-relations-point.sparql not found)" -ForegroundColor Yellow
-    Write-Host ""
-}
-
-# Step 1d: Add missing rdf:type declarations
-if (Test-Path "add-missing-rdf-types.sparql") {
-    $addTypesQuery = Get-Content "add-missing-rdf-types.sparql" -Raw
-    if ($addTypesQuery.Trim().Length -gt 0) {
-        Write-Host "Step 1d: Adding missing rdf:type declarations..." -ForegroundColor Green
-        
-        if ($fusekiAvailable) {
-            try {
-                $updateBody = "update=$([System.Uri]::EscapeDataString($addTypesQuery))"
-                
-                $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
-                    -Method POST `
-                    -ContentType "application/x-www-form-urlencoded" `
-                    -Body $updateBody `
-                    -ErrorAction Stop
-                
-                Write-Host "  ✓ Missing rdf:type declarations added successfully" -ForegroundColor Green
-            } catch {
-                Write-Host "  ⚠️  WARNING: Failed to add missing rdf:type declarations: $_" -ForegroundColor Yellow
-                Write-Host "     Error: $_" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "  ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
-        }
-        Write-Host ""
-    } else {
-        Write-Host "Step 1d: Skipping missing rdf:type declarations (add-missing-rdf-types.sparql is empty)" -ForegroundColor Yellow
-        Write-Host ""
-    }
-} else {
-    Write-Host "Step 1d: Skipping missing rdf:type declarations (add-missing-rdf-types.sparql not found)" -ForegroundColor Yellow
+    Write-Host "Step 1: SPARQL UPDATE directory not found ($sparqlUpdateDir)" -ForegroundColor Yellow
     Write-Host ""
 }
 

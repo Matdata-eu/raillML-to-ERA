@@ -61,8 +61,8 @@ OXIGRAPH_UPDATE_ENDPOINT = None
 OXIGRAPH_STORE_ENDPOINT = None
 
 # Input/Output files
-INPUT_TTL_FILE = "../02-construct/era-graph.ttl"
-OUTPUT_TTL_FILE = "era-graph-enriched.ttl"
+INPUT_TTL_FILE = "../02-construct/output/era-graph.ttl"
+OUTPUT_TTL_FILE = "output/era-graph-enriched.ttl"
 
 # Fuseki availability
 FUSEKI_AVAILABLE = False

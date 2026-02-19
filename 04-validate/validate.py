@@ -6,7 +6,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Define paths
-data_file = Path("../03-post-process/era-graph-enriched.ttl")
+data_file = Path("../03-post-process/output/era-graph-enriched.ttl")
 shapes_dir = Path("shapes")
 shapes_dir.mkdir(exist_ok=True)
 shape_fixes_dir = Path("shape-fixes")
@@ -121,8 +121,8 @@ try:
 
     # Write validation report
     print("Writing validation report...")
-    validation_model.write("validation-report.ttl", format="turtle")
-    print("Validation report saved to validation-report.ttl")
+    validation_model.write("output/validation-report.ttl", format="turtle")
+    print("Validation report saved to output/validation-report.ttl")
 
     query = """
     PREFIX sh: <http://www.w3.org/ns/shacl#>
@@ -153,7 +153,7 @@ try:
         summary_message = f"Found {len(df)} types of violations"
     
     # Write summary to markdown file
-    summary_file = Path("validation-summary.md")
+    summary_file = Path("output/validation-summary.md")
     print(f"\nWriting validation summary to {summary_file}...")
     
     with open(summary_file, 'w', encoding='utf-8') as f:

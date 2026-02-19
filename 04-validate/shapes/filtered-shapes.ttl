@@ -2446,7 +2446,7 @@ era-sh:HasPartOP a sh:PropertyShape ;
     rdfs:comment "Reference from an aggregated element to a basic element."@en ;
     sh:message "hasPart from an operational point : The Operational Point may have a hasPart reference that is a Track object (or the subclasses RunningTrack and Siding), or a KilometricPost object. This error may be due to a hasPart relationship from an operational point that is not a Track nor a KilometricPost."@en ;
     sh:nodeKind sh:IRI ;
-    sh:or ( [ sh:class era:Track ] [ sh:class era:KilometricPost ] ) ;
+    sh:or ( [ sh:class era:Bridge ] [ sh:class era:HABD ] [ sh:class era:KilometricPost ] [ sh:class era:LevelCrossing ] [ sh:class era:NationalRailwayLine ] [ sh:class era:OperationalPoint ] [ sh:class era:PlatformEdge ] [ sh:class era:PrimaryLocation ] [ sh:class era:RadioBlockCenter ] [ sh:class era:RunningTrack ] [ sh:class era:SectionOfLine ] [ sh:class era:Siding ] [ sh:class era:Signal ] [ sh:class era:SpecialArea ] [ sh:class era:SpecialTunnelArea ] [ sh:class era:Switch ] [ sh:class era:Track ] [ sh:class era:Tunnel ] ) ;
     sh:path era:hasPart ;
     sh:severity sh:Violation .
 
@@ -4027,10 +4027,11 @@ era-sh:OffsetFromOrigin a sh:PropertyShape ;
     era:affectedProperty era:offsetFromOrigin ;
     era:scope "local" ;
     rdfs:comment "Offset from the origin in a topological coordinate."@en ;
-    sh:datatype xsd:nonNegativeInteger ;
+    sh:datatype xsd:integer ;
     sh:maxCount 1 ;
     sh:message "offsetFromOrigin: The offset from the origin in a topological coordinate must be represented as a positive integer or more than one value."@en ;
     sh:minCount 1 ;
+    sh:minInclusive 0 ;
     sh:path era:offsetFromOrigin ;
     sh:severity sh:Violation .
 
@@ -10254,4 +10255,7 @@ era-sh:RdfsLabel a sh:PropertyShape ;
                 }
             """ ] ;
     sh:uniqueLang true .
+
+[] rdf:first [ sh:class era:Track ] ;
+    rdf:rest ( [ sh:class era:KilometricPost ] ) .
 
