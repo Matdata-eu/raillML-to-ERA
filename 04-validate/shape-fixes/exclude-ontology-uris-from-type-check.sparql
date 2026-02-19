@@ -1,0 +1,67 @@
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX era-sh: <http://data.europa.eu/949/shapes/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+# Fix: Exclude ontology/vocabulary URIs from the InstancesMustHaveTypeShape validation
+# This prevents validation warnings on well-known vocabulary terms (OWL, RDF, SKOS, etc.)
+
+DELETE {
+    era-sh:InstancesMustHaveTypeShape sh:target ?oldTarget .
+    ?oldTarget ?p ?o .
+}
+INSERT {
+    era-sh:InstancesMustHaveTypeShape sh:target [
+        a sh:SPARQLTarget ;
+        sh:prefixes era-sh: ; 
+        sh:select """
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            SELECT DISTINCT $this
+            WHERE {
+                {
+                    $this ?p ?o .
+                } UNION {
+                    ?s ?p $this .
+                }
+                FILTER(isIRI($this))
+                # Exclude well-known ontology/vocabulary namespaces
+                FILTER(!STRSTARTS(STR($this), "http://creativecommons.org/ns#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.opengis.net/ont/sf#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/2003/06/sw-vocab-status/ns#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.opengis.net/ont/geosparql#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/ns/org#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/2002/07/owl#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/XML/1998/namespace"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/2001/XMLSchema#"))
+                FILTER(!STRSTARTS(STR($this), "http://xmlns.com/foaf/0.1/"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/2000/01/rdf-schema#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/2004/02/skos/core#"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/2006/time#"))
+                FILTER(!STRSTARTS(STR($this), "http://qudt.org/vocab/unit/"))
+                FILTER(!STRSTARTS(STR($this), "http://purl.org/dc/terms/"))
+                # Also exclude SHACL shapes namespace
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/ns/shacl#"))
+                FILTER(!STRSTARTS(STR($this), "http://data.europa.eu/949/shapes/"))
+                # Exclude EU authority/concept namespaces
+                FILTER(!STRSTARTS(STR($this), "http://data.europa.eu/949/concepts/"))
+                FILTER(!STRSTARTS(STR($this), "http://data.europa.eu/eli/"))
+                FILTER(!STRSTARTS(STR($this), "http://publications.europa.eu/"))
+                # Exclude ERA stable, OpenGIS, EUR-Lex, GitLab, ORCID, and other identifiers
+                FILTER(!STRSTARTS(STR($this), "http://data.europa.eu/949/stable"))
+                FILTER(!STRSTARTS(STR($this), "http://www.opengis.net/"))
+                FILTER(!STRSTARTS(STR($this), "http://www.w3.org/ns/org"))
+                FILTER(!STRSTARTS(STR($this), "https://creativecommons.org/"))
+                FILTER(!STRSTARTS(STR($this), "https://eur-lex.europa.eu/"))
+                FILTER(!STRSTARTS(STR($this), "https://gitlab.com/era-europa-eu/"))
+                FILTER(!STRSTARTS(STR($this), "https://orcid.org/"))
+                FILTER(!STRSTARTS(STR($this), "https://publications.europa.eu/resource/"))
+                FILTER(!STRSTARTS(STR($this), "https://www.era.europa.eu/"))
+            }
+        """ ;
+    ] .
+}
+WHERE {
+    era-sh:InstancesMustHaveTypeShape sh:target ?oldTarget .
+    ?oldTarget a sh:SPARQLTarget .
+    OPTIONAL { ?oldTarget ?p ?o . }
+}
