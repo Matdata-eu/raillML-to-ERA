@@ -365,13 +365,6 @@ def main():
             print(f"  - {f}")
         print()
         
-        # Ask for confirmation
-        if not args.yes:
-            response = input("Execute all queries? [y/N]: ")
-            if response.lower() != 'y':
-                print("Aborted.")
-                return 0
-        
         # Clear target endpoint if available
         if TARGET_FUSEKI_AVAILABLE:
             print("\n🗑️  Clearing target endpoint...")
