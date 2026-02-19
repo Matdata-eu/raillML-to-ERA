@@ -66,6 +66,17 @@ WHERE {
     ?opEquip fx:ownsSignal ?signalNode .
     ?signalNode xyz:ref ?signalRef .
     
+    # Extract signal type from typeDesignator (TJN rulebook)
+    # TJN codes map to ERA signal type concepts - see TJN-TO-ERA-SIGNAL-TYPE-MAPPING.md
+    ?signal a railml:signalIS ;
+                  xyz:id ?signalRef ;
+                  fx:typeDesignator ?typeDesNode .
+
+    ?typeDesNode xyz:entry ?tjnCode ;
+                  xyz:rulebook "TJN" .
+                  
+    FILTER(?tjnCode in ("§8-10", "§8-11", "§8-12", "§8-13", "§8-23"))
+    
     # Mint ERA Signal URI
     BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/signals/", ?signalRef)) AS ?eraSignal)
   }
