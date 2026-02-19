@@ -2,54 +2,142 @@ from maplib import Model
 import polars as pl
 import rdflib
 import urllib.request
+import requests
 from pathlib import Path
 from datetime import datetime
 
 # Define paths
 data_file = Path("../03-post-process/output/era-graph-enriched.ttl")
-shapes_dir = Path("shapes")
-shapes_dir.mkdir(exist_ok=True)
+download_dir = Path("downloads")
+download_dir.mkdir(exist_ok=True)
 shape_fixes_dir = Path("shape-fixes")
 
 # URLs for ERA SHACL shapes
 era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/era-shacl/ERA-RINF-shapes.ttl"
 skos_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/era-shacl/SKOS-shapes.ttl"
 
+# URLs for ERA ontology and SKOS data
+era_ontology_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/ontology.ttl"
+era_skos_api_url = "https://gitlab.com/api/v4/projects/era-europa-eu%2Fpublic%2Finteroperable-data-programme%2Fera-ontology%2Fera-ontology/repository/tree?path=era-skos&ref=main"
+era_skos_base_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/era-skos/"
+
 # Download SHACL shapes
-era_rinf_shapes_file = shapes_dir / "ERA-RINF-shapes.ttl"
-skos_shapes_file = shapes_dir / "SKOS-shapes.ttl"
+era_rinf_shapes_file = download_dir / "ERA-RINF-shapes.ttl"
+skos_shapes_file = download_dir / "SKOS-shapes.ttl"
 
-print("Downloading ERA RINF SHACL shapes...")
-urllib.request.urlretrieve(era_rinf_shapes_url, era_rinf_shapes_file)
-print(f"Downloaded to {era_rinf_shapes_file}")
+if era_rinf_shapes_file.exists():
+    print(f"ERA RINF SHACL shapes already exists at {era_rinf_shapes_file}")
+else:
+    print("Downloading ERA RINF SHACL shapes...")
+    urllib.request.urlretrieve(era_rinf_shapes_url, era_rinf_shapes_file)
+    print(f"Downloaded to {era_rinf_shapes_file}")
 
-print("Downloading SKOS SHACL shapes...")
-urllib.request.urlretrieve(skos_shapes_url, skos_shapes_file)
-print(f"Downloaded to {skos_shapes_file}")
+if skos_shapes_file.exists():
+    print(f"SKOS SHACL shapes already exists at {skos_shapes_file}")
+else:
+    print("Downloading SKOS SHACL shapes...")
+    urllib.request.urlretrieve(skos_shapes_url, skos_shapes_file)
+    print(f"Downloaded to {skos_shapes_file}")
+
+# Download ERA ontology
+era_ontology_file = download_dir / "era-ontology.ttl"
+if era_ontology_file.exists():
+    print(f"\nERA ontology already exists at {era_ontology_file}")
+else:
+    print("\nDownloading ERA ontology...")
+    urllib.request.urlretrieve(era_ontology_url, era_ontology_file)
+    print(f"Downloaded to {era_ontology_file}")
+
+# Download ERA SKOS files
+print("\nDownloading ERA SKOS files...")
+skos_files = []
+try:
+    # GitLab API uses pagination - fetch all pages
+    page = 1
+    per_page = 100  # Maximum allowed by GitLab API
+    all_items = []
+    
+    while True:
+        paginated_url = f"{era_skos_api_url}&per_page={per_page}&page={page}"
+        print(f"  Fetching page {page} from GitLab API...")
+        response = requests.get(paginated_url, timeout=30)
+        response.raise_for_status()
+        items = response.json()
+        
+        if not items:  # No more items
+            break
+        
+        all_items.extend(items)
+        page += 1
+    
+    print(f"  Found {len(all_items)} items in era-skos directory")
+    
+    # Download all .ttl files
+    for item in all_items:
+        if item['type'] == 'blob' and item['name'].endswith('.ttl'):
+            file_name = item['name']
+            file_url = era_skos_base_url + file_name
+            local_file = download_dir / f"skos-{file_name}"
+            
+            if local_file.exists():
+                print(f"  {file_name} already exists, skipping download")
+                skos_files.append(local_file)
+            else:
+                print(f"  Downloading {file_name}...")
+                urllib.request.urlretrieve(file_url, local_file)
+                skos_files.append(local_file)
+    
+    print(f"Downloaded {len(skos_files)} SKOS file(s)")
+except Exception as e:
+    print(f"  ⚠️  Warning: Failed to download SKOS files: {e}")
+    print("     Validation may be incomplete")
 
 # Initialize mapping and load data
 m = Model()
-print(f"Loading data from {data_file}...")
+print(f"\nLoading data from {data_file}...")
 
 # Workaround: Use rdflib to parse and re-serialize the turtle file
 # This handles any encoding or format quirks that maplib's parser doesn't like
 print("Preprocessing TTL file with rdflib...")
 g_temp = rdflib.Graph()
+
+# Load main data file
+print("  Loading main data...")
 g_temp.parse(str(data_file), format="turtle")
-temp_nt_file = shapes_dir / "temp_data.nt"
+
+# Load ERA ontology into data graph
+print("  Loading ERA ontology...")
+try:
+    g_temp.parse(str(era_ontology_file), format="turtle")
+    print(f"    ✓ Loaded ontology")
+except Exception as e:
+    print(f"    ⚠️  Warning: Failed to load ontology: {e}")
+
+# Load SKOS files into data graph
+if skos_files:
+    print("  Loading SKOS files...")
+    for skos_file in skos_files:
+        try:
+            g_temp.parse(str(skos_file), format="turtle")
+            print(f"    ✓ Loaded {skos_file.name}")
+        except Exception as e:
+            print(f"    ⚠️  Warning: Failed to load {skos_file.name}: {e}")
+
+temp_nt_file = download_dir / "temp_data.nt"
 g_temp.serialize(destination=str(temp_nt_file), format="ntriples")
 print(f"Converted to N-Triples format at {temp_nt_file}")
 
 # Load the normalized N-Triples file into maplib
 m.read(str(temp_nt_file), format="ntriples")
 print("Data loaded successfully")
+print(f"  Total triples in data graph: {len(g_temp)}")
 
 # Clean up temporary file
 temp_nt_file.unlink()
 
 # Filter SHACL shapes to remove unsupported GeoSPARQL constraints
 print("Filtering SHACL shapes to remove unsupported GeoSPARQL functions...")
-filtered_shapes_file = shapes_dir / "filtered-shapes.ttl"
+filtered_shapes_file = download_dir / "filtered-shapes.ttl"
 
 # Load shapes into rdflib
 shapes_graph = rdflib.Graph()
