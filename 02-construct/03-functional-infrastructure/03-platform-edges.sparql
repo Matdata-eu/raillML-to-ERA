@@ -63,7 +63,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT {
   # Platform Edge resource
   ?eraPlatformEdge a era:PlatformEdge ;
-                   era:platformId ?platformName ;
+                   era:platformId ?finalPlatformId ;
                    rdfs:label ?platformEdgeName ;
                    era:platformHeight ?platformHeightConcept ;
                    era:inCountry country:NOR ;
@@ -169,6 +169,7 @@ WHERE {
     ?platform fx:name ?platformNameNode .
     ?platformNameNode xyz:name ?platformName .
   }
+  BIND (COALESCE(?platformName, ?platformEdgeName, "Missing") AS ?finalPlatformId)
 
   # Get screen visualization geometry (optional)
   OPTIONAL {
