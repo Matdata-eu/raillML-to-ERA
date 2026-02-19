@@ -1,0 +1,40 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX era-sh: <http://data.europa.eu/949/shapes/>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Fix: Allow OperationalPoint hasPart to target any InfrastructureElement subclass
+# Original constraint only allowed Track and KilometricPost
+# This fix expands to allow all InfrastructureElement subclasses:
+# Bridge, HABD, KilometricPost, LevelCrossing, NationalRailwayLine, OperationalPoint,
+# PlatformEdge, PrimaryLocation, RadioBlockCenter, RunningTrack, SectionOfLine,
+# Siding, Signal, SpecialArea, SpecialTunnelArea, Switch, Track, Tunnel
+
+DELETE {
+  era-sh:HasPartOP sh:or ?orConstraint .
+}
+INSERT {
+  era-sh:HasPartOP sh:or (
+    [sh:class era:Bridge ;]
+    [sh:class era:HABD ;]
+    [sh:class era:KilometricPost ;]
+    [sh:class era:LevelCrossing ;]
+    [sh:class era:NationalRailwayLine ;]
+    [sh:class era:OperationalPoint ;]
+    [sh:class era:PlatformEdge ;]
+    [sh:class era:PrimaryLocation ;]
+    [sh:class era:RadioBlockCenter ;]
+    [sh:class era:RunningTrack ;]
+    [sh:class era:SectionOfLine ;]
+    [sh:class era:Siding ;]
+    [sh:class era:Signal ;]
+    [sh:class era:SpecialArea ;]
+    [sh:class era:SpecialTunnelArea ;]
+    [sh:class era:Switch ;]
+    [sh:class era:Track ;]
+    [sh:class era:Tunnel ;]
+  ) .
+}
+WHERE {
+  era-sh:HasPartOP sh:or ?orConstraint .
+}
