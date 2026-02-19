@@ -4027,7 +4027,7 @@ era-sh:OffsetFromOrigin a sh:PropertyShape ;
     era:affectedProperty era:offsetFromOrigin ;
     era:scope "local" ;
     rdfs:comment "Offset from the origin in a topological coordinate."@en ;
-    sh:datatype xsd:positiveInteger ;
+    sh:datatype xsd:nonNegativeInteger ;
     sh:maxCount 1 ;
     sh:message "offsetFromOrigin: The offset from the origin in a topological coordinate must be represented as a positive integer or more than one value."@en ;
     sh:minCount 1 ;
