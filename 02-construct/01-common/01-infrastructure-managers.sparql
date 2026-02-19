@@ -34,12 +34,9 @@ WHERE {
   # Match organizational units that have an isInfrastructureManager child
   ?ou a railml:organizationalUnit ;
       xyz:id ?id ;
-      fx:isInfrastructureManager ?imNode .
-  OPTIONAL {
-    ?ou xyz:code ?railmlCode
-  }
+      fx:isInfrastructureManager ?imNode ;
+      xyz:code ?railmlCode .
 
-  # 
   BIND (IF(!BOUND(?railmlCode),'9999',IF(?railmlCode = 'BN','0076',?railmlCode)) AS ?eraCode)
   
   # Mint ERA URIs from the railML id / for the sake of the workshop, we will be hardcoding the ERA code to BaneNOR's 0076
