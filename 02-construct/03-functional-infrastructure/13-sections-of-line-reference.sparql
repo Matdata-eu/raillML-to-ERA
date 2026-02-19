@@ -1,6 +1,6 @@
 PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-PREFIX country: <http://data.europa.eu/949/countries/>
+PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>

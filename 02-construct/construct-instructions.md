@@ -74,7 +74,7 @@ This approach ensures mappings are ontology-compliant and makes full use of avai
 - **Namespace**: `http://data.europa.eu/949/`
 - **Ontology endpoint**: `http://localhost:8082/jena-fuseki/era-ontology/sparql`
 - **GeoSPARQL**: `http://www.opengis.net/ont/geosparql#` (geometry/spatial features)
-- **Countries**: `http://data.europa.eu/949/countries/` (country code namespace)
+- **Countries**: `http://publications.europa.eu/resource/authority/country/` (country code namespace)
 
 ### Key Technical Patterns
 - **URI Minting**: `http://data.europa.eu/949/{category}/{railml_id}` (e.g., `era-topology:ne_001`)
