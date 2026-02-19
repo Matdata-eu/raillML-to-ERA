@@ -213,7 +213,10 @@ WHERE {
              xyz:posEnd ?posEnd .
   
   # Get sequence (for ordering segments)
-  ?assocNode xyz:sequence ?sequence .
+  OPTIONAL {
+    ?assocNode xyz:sequence ?sequence_optional .
+  }
+  BIND (IF(bound(?sequence_optional), ?sequence_optional, 0) AS ?sequence)
   
   # Convert positions to integer (round to nearest meter)
   BIND (xsd:integer(ROUND(xsd:double(?posBegin))) AS ?posBeginInteger)
