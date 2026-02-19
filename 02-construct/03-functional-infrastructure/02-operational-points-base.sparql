@@ -32,8 +32,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT {
   # Operational Point
   ?eraOp a era:OperationalPoint ;
-         era:opName ?opName ;
-         rdfs:label ?opName ;
+         era:opName ?opName, ?opNameEn ;
+         rdfs:label ?opName, ?opNameEn ;
          era:opType ?eraOpType ;
          era:uopid ?uopid ;
          era:inCountry country:NOR ;
@@ -61,6 +61,7 @@ WHERE {
       ?nameNode xyz:language ?lang
     }
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?opName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?opNameEn) # need an English name
   }
 
   # Get designator for UOPID
