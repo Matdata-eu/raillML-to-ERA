@@ -2830,7 +2830,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <http://data.europa.eu/949/documents/skienstunnelen>
         rdf:type         era:Document;
-        era:documentUrl  "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx" .
+        era:documentUrl  "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx"^^xsd:anyURI .
 
 <http://data.europa.eu/949/topology/netPointReferences/tun199_start>
         rdf:type               era:NetPointReference;

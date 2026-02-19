@@ -90,7 +90,7 @@ CONSTRUCT {
   # Adding a dummy document
   ?eraTunnel era:document <http://data.europa.eu/949/documents/skienstunnelen> .
   <http://data.europa.eu/949/documents/skienstunnelen> a era:Document;
-            era:documentUrl "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx" .
+            era:documentUrl "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx"^^xsd:anyURI .
 
   # Start point NetPointReference
   ?startPointRef a era:NetPointReference ;
