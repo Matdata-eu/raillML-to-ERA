@@ -35,9 +35,12 @@ CONSTRUCT {
           era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
           era:inCountry country:NOR ;
           era:solNature ?eraSolNature ;
-          era:nationalLine ?nationalLineName ;
+          era:nationalLine ?thisDoesntMakeSense ; ;
           era:opStart ?eraOpStart ;
           era:opEnd ?eraOpEnd .
+
+  ?thisDoesntMakeSense a era:LinearPositioningSystem ;
+          era:lineId ?nationalLineNameStr .
 }
 WHERE {
   # Get lines WITH belongsToParent (child lines = actual sections of line)
@@ -66,7 +69,7 @@ WHERE {
                   xyz:language ?nationalLineLang .
   
   # Create language-tagged string for nationalLine
-  BIND (STRLANG(?nationalLineNameStr, ?nationalLineLang) AS ?nationalLineName)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/lps/", ?nationalLineNameStr)) AS ?thisDoesntMakeSense)
 
   # Extract operational point names from line name
   # Line name format: "[opStart]-[opEnd]"
