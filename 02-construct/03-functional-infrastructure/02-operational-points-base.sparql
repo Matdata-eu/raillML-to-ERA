@@ -56,7 +56,11 @@ WHERE {
   # Get operational point name
   OPTIONAL {
     ?op fx:name ?nameNode .
-    ?nameNode xyz:name ?opName .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?opName)
   }
 
   # Get designator for UOPID
