@@ -52,7 +52,7 @@ CONSTRUCT {
 
   ?startTopoCoord a era:TopologicalCoordinate ;
                   era:onLinearElement ?eraLinearElement ;
-                  era:offsetFromOrigin 0.0 .
+                  era:offsetFromOrigin 0 .
 
   # End point
   ?endPointRef a era:NetPointReference ;
@@ -60,7 +60,7 @@ CONSTRUCT {
 
   ?endTopoCoord a era:TopologicalCoordinate ;
                 era:onLinearElement ?eraLinearElement ;
-                era:offsetFromOrigin ?microLengthDouble .
+                era:offsetFromOrigin ?microLengthInteger .
 }
 WHERE {
   # Get lines WITH belongsToParent (child lines = actual sections)
@@ -94,7 +94,8 @@ WHERE {
   # Ensure it's truly a micro element (no sub-collections)
   FILTER NOT EXISTS { ?microElement fx:elementCollectionUnordered ?microColl . }
   
-  BIND (xsd:double(?microLength) AS ?microLengthDouble)
+  # Convert length to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?microLength))) AS ?microLengthInteger)
   
   # Mint LinearElement URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?microElementRef)) AS ?eraLinearElement)
@@ -129,7 +130,7 @@ WHERE {
   
   # Mint end point URIs
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?lineId, "_", ?microElementRef, "_end")) AS ?endPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?lineId, "_", ?microElementRef, "_", STR(?microLengthDouble))) AS ?endTopoCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?lineId, "_", ?microElementRef, "_", STR(?microLengthInteger))) AS ?endTopoCoord)
 
   # Build RDF List structure for era:includes
   # Create list node for this NetLinearReference

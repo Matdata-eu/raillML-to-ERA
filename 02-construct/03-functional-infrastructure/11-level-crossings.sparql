@@ -71,7 +71,7 @@ CONSTRUCT {
 
   ?topoCoord a era:TopologicalCoordinate ;
              era:onLinearElement ?eraLinearElement ;
-             era:offsetFromOrigin ?posDouble .
+             era:offsetFromOrigin ?posInteger .
   
   ?lrsCoord a era:LinearPositioningSystemCoordinate ;
             era:kmPost ?kmPost ;
@@ -137,12 +137,12 @@ WHERE {
   # Mint ERA netElement URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
 
-  # Convert position to double for TopologicalCoordinate
-  BIND (xsd:double(?posStr) AS ?posDouble)
+  # Convert position to integer (round to nearest meter) for TopologicalCoordinate
+  BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posInteger)
   
   # Mint URIs for NetPointReference and TopologicalCoordinate
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?levelCrossingId, "_on_", ?netElementRef)) AS ?netPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?levelCrossingId, "_", ?netElementRef, "_", STR(?posDouble))) AS ?topoCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?levelCrossingId, "_", ?netElementRef, "_", STR(?posInteger))) AS ?topoCoord)
   
   # Note: gsp:hasGeometry triples for NetPointReferences are added by
   # enrich-geometries.py post-processing script using Shapely linear referencing

@@ -48,7 +48,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → reference to micro-level LinearElement
-#   - era:offsetFromOrigin → position on element (xsd:double)
+#   - era:offsetFromOrigin → position on element (xsd:integer, rounded)
 #
 # Tunnel start/end extraction pattern:
 #   Each railML tunnel has areaLocation with multiple associatedNetElement entries.
@@ -100,7 +100,7 @@ CONSTRUCT {
   # Start TopologicalCoordinate
   ?startTopoCoord a era:TopologicalCoordinate ;
                   era:onLinearElement ?startLinearElement ;
-                  era:offsetFromOrigin ?startPosDouble .
+                  era:offsetFromOrigin ?startPosInteger .
   
   # Start LinearPositioningSystemCoordinate
   ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -120,7 +120,7 @@ CONSTRUCT {
   # End TopologicalCoordinate
   ?endTopoCoord a era:TopologicalCoordinate ;
                 era:onLinearElement ?endLinearElement ;
-                era:offsetFromOrigin ?endPosDouble .
+                era:offsetFromOrigin ?endPosInteger .
   
   # End LinearPositioningSystemCoordinate
   ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -169,7 +169,8 @@ WHERE {
   ?startAssocNode xyz:netElementRef ?startNetElementRef ;
                   xyz:posBegin ?startPos .
   
-  BIND (xsd:double(?startPos) AS ?startPosDouble)
+  # Convert start position to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?startPos))) AS ?startPosInteger)
   
   # Dereference start netElement
   ?startNetElement a railml:netElement ;
@@ -223,7 +224,8 @@ WHERE {
   ?endAssocNode xyz:netElementRef ?endNetElementRef ;
                 xyz:posEnd ?endPos .
   
-  BIND (xsd:double(?endPos) AS ?endPosDouble)
+  # Convert end position to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?endPos))) AS ?endPosInteger)
   
   # Dereference end netElement
   ?endNetElement a railml:netElement ;

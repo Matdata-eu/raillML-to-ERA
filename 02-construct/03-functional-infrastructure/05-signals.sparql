@@ -36,7 +36,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → reference to micro-level LinearElement
-#   - era:offsetFromOrigin → position on element (xsd:double)
+#   - era:offsetFromOrigin → position on element (xsd:integer, rounded)
 #
 # Geometry derivation (post-processing):
 #   POINT geometries for NetPointReferences are calculated by a Python script
@@ -79,7 +79,7 @@ CONSTRUCT {
 
   ?topoCoord a era:TopologicalCoordinate ;
              era:onLinearElement ?eraLinearElement ;
-             era:offsetFromOrigin ?posDouble .
+             era:offsetFromOrigin ?posInteger .
   
   ?lrsCoord a era:LinearPositioningSystemCoordinate ;
             era:kmPost ?kmPost ;
@@ -157,8 +157,8 @@ WHERE {
   # Mint ERA netElement URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
 
-  # Convert position to double for TopologicalCoordinate
-  BIND (xsd:double(?posStr) AS ?posDouble)
+  # Convert position to integer (round to nearest meter) for TopologicalCoordinate
+  BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posInteger)
 
   # Map railML application direction to ERA orientation concepts
   # "normal" → 00, "reverse" → 01, "both" → 02
@@ -167,7 +167,7 @@ WHERE {
   # Mint URIs for NetPointReference and TopologicalCoordinate
   # Pattern: Use signal ID + netElement ref for uniqueness
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?signalId, "_on_", ?netElementRef)) AS ?netPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?signalId, "_", ?netElementRef, "_", STR(?posDouble))) AS ?topoCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?signalId, "_", ?netElementRef, "_", STR(?posInteger))) AS ?topoCoord)
   
   # Mint URIs for LinearPositioningSystemCoordinate and KilometricPost
   # LinearPositioningSystemCoordinate: unique per signal

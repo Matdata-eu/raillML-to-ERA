@@ -35,7 +35,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → era:LinearElement (micro-level netElement)
-#   - era:offsetFromOrigin → xsd:double (position in meters)
+#   - era:offsetFromOrigin → xsd:integer (position in meters, rounded)
 #
 # LinearPositioningSystemCoordinate structure:
 #   - era:kmPost → era:KilometricPost (from track's linearCoordinate)
@@ -86,7 +86,7 @@ CONSTRUCT {
 
   ?startTopoCoord a era:TopologicalCoordinate ;
                   era:onLinearElement ?eraLinearElement ;
-                  era:offsetFromOrigin ?posBeginDouble .
+                  era:offsetFromOrigin ?posBeginInteger .
 
   ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
                  era:kmPost ?startKmPost ;
@@ -103,7 +103,7 @@ CONSTRUCT {
 
   ?endTopoCoord a era:TopologicalCoordinate ;
                 era:onLinearElement ?eraLinearElement ;
-                era:offsetFromOrigin ?posEndDouble .
+                era:offsetFromOrigin ?posEndInteger .
 
   ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
                era:kmPost ?endKmPost ;
@@ -145,9 +145,9 @@ WHERE {
   # Ensure it's truly a micro element (no sub-collections)
   FILTER NOT EXISTS { ?microElement fx:elementCollectionUnordered ?microColl . }
   
-  # Linear extent: from 0 to element length
-  BIND (0.0 AS ?posBeginDouble)
-  BIND (xsd:double(?microLength) AS ?posEndDouble)
+  # Linear extent: from 0 to element length (convert to integer)
+  BIND (0 AS ?posBeginInteger)
+  BIND (xsd:integer(ROUND(xsd:double(?microLength))) AS ?posEndInteger)
   
   # Mint LinearElement URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?microElementRef)) AS ?eraLinearElement)
@@ -224,7 +224,7 @@ WHERE {
   
   # Mint end point URIs
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?oppId, "_", ?microElementRef, "_end")) AS ?endPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?oppId, "_", ?microElementRef, "_", STR(?posEndDouble))) AS ?endTopoCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?oppId, "_", ?microElementRef, "_", STR(?posEndInteger))) AS ?endTopoCoord)
 
   # Get LRS coordinates from the track that covers this micro element
   OPTIONAL {

@@ -42,7 +42,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → reference to micro-level LinearElement
-#   - era:offsetFromOrigin → position on element (xsd:double)
+#   - era:offsetFromOrigin → position on element (xsd:integer, rounded)
 #
 # Platform edge linear extent pattern:
 #   Each railML platformEdge has linearLocation with associatedNetElement entries.
@@ -93,7 +93,7 @@ CONSTRUCT {
   # Start TopologicalCoordinate
   ?startTopoCoord a era:TopologicalCoordinate ;
                   era:onLinearElement ?eraLinearElement ;
-                  era:offsetFromOrigin ?posBeginDouble .
+                  era:offsetFromOrigin ?posBeginInteger .
   
   # Start LinearPositioningSystemCoordinate
   ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -113,7 +113,7 @@ CONSTRUCT {
   # End TopologicalCoordinate
   ?endTopoCoord a era:TopologicalCoordinate ;
                 era:onLinearElement ?eraLinearElement ;
-                era:offsetFromOrigin ?posEndDouble .
+                era:offsetFromOrigin ?posEndInteger .
   
   # End LinearPositioningSystemCoordinate
   ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -211,9 +211,9 @@ WHERE {
   OPTIONAL { ?assocNode xyz:sequence ?seqValue . }
   BIND (COALESCE(?seqValue, "1") AS ?sequence)
   
-  # Convert positions to double
-  BIND (xsd:double(?posBegin) AS ?posBeginDouble)
-  BIND (xsd:double(?posEnd) AS ?posEndDouble)
+  # Convert positions to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?posBegin))) AS ?posBeginInteger)
+  BIND (xsd:integer(ROUND(xsd:double(?posEnd))) AS ?posEndInteger)
   
   # Dereference netElement to get LinearElement URI
   ?netElement a railml:netElement ;

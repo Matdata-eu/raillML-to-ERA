@@ -36,7 +36,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → reference to micro-level LinearElement
-#   - era:offsetFromOrigin → position on element (xsd:double)
+#   - era:offsetFromOrigin → position on element (xsd:integer, rounded)
 #
 # Geometry derivation (post-processing):
 #   POINT geometries for NetPointReferences are calculated by a Python script
@@ -107,8 +107,8 @@ WHERE {
   ?spotLoc xyz:netElementRef ?neRef ;
            xyz:pos ?posStr .
 
-  # Convert position to double
-  BIND (xsd:double(?posStr) AS ?posDouble)
+  # Convert position to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posDouble)
 
   # Mint LinearElement URI (topology reference)
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?neRef)) AS ?eraLinearElement)

@@ -26,7 +26,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # TopologicalCoordinate structure:
 #   - era:onLinearElement → era:LinearElement (micro-level netElement)
-#   - era:offsetFromOrigin → xsd:double (position in meters)
+#   - era:offsetFromOrigin → xsd:integer (position in meters, rounded)
 #
 # LinearPositioningSystemCoordinate structure (if linearCoordinate present):
 #   - era:kmPost → era:KilometricPost (inferred from measure)
@@ -56,7 +56,7 @@ CONSTRUCT {
 
   ?topoCoord a era:TopologicalCoordinate ;
              era:onLinearElement ?eraLinearElement ;
-             era:offsetFromOrigin ?posDouble .
+             era:offsetFromOrigin ?posInteger .
 
   # LinearPositioningSystemCoordinate (if available)
   ?lrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -88,7 +88,8 @@ WHERE {
   
   FILTER NOT EXISTS { ?spotNetElement fx:elementCollectionUnordered ?coll . }
   
-  BIND (xsd:double(?posStr) AS ?posDouble)
+  # Convert position to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posInteger)
   
   # Mint LinearElement URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?spotNetElementRef)) AS ?eraLinearElement)
@@ -97,7 +98,7 @@ WHERE {
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?spotLocId)) AS ?netPointRef)
   
   # Mint TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?spotLocId, "_", ?spotNetElementRef, "_", STR(?posDouble))) AS ?topoCoord)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?spotLocId, "_", ?spotNetElementRef, "_", STR(?posInteger))) AS ?topoCoord)
   
   # LRS coordinates (if available)
   OPTIONAL {
