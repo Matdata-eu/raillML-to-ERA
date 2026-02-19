@@ -133,6 +133,40 @@ if (Test-Path "infer-part-relations-point.sparql") {
     Write-Host ""
 }
 
+# Step 1d: Add missing rdf:type declarations
+if (Test-Path "add-missing-rdf-types.sparql") {
+    $addTypesQuery = Get-Content "add-missing-rdf-types.sparql" -Raw
+    if ($addTypesQuery.Trim().Length -gt 0) {
+        Write-Host "Step 1d: Adding missing rdf:type declarations..." -ForegroundColor Green
+        
+        if ($fusekiAvailable) {
+            try {
+                $updateBody = "update=$([System.Uri]::EscapeDataString($addTypesQuery))"
+                
+                $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
+                    -Method POST `
+                    -ContentType "application/x-www-form-urlencoded" `
+                    -Body $updateBody `
+                    -ErrorAction Stop
+                
+                Write-Host "  ✓ Missing rdf:type declarations added successfully" -ForegroundColor Green
+            } catch {
+                Write-Host "  ⚠️  WARNING: Failed to add missing rdf:type declarations: $_" -ForegroundColor Yellow
+                Write-Host "     Error: $_" -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "  ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
+        }
+        Write-Host ""
+    } else {
+        Write-Host "Step 1d: Skipping missing rdf:type declarations (add-missing-rdf-types.sparql is empty)" -ForegroundColor Yellow
+        Write-Host ""
+    }
+} else {
+    Write-Host "Step 1d: Skipping missing rdf:type declarations (add-missing-rdf-types.sparql not found)" -ForegroundColor Yellow
+    Write-Host ""
+}
+
 # Step 2: Enrich geometries using linear referencing
 Write-Host "Step 2: Enriching geometries using linear referencing..." -ForegroundColor Green
 
