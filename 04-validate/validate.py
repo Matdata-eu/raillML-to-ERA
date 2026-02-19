@@ -223,7 +223,7 @@ try:
 
     query = """
     PREFIX sh: <http://www.w3.org/ns/shacl#>
-    SELECT ?path ?message ?sourceConstraintComponent (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)
+    SELECT ?level ?path ?message ?sourceConstraintComponent (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)
     WHERE {
         ?violation a sh:ValidationResult ;
                     sh:resultPath ?path ;
@@ -231,9 +231,10 @@ try:
                     sh:sourceConstraintComponent ?sourceConstraintComponent .
         
         OPTIONAL { ?violation sh:resultMessage ?message }
+        OPTIONAL { ?violation sh:resultSeverity ?level }
     }
-    GROUP BY ?path ?message ?sourceConstraintComponent
-    ORDER BY ?path ?message ?sourceConstraintComponent
+    GROUP BY ?level ?path ?message ?sourceConstraintComponent
+    ORDER BY ?level ?path ?message ?sourceConstraintComponent
     """
     # Get query results
     df = validation_model.query(query)
@@ -264,10 +265,11 @@ try:
         else:
             f.write(f"{summary_message}\n\n")
             f.write("## Violation Details\n\n")
-            f.write("| Property Path | Constraint Component | Violations | Message | Example Node |\n")
-            f.write("|---------------|---------------------|------------|---------|-------------|\n")
+            f.write("| Level | Property Path | Constraint Component | Violations | Message | Example Node |\n")
+            f.write("|-------|---------------|---------------------|------------|---------|-------------|\n")
             
             for row in df.iter_rows(named=True):
+                level = row.get('level', 'N/A')
                 path = row.get('path', 'N/A')
                 constraint = row.get('sourceConstraintComponent', 'N/A')
                 count = row.get('violation_count', 0)
@@ -275,6 +277,7 @@ try:
                 example = row.get('example', 'N/A')
                 
                 # Format URIs for readability
+                level_str = str(level).replace('http://www.w3.org/ns/shacl#', 'sh:')
                 path_str = str(path).replace('http://data.europa.eu/949/', 'era:')
                 constraint_str = str(constraint).replace('http://www.w3.org/ns/shacl#', 'sh:')
                 example_str = str(example).replace('http://data.europa.eu/949/', 'era:')
@@ -282,7 +285,7 @@ try:
                 # Escape pipe characters in message
                 message_str = str(message).replace('|', '\\|') if message else ''
                 
-                f.write(f"| `{path_str}` | `{constraint_str}` | {count} | {message_str} | `{example_str}` |\n")
+                f.write(f"| `{level_str}` | `{path_str}` | `{constraint_str}` | {count} | {message_str} | `{example_str}` |\n")
             
             f.write("\n## Recommendations\n\n")
             f.write("1. Review the violations table above\n")
