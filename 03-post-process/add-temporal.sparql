@@ -7,8 +7,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 # with validFrom date of 2025-01-01T00:00:00
 
 INSERT {
-  ?element era:temporalFeature ?temporal .
-  ?temporal a era:TemporalFeature ;
+  ?element a era:TemporalFeature ;
     era:validFrom "2025-01-01T00:00:00"^^xsd:dateTime .
 }
 WHERE {
@@ -35,10 +34,7 @@ WHERE {
     era:Tunnel
   }
   ?element a ?type .
-  
-  # Mint temporal feature URI based on element URI
-  BIND(IRI(CONCAT(STR(?element), "/temporal")) AS ?temporal)
-  
+    
   # Only add if no temporal feature exists yet (idempotent)
   FILTER NOT EXISTS {
     ?element era:temporalFeature ?existingTemporal .
