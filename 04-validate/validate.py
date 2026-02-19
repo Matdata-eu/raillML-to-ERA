@@ -9,6 +9,7 @@ from datetime import datetime
 data_file = Path("../03-post-process/era-graph-enriched.ttl")
 shapes_dir = Path("shapes")
 shapes_dir.mkdir(exist_ok=True)
+shape_fixes_dir = Path("shape-fixes")
 
 # URLs for ERA SHACL shapes
 era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/era-shacl/ERA-RINF-shapes.ttl"
@@ -143,9 +144,56 @@ try:
     print("\n=== VALIDATION SUMMARY ===")
     if len(df) == 0:
         print("[OK] No validation violations found!")
+        summary_status = "✅ PASSED"
+        summary_message = "No validation violations found!"
     else:
         print(f"[VIOLATIONS] Found {len(df)} types of violations:\n")
         print(df)
+        summary_status = "❌ FAILED"
+        summary_message = f"Found {len(df)} types of violations"
+    
+    # Write summary to markdown file
+    summary_file = Path("validation-summary.md")
+    print(f"\nWriting validation summary to {summary_file}...")
+    
+    with open(summary_file, 'w', encoding='utf-8') as f:
+        f.write("# SHACL Validation Summary\n\n")
+        f.write(f"**Status:** {summary_status}\n\n")
+        f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        
+        if len(df) == 0:
+            f.write(summary_message + "\n\n")
+            f.write("All ERA ontology constraints are satisfied.\n")
+        else:
+            f.write(f"{summary_message}\n\n")
+            f.write("## Violation Details\n\n")
+            f.write("| Property Path | Constraint Component | Violations | Message | Example Node |\n")
+            f.write("|---------------|---------------------|------------|---------|-------------|\n")
+            
+            for row in df.iter_rows(named=True):
+                path = row.get('path', 'N/A')
+                constraint = row.get('sourceConstraintComponent', 'N/A')
+                count = row.get('violation_count', 0)
+                message = row.get('message', '')
+                example = row.get('example', 'N/A')
+                
+                # Format URIs for readability
+                path_str = str(path).replace('http://data.europa.eu/949/', 'era:')
+                constraint_str = str(constraint).replace('http://www.w3.org/ns/shacl#', 'sh:')
+                example_str = str(example).replace('http://data.europa.eu/949/', 'era:')
+                
+                # Escape pipe characters in message
+                message_str = str(message).replace('|', '\\|') if message else ''
+                
+                f.write(f"| `{path_str}` | `{constraint_str}` | {count} | {message_str} | `{example_str}` |\n")
+            
+            f.write("\n## Recommendations\n\n")
+            f.write("1. Review the violations table above\n")
+            f.write("2. Check the full validation report in `validation-report.ttl`\n")
+            f.write("3. Update CONSTRUCT queries or add shape fixes as needed\n")
+            f.write("4. Re-run the validation after making corrections\n")
+    
+    print(f"Validation summary saved to {summary_file}")
         
 except Exception as e:
     print(f"\n[ERROR] SHACL validation failed: {type(e).__name__}")
