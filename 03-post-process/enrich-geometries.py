@@ -1,766 +1,393 @@
 #!/usr/bin/env python3
+"""Enrich ERA network reference geometries using linear referencing.
+
+Computes GeoSPARQL geometries for:
+- NetPointReference  -> POINT (interpolated on LinearElement)
+- NetLinearReference -> LINESTRING (concatenated from sequence of LinearElements)
+- NetAreaReference   -> MULTILINESTRING (combined from included NetLinearReferences)
+- Subjects of era:netReference -> combined WKT from all referenced geometries
 """
-Enrich network reference geometries using linear referencing.
 
-This script runs AFTER all CONSTRUCT queries have been executed.
-It adds gsp:hasGeometry triples to network reference resources that don't already have geometries:
-
-1. NetPointReference → POINT geometry:
-   - Finding all NetPointReferences with TopologicalCoordinates (without existing geometries)
-   - Getting the LinearElement's LINESTRING geometry
-   - Using Shapely's linear referencing to interpolate POINT at offsetFromOrigin
-   - Inserting gsp:hasGeometry → gsp:Geometry → gsp:asWKT triples
-
-2. NetLinearReference → LINESTRING geometry:
-   - Finding all NetLinearReferences with startsAt/endsAt points (without existing geometries)
-   - Interpolating start and end points from their TopologicalCoordinates
-   - Creating LINESTRING from start to end point
-   - Inserting gsp:hasGeometry → gsp:Geometry → gsp:asWKT triples
-
-3. NetAreaReference → MULTILINESTRING geometry:
-   - Finding all NetAreaReferences with included NetLinearReferences (without existing geometries)
-   - Collecting all constituent NetLinearReference linestrings
-   - Creating MULTILINESTRING from all included linestrings
-   - Inserting gsp:hasGeometry → gsp:Geometry → gsp:asWKT triples
-
-Dependencies:
-    pip install shapely requests
-"""
+import hashlib
+import os
 
 import requests
-import sys
-import subprocess
-import time
-import random
+from rdflib import Graph, Namespace, URIRef, Literal, RDF
+from shapely import wkt as shapely_wkt
+from shapely.geometry import GeometryCollection, LineString, MultiLineString, MultiPoint, Point
+from shapely.ops import substring
 
-# Ensure UTF-8 encoding for Windows console
-if sys.platform == 'win32':
-    try:
-        sys.stdout.reconfigure(encoding='utf-8')
-    except AttributeError:
-        import io
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-
-from shapely.wkt import loads as wkt_loads
-from shapely.geometry import Point, LineString, MultiLineString
-from shapely import wkt
-from typing import Dict, Tuple, Optional, List, Set, Union
+# Namespaces
+ERA = Namespace("http://data.europa.eu/949/")
+GSP = Namespace("http://www.opengis.net/ont/geosparql#")
 
 # Configuration
-SOURCE_ENDPOINT = "http://localhost:8082/jena-fuseki/advanced-example/sparql"
-TARGET_ENDPOINT = "http://localhost:8082/jena-fuseki/advanced-example"
-TARGET_QUERY_ENDPOINT = f"{TARGET_ENDPOINT}/sparql"
-TARGET_UPDATE_ENDPOINT = f"{TARGET_ENDPOINT}/update"
-TARGET_DATA_ENDPOINT = f"{TARGET_ENDPOINT}/data"
-
-# Oxigraph Docker configuration
-OXIGRAPH_CONTAINER_NAME = "era-geometry-oxigraph-temp"
-OXIGRAPH_PORT = None
-OXIGRAPH_QUERY_ENDPOINT = None
-OXIGRAPH_UPDATE_ENDPOINT = None
-OXIGRAPH_STORE_ENDPOINT = None
-
-# Input/Output files
-INPUT_TTL_FILE = "../02-construct/output/era-graph.ttl"
-OUTPUT_TTL_FILE = "output/era-graph-enriched.ttl"
-
-# Fuseki availability
-FUSEKI_AVAILABLE = False
-OXIGRAPH_CONTAINER_ID = None
+FUSEKI_URL = "http://localhost:8082/jena-fuseki/advanced-example"
+FUSEKI_QUERY = f"{FUSEKI_URL}/query"
+FUSEKI_DATA = f"{FUSEKI_URL}/data"
+INPUT_TTL = "../02-construct/output/era-graph.ttl"
+OUTPUT_TTL = "output/era-graph-enriched.ttl"
 
 
-def start_oxigraph_container() -> bool:
-    """Start Oxigraph Docker container."""
-    global OXIGRAPH_CONTAINER_ID, OXIGRAPH_PORT, OXIGRAPH_QUERY_ENDPOINT, OXIGRAPH_UPDATE_ENDPOINT, OXIGRAPH_STORE_ENDPOINT
-    
-    try:
-        OXIGRAPH_PORT = random.randint(17978, 18078)
-        print(f"  Starting Oxigraph Docker container on port {OXIGRAPH_PORT}...")
-        
-        result = subprocess.run(
-            [
-                'docker', 'run', '-d',
-                '--name', OXIGRAPH_CONTAINER_NAME,
-                '-p', f'{OXIGRAPH_PORT}:7878',
-                'oxigraph/oxigraph', 'serve'
-            ],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        
-        OXIGRAPH_CONTAINER_ID = result.stdout.strip()
-        OXIGRAPH_QUERY_ENDPOINT = f"http://localhost:{OXIGRAPH_PORT}/query"
-        OXIGRAPH_UPDATE_ENDPOINT = f"http://localhost:{OXIGRAPH_PORT}/update"
-        OXIGRAPH_STORE_ENDPOINT = f"http://localhost:{OXIGRAPH_PORT}/store"
-        
-        print("  Waiting for Oxigraph to be ready...")
-        for i in range(30):
-            time.sleep(1)
-            try:
-                response = requests.post(
-                    OXIGRAPH_QUERY_ENDPOINT,
-                    data={'query': 'ASK { }'},
-                    timeout=2
-                )
-                if response.status_code == 200:
-                    print(f"  ✓ Oxigraph container started (ID: {OXIGRAPH_CONTAINER_ID[:12]})")
-                    return True
-            except Exception:
+def geometry_uri(geom_type: str, wkt_str: str) -> URIRef:
+    """Create a deterministic geometry URI from type and WKT."""
+    h = hashlib.sha256(wkt_str.encode()).hexdigest()[:8]
+    return URIRef(f"http://data.europa.eu/949/geometry/{geom_type}/{h}")
+
+
+def parse_wkt(wkt_str: str):
+    """Parse a WKT string, stripping any GeoSPARQL CRS prefix."""
+    s = str(wkt_str).strip()
+    if s.startswith("<"):
+        s = s[s.index(">") + 1 :].strip()
+    return shapely_wkt.loads(s)
+
+
+def add_geometry(graph: Graph, new_triples: Graph, subject: URIRef, geom_type: str, wkt_str: str):
+    """Add gsp:hasGeometry triples to both the main graph and the new-triples graph."""
+    uri = geometry_uri(geom_type, wkt_str)
+    wkt_lit = Literal(wkt_str, datatype=GSP.wktLiteral)
+    for g in (graph, new_triples):
+        g.add((subject, GSP.hasGeometry, uri))
+        g.add((uri, RDF.type, GSP.Geometry))
+        g.add((uri, GSP.asWKT, wkt_lit))
+
+
+def get_le_geometry(graph: Graph, le: URIRef):
+    """Return a LinearElement's (Shapely geometry, length_in_meters) or (None, None)."""
+    length = None
+    for o in graph.objects(le, ERA.lengthOfNetLinearElement):
+        length = float(o)
+        break
+
+    geom = None
+    for g in graph.objects(le, GSP.hasGeometry):
+        for w in graph.objects(g, GSP.asWKT):
+            geom = parse_wkt(w)
+            break
+        if geom:
+            break
+
+    return geom, length
+
+
+def rdf_list_items(graph: Graph, head) -> list:
+    """Traverse an RDF list and return all items in order."""
+    items = []
+    node = head
+    while node and node != RDF.nil:
+        first = next(graph.objects(node, RDF.first), None)
+        if first is not None:
+            items.append(first)
+        node = next(graph.objects(node, RDF.rest), None)
+    return items
+
+
+# ---------------------------------------------------------------------------
+# NetPointReference -> POINT
+# ---------------------------------------------------------------------------
+
+def enrich_points(graph: Graph, new_triples: Graph) -> int:
+    """Interpolate POINT geometries for NetPointReferences without geometry."""
+    count = 0
+    for ref in graph.subjects(RDF.type, ERA.NetPointReference):
+        if any(graph.objects(ref, GSP.hasGeometry)):
+            continue
+
+        tc = next(graph.objects(ref, ERA.hasTopoCoordinate), None)
+        if not tc:
+            continue
+
+        le = next(graph.objects(tc, ERA.onLinearElement), None)
+        offset_lit = next(graph.objects(tc, ERA.offsetFromOrigin), None)
+        if not le or offset_lit is None:
+            continue
+
+        offset = float(offset_lit)
+        le_geom, le_len = get_le_geometry(graph, le)
+        if not le_geom or not le_len:
+            continue
+
+        frac = max(0.0, min(1.0, offset / le_len))
+        point = le_geom.interpolate(frac, normalized=True)
+        add_geometry(graph, new_triples, ref, "point", point.wkt)
+        count += 1
+
+    return count
+
+
+# ---------------------------------------------------------------------------
+# NetLinearReference -> LINESTRING
+# ---------------------------------------------------------------------------
+
+def enrich_lines(graph: Graph, new_triples: Graph) -> int:
+    """Build LINESTRING geometries for NetLinearReferences without geometry."""
+    count = 0
+    for ref in graph.subjects(RDF.type, ERA.NetLinearReference):
+        if any(graph.objects(ref, GSP.hasGeometry)):
+            continue
+
+        start_ref = next(graph.objects(ref, ERA.startsAt), None)
+        end_ref = next(graph.objects(ref, ERA.endsAt), None)
+        seq_head = next(graph.objects(ref, ERA.hasSequence), None)
+        if not start_ref or not end_ref or not seq_head:
+            continue
+
+        # Start topological coordinate
+        start_tc = next(graph.objects(start_ref, ERA.hasTopoCoordinate), None)
+        if not start_tc:
+            continue
+        start_offset_lit = next(graph.objects(start_tc, ERA.offsetFromOrigin), None)
+        if start_offset_lit is None:
+            continue
+        start_offset = float(start_offset_lit)
+
+        # End topological coordinate
+        end_tc = next(graph.objects(end_ref, ERA.hasTopoCoordinate), None)
+        if not end_tc:
+            continue
+        end_offset_lit = next(graph.objects(end_tc, ERA.offsetFromOrigin), None)
+        if end_offset_lit is None:
+            continue
+        end_offset = float(end_offset_lit)
+
+        elements = rdf_list_items(graph, seq_head)
+        if not elements:
+            continue
+
+        all_coords = []
+        valid = True
+
+        for i, le in enumerate(elements):
+            le_geom, le_len = get_le_geometry(graph, le)
+            if not le_geom or not le_len:
+                valid = False
+                break
+
+            is_first = i == 0
+            is_last = i == len(elements) - 1
+
+            if is_first and is_last:
+                s = max(0.0, min(1.0, start_offset / le_len))
+                e = max(0.0, min(1.0, end_offset / le_len))
+                seg = substring(le_geom, s, e, normalized=True)
+            elif is_first:
+                s = max(0.0, min(1.0, start_offset / le_len))
+                seg = substring(le_geom, s, 1.0, normalized=True)
+            elif is_last:
+                e = max(0.0, min(1.0, end_offset / le_len))
+                seg = substring(le_geom, 0.0, e, normalized=True)
+            else:
+                seg = le_geom
+
+            if seg.is_empty or seg.geom_type == "Point":
                 continue
-        
-        print("  ❌ Oxigraph container did not become ready in time")
-        stop_oxigraph_container()
-        return False
-        
-    except Exception as e:
-        print(f"  ❌ Failed to start Oxigraph container: {e}")
-        return False
+
+            coords = list(seg.coords)
+
+            # Check orientation for connectivity with previous segment
+            if all_coords and len(coords) >= 2:
+                prev = all_coords[-1]
+                d_fwd = (prev[0] - coords[0][0]) ** 2 + (prev[1] - coords[0][1]) ** 2
+                d_rev = (prev[0] - coords[-1][0]) ** 2 + (prev[1] - coords[-1][1]) ** 2
+                if d_rev < d_fwd:
+                    coords = coords[::-1]
+
+            # Remove duplicate junction point
+            if all_coords and coords:
+                p1, p2 = all_coords[-1], coords[0]
+                if abs(p1[0] - p2[0]) < 1e-10 and abs(p1[1] - p2[1]) < 1e-10:
+                    coords = coords[1:]
+
+            all_coords.extend(coords)
+
+        if valid and len(all_coords) >= 2:
+            add_geometry(graph, new_triples, ref, "linestring", LineString(all_coords).wkt)
+            count += 1
+
+    return count
 
 
-def stop_oxigraph_container() -> None:
-    """Stop and remove Oxigraph Docker container."""
-    global OXIGRAPH_CONTAINER_ID
-    
-    if OXIGRAPH_CONTAINER_ID:
-        try:
-            print(f"\n🧹 Cleaning up Oxigraph container...")
-            subprocess.run(['docker', 'stop', OXIGRAPH_CONTAINER_NAME], 
-                         capture_output=True, timeout=10)
-            subprocess.run(['docker', 'rm', OXIGRAPH_CONTAINER_NAME], 
-                         capture_output=True, timeout=10)
-            print("  ✓ Container removed")
-        except Exception as e:
-            print(f"  ⚠️  Warning: Failed to clean up container: {e}")
-        finally:
-            OXIGRAPH_CONTAINER_ID = None
+# ---------------------------------------------------------------------------
+# NetAreaReference -> MULTILINESTRING
+# ---------------------------------------------------------------------------
+
+def enrich_areas(graph: Graph, new_triples: Graph) -> int:
+    """Combine included NetLinearReference geometries into MULTILINESTRING."""
+    count = 0
+    for ref in graph.subjects(RDF.type, ERA.NetAreaReference):
+        if any(graph.objects(ref, GSP.hasGeometry)):
+            continue
+
+        includes_head = next(graph.objects(ref, ERA.includes), None)
+        if not includes_head:
+            continue
+
+        included = rdf_list_items(graph, includes_head)
+        lines = []
+        for inc in included:
+            geom_node = next(graph.objects(inc, GSP.hasGeometry), None)
+            if not geom_node:
+                continue
+            wkt_val = next(graph.objects(geom_node, GSP.asWKT), None)
+            if not wkt_val:
+                continue
+            geom = parse_wkt(wkt_val)
+            if isinstance(geom, LineString):
+                lines.append(geom)
+
+        if lines:
+            add_geometry(graph, new_triples, ref, "multilinestring", MultiLineString(lines).wkt)
+            count += 1
+
+    return count
 
 
-def load_data_to_oxigraph() -> bool:
-    """Load source TTL file into Oxigraph container."""
-    try:
-        print(f"  Loading data from {INPUT_TTL_FILE} into Oxigraph...")
-        
-        with open(INPUT_TTL_FILE, 'rb') as f:
-            ttl_data = f.read()
-        
-        response = requests.post(
-            OXIGRAPH_STORE_ENDPOINT,
-            data=ttl_data,
-            headers={'Content-Type': 'application/x-turtle'},
-            timeout=120
-        )
-        
-        if response.status_code in [200, 201, 204]:
-            print(f"  ✓ Data loaded into Oxigraph")
-            return True
+# ---------------------------------------------------------------------------
+# Subject geometries (combine reference geometries)
+# ---------------------------------------------------------------------------
+
+def _geom_type_label(geom) -> str:
+    """Map a Shapely geometry to a URI path segment."""
+    mapping = {
+        "Point": "point",
+        "LineString": "linestring",
+        "MultiPoint": "multipoint",
+        "MultiLineString": "multilinestring",
+        "GeometryCollection": "geometrycollection",
+    }
+    return mapping.get(geom.geom_type, "geometry")
+
+
+def enrich_subjects(graph: Graph, new_triples: Graph) -> int:
+    """Add a combined geometry to subjects of era:netReference that lack one."""
+    count = 0
+    seen = set()
+
+    for subject in graph.subjects(ERA.netReference, None):
+        if subject in seen:
+            continue
+        seen.add(subject)
+
+        if any(graph.objects(subject, GSP.hasGeometry)):
+            continue
+
+        geoms = []
+        for ref in graph.objects(subject, ERA.netReference):
+            for geom_node in graph.objects(ref, GSP.hasGeometry):
+                for wkt_val in graph.objects(geom_node, GSP.asWKT):
+                    geoms.append(parse_wkt(wkt_val))
+
+        if not geoms:
+            continue
+
+        if len(geoms) == 1:
+            combined = geoms[0]
         else:
-            print(f"  ❌ Failed to load data: HTTP {response.status_code}")
-            return False
-            
-    except Exception as e:
-        print(f"  ❌ Failed to load data into Oxigraph: {e}")
-        return False
+            types = {g.geom_type for g in geoms}
+            if types == {"Point"}:
+                combined = MultiPoint(geoms)
+            elif types <= {"LineString", "MultiLineString"}:
+                lines = []
+                for g in geoms:
+                    if isinstance(g, LineString):
+                        lines.append(g)
+                    elif isinstance(g, MultiLineString):
+                        lines.extend(g.geoms)
+                combined = MultiLineString(lines)
+            else:
+                combined = GeometryCollection(geoms)
+
+        add_geometry(graph, new_triples, subject, _geom_type_label(combined), combined.wkt)
+        count += 1
+
+    return count
 
 
-def check_fuseki_availability() -> bool:
-    """Check if Fuseki endpoint is available."""
+# ---------------------------------------------------------------------------
+# Fuseki helpers
+# ---------------------------------------------------------------------------
+
+def check_fuseki() -> bool:
     try:
-        response = requests.post(
-            TARGET_QUERY_ENDPOINT,
-            data={'query': 'ASK { }'},
-            timeout=5
-        )
-        return response.status_code == 200
+        r = requests.post(FUSEKI_QUERY, data={"query": "ASK { }"}, timeout=5)
+        return r.status_code == 200
     except Exception:
         return False
 
 
-def get_active_endpoint() -> Optional[str]:
-    """Get the active SPARQL query endpoint (Fuseki or Oxigraph)."""
-    if FUSEKI_AVAILABLE:
-        return TARGET_QUERY_ENDPOINT
-    elif OXIGRAPH_CONTAINER_ID:
-        return OXIGRAPH_QUERY_ENDPOINT
-    else:
-        return None
-
-
-def query_net_point_references() -> List[Dict]:
-    """
-    Query for all NetPointReferences with their TopologicalCoordinates.
-    Only returns those that don't already have gsp:hasGeometry.
-    
-    Returns list of dictionaries with keys:
-        - netPointRef: URI string
-        - topoCoord: URI string
-        - linearElement: URI string
-        - offset: float value
-    """
-    query = """
-    PREFIX era: <http://data.europa.eu/949/>
-    PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-    
-    SELECT ?netPointRef ?topoCoord ?linearElement ?offset
-    WHERE {
-        ?netPointRef a era:NetPointReference ;
-                     era:hasTopoCoordinate ?topoCoord .
-        ?topoCoord era:onLinearElement ?linearElement ;
-                   era:offsetFromOrigin ?offset .
-        FILTER NOT EXISTS { ?netPointRef gsp:hasGeometry ?existing }
-    }
-    """
-    
-    endpoint = get_active_endpoint()
-    if not endpoint:
-        raise RuntimeError("No SPARQL endpoint available")
-    
-    response = requests.post(
-        endpoint,
-        data={'query': query},
-        headers={'Accept': 'application/sparql-results+json'},
-        timeout=60
+def load_graph_from_fuseki() -> Graph:
+    g = Graph()
+    r = requests.post(
+        FUSEKI_QUERY,
+        data={"query": "CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }"},
+        headers={"Accept": "text/turtle"},
+        timeout=120,
     )
-    response.raise_for_status()
-    
-    results = response.json()
-    
-    records = []
-    for binding in results['results']['bindings']:
-        records.append({
-            'netPointRef': binding['netPointRef']['value'],
-            'topoCoord': binding['topoCoord']['value'],
-            'linearElement': binding['linearElement']['value'],
-            'offset': float(binding['offset']['value'])
-        })
-    
-    return records
+    r.raise_for_status()
+    g.parse(data=r.text, format="turtle")
+    return g
 
 
-def query_net_linear_references() -> List[Dict]:
-    """
-    Query for all NetLinearReferences with their start and end points.
-    Only returns those that don't already have gsp:hasGeometry.
-    
-    Returns list of dictionaries with keys:
-        - netLinearRef: URI string
-        - startLinearElement: URI string
-        - startOffset: float value
-        - endLinearElement: URI string
-        - endOffset: float value
-    """
-    query = """
-    PREFIX era: <http://data.europa.eu/949/>
-    PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-    
-    SELECT ?netLinearRef ?startLinearElement ?startOffset ?endLinearElement ?endOffset
-    WHERE {
-        ?netLinearRef a era:NetLinearReference ;
-                      era:startsAt ?startRef ;
-                      era:endsAt ?endRef .
-        
-        ?startRef era:hasTopoCoordinate ?startTopoCoord .
-        ?startTopoCoord era:onLinearElement ?startLinearElement ;
-                        era:offsetFromOrigin ?startOffset .
-        
-        ?endRef era:hasTopoCoordinate ?endTopoCoord .
-        ?endTopoCoord era:onLinearElement ?endLinearElement ;
-                      era:offsetFromOrigin ?endOffset .
-        
-        FILTER NOT EXISTS { ?netLinearRef gsp:hasGeometry ?existing }
-    }
-    """
-    
-    endpoint = get_active_endpoint()
-    if not endpoint:
-        raise RuntimeError("No SPARQL endpoint available")
-    
-    response = requests.post(
-        endpoint,
-        data={'query': query},
-        headers={'Accept': 'application/sparql-results+json'},
-        timeout=60
+def upload_triples_to_fuseki(new_triples: Graph):
+    """POST only the new geometry triples to Fuseki (additive)."""
+    ttl = new_triples.serialize(format="turtle")
+    r = requests.post(
+        FUSEKI_DATA,
+        data=ttl.encode("utf-8"),
+        headers={"Content-Type": "text/turtle"},
+        timeout=120,
     )
-    response.raise_for_status()
-    
-    results = response.json()
-    
-    records = []
-    for binding in results['results']['bindings']:
-        records.append({
-            'netLinearRef': binding['netLinearRef']['value'],
-            'startLinearElement': binding['startLinearElement']['value'],
-            'startOffset': float(binding['startOffset']['value']),
-            'endLinearElement': binding['endLinearElement']['value'],
-            'endOffset': float(binding['endOffset']['value'])
-        })
-    
-    return records
+    r.raise_for_status()
 
 
-def query_net_area_references() -> List[Dict]:
-    """
-    Query for all NetAreaReferences with their included NetLinearReferences.
-    Only returns those that don't already have gsp:hasGeometry.
-    
-    Returns list of dictionaries with keys:
-        - netAreaRef: URI string
-        - netLinearRefs: list of URI strings
-    """
-    query = """
-    PREFIX era: <http://data.europa.eu/949/>
-    PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    
-    SELECT ?netAreaRef (GROUP_CONCAT(?netLinearRef; separator="|") AS ?netLinearRefs)
-    WHERE {
-        ?netAreaRef a era:NetAreaReference ;
-                    era:includes ?includesList .
-        
-        ?includesList rdf:rest* ?listNode .
-        ?listNode rdf:first ?netLinearRef .
-        
-        FILTER NOT EXISTS { ?netAreaRef gsp:hasGeometry ?existing }
-    }
-    GROUP BY ?netAreaRef
-    """
-    
-    endpoint = get_active_endpoint()
-    if not endpoint:
-        raise RuntimeError("No SPARQL endpoint available")
-    
-    response = requests.post(
-        endpoint,
-        data={'query': query},
-        headers={'Accept': 'application/sparql-results+json'},
-        timeout=60
-    )
-    response.raise_for_status()
-    
-    results = response.json()
-    
-    records = []
-    for binding in results['results']['bindings']:
-        linear_refs_str = binding.get('netLinearRefs', {}).get('value', '')
-        linear_refs = [ref.strip() for ref in linear_refs_str.split('|') if ref.strip()]
-        
-        records.append({
-            'netAreaRef': binding['netAreaRef']['value'],
-            'netLinearRefs': linear_refs
-        })
-    
-    return records
-
-
-def query_linear_element_geometries() -> Dict[str, str]:
-    """
-    Query for all LinearElement geometries.
-    
-    Returns:
-        Dictionary mapping LinearElement URI → WKT string
-    """
-    query = """
-    PREFIX era: <http://data.europa.eu/949/>
-    PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
-    
-    SELECT ?linearElement ?wkt
-    WHERE {
-        ?linearElement a era:LinearElement ;
-                       gsp:hasGeometry/gsp:asWKT ?wkt .
-    }
-    """
-    
-    endpoint = get_active_endpoint()
-    if not endpoint:
-        raise RuntimeError("No SPARQL endpoint available")
-    
-    response = requests.post(
-        endpoint,
-        data={'query': query},
-        headers={'Accept': 'application/sparql-results+json'},
-        timeout=60
-    )
-    response.raise_for_status()
-    
-    results = response.json()
-    
-    geometries = {}
-    for binding in results['results']['bindings']:
-        linear_element = binding['linearElement']['value']
-        wkt = binding['wkt']['value']
-        geometries[linear_element] = wkt
-    
-    return geometries
-
-
-def interpolate_point_on_linestring(wkt: str, offset: float) -> Optional[Point]:
-    """
-    Interpolate a point along a LINESTRING at a given offset.
-    
-    Args:
-        wkt: WKT LINESTRING (may include CRS prefix)
-        offset: Distance along the line from origin (meters)
-    
-    Returns:
-        Shapely Point at the interpolated position, or None if invalid
-    """
-    try:
-        # Remove CRS prefix if present (e.g., "<http://...> LINESTRING(...)")
-        if wkt.startswith('<'):
-            wkt = wkt.split('>', 1)[1].strip()
-        
-        line = wkt_loads(wkt)
-        
-        # Use Shapely's interpolate function for linear referencing
-        # Distance is in the same units as the coordinates
-        point = line.interpolate(offset)
-        
-        return point
-        
-    except Exception as e:
-        print(f"  ⚠️  Warning: Failed to interpolate point: {e}")
-        return None
-
-
-def create_geometry_triple(
-    resource_uri: str,
-    geometry: Union[Point, LineString, MultiLineString],
-    geometry_type: str
-) -> str:
-    """
-    Create geometry triples for a resource in Turtle format.
-    
-    Returns Turtle string:
-        <resourceUri> gsp:hasGeometry <geometry> .
-        <geometry> a gsp:Geometry ;
-                  gsp:asWKT "..."^^gsp:wktLiteral .
-    
-    Args:
-        resource_uri: Resource URI string (NetPointReference, NetLinearReference, or NetAreaReference)
-        geometry: Shapely geometry (Point, LineString, or MultiLineString)
-        geometry_type: Type identifier for URI minting ("point", "linestring", "multilinestring")
-    
-    Returns:
-        Turtle string with geometry triples
-    """
-    wkt_string = geometry.wkt
-    # Create a hash-based URI for the geometry to ensure uniqueness
-    import hashlib
-    geom_hash = hashlib.md5(wkt_string.encode()).hexdigest()[:8]
-    geometry_uri = f"http://data.europa.eu/949/geometry/{geometry_type}/{geom_hash}"
-    
-    turtle = f"""
-<{resource_uri}> <http://www.opengis.net/ont/geosparql#hasGeometry> <{geometry_uri}> .
-<{geometry_uri}> a <http://www.opengis.net/ont/geosparql#Geometry> ;
-    <http://www.opengis.net/ont/geosparql#asWKT> "{wkt_string}"^^<http://www.opengis.net/ont/geosparql#wktLiteral> .
-"""
-    return turtle
-
-
-def insert_geometry_triples(turtle_data: str) -> None:
-    """Insert geometry triples into target endpoint."""
-    if FUSEKI_AVAILABLE:
-        response = requests.post(
-            TARGET_DATA_ENDPOINT,
-            data=turtle_data.encode('utf-8'),
-            headers={'Content-Type': 'text/turtle'},
-            params={'default': ''},
-            timeout=120
-        )
-        response.raise_for_status()
-    elif OXIGRAPH_CONTAINER_ID:
-        response = requests.post(
-            OXIGRAPH_STORE_ENDPOINT,
-            data=turtle_data.encode('utf-8'),
-            headers={'Content-Type': 'application/x-turtle'},
-            timeout=120
-        )
-        response.raise_for_status()
-    else:
-        raise RuntimeError("No endpoint available for inserting triples")
-
-
-def save_enriched_graph_to_file(turtle_data: str) -> None:
-    """Save enriched graph to local file by merging with original."""
-    print(f"   Reading original graph from: {INPUT_TTL_FILE}")
-    
-    with open(INPUT_TTL_FILE, 'r', encoding='utf-8') as f:
-        original_turtle = f.read()
-    
-    # Simple merge: concatenate Turtle documents
-    # They will share the same namespace prefixes
-    enriched_turtle = original_turtle + "\n\n# Geometry Enrichment\n" + turtle_data
-    
-    print(f"   Writing enriched graph to: {OUTPUT_TTL_FILE}")
-    with open(OUTPUT_TTL_FILE, 'w', encoding='utf-8') as f:
-        f.write(enriched_turtle)
-    
-    print("   ✓ Saved successfully")
-
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def main():
-    """Main execution flow."""
-    global FUSEKI_AVAILABLE
-    
-    try:
-        print("=" * 70)
-        print("ERA Geometry Enrichment - Linear Referencing")
-        print("=" * 70)
-        print(f"Target endpoint: {TARGET_ENDPOINT}")
-        print()
-        
-        # Check Fuseki availability
-        print("🔍 Checking Fuseki availability...")
-        FUSEKI_AVAILABLE = check_fuseki_availability()
-        if FUSEKI_AVAILABLE:
-            print("   ✓ Fuseki is available")
-        else:
-            print("   ⚠️  Fuseki is not available (will use Oxigraph Docker)")
-            
-            # Check if local file exists
-            from pathlib import Path
-            if not Path(INPUT_TTL_FILE).exists():
-                print(f"   ❌ ERROR: Local file not found: {INPUT_TTL_FILE}")
-                print("      Please run step 02-construct first")
-                return 1
-            
-            # Start Oxigraph container
-            if not start_oxigraph_container():
-                print("   ❌ ERROR: Failed to start Oxigraph container")
-                print("      Please ensure Docker is running")
-                return 1
-            
-            # Load data into Oxigraph
-            if not load_data_to_oxigraph():
-                print("   ❌ ERROR: Failed to load data into Oxigraph")
-                return 1
-        
-        print()
-        
-        # Step 1: Query for all reference types
-        print("📊 Querying NetPointReferences with TopologicalCoordinates...")
-        net_point_ref_records = query_net_point_references()
-        print(f"   Found {len(net_point_ref_records)} NetPointReferences (without geometries)")
-        
-        print("\n📊 Querying NetLinearReferences...")
-        net_linear_ref_records = query_net_linear_references()
-        print(f"   Found {len(net_linear_ref_records)} NetLinearReferences (without geometries)")
-        
-        print("\n📊 Querying NetAreaReferences...")
-        net_area_ref_records = query_net_area_references()
-        print(f"   Found {len(net_area_ref_records)} NetAreaReferences (without geometries)")
-        
-        total_records = len(net_point_ref_records) + len(net_linear_ref_records) + len(net_area_ref_records)
-        
-        if total_records == 0:
-            print("\n✓ No references found without geometries - nothing to enrich")
-            return 0
-        
-        # Step 2: Query for LinearElement geometries
-        print("\n📊 Querying LinearElement geometries...")
-        linear_element_geometries = query_linear_element_geometries()
-        print(f"   Found {len(linear_element_geometries)} LinearElements with geometries")
-        
-        geometry_triples = []
-        successful = 0
-        skipped = 0
-        
-        # Step 3: Process NetPointReferences
-        if net_point_ref_records:
-            print(f"\n🔧 Enriching {len(net_point_ref_records)} NetPointReferences with POINT geometries...")
-            
-            for record in net_point_ref_records:
-                net_point_ref = record['netPointRef']
-                linear_element = record['linearElement']
-                offset = record['offset']
-                
-                # Get LinearElement geometry
-                wkt_str = linear_element_geometries.get(linear_element)
-                if not wkt_str:
-                    print(f"  ⚠️  No geometry for LinearElement {linear_element}")
-                    skipped += 1
-                    continue
-                
-                # Interpolate point
-                point = interpolate_point_on_linestring(wkt_str, offset)
-                
-                if not point:
-                    skipped += 1
-                    continue
-                
-                # Create geometry triple
-                turtle = create_geometry_triple(net_point_ref, point, "point")
-                geometry_triples.append(turtle)
-                successful += 1
-            
-            print(f"   ✓ NetPointReferences enriched: {successful}")
-        
-        # Step 4: Process NetLinearReferences
-        if net_linear_ref_records:
-            print(f"\n🔧 Enriching {len(net_linear_ref_records)} NetLinearReferences with LINESTRING geometries...")
-            
-            linear_successful = 0
-            linear_skipped = 0
-            
-            for record in net_linear_ref_records:
-                net_linear_ref = record['netLinearRef']
-                start_element = record['startLinearElement']
-                start_offset = record['startOffset']
-                end_element = record['endLinearElement']
-                end_offset = record['endOffset']
-                
-                # Interpolate start point
-                start_wkt = linear_element_geometries.get(start_element)
-                if not start_wkt:
-                    print(f"  ⚠️  No geometry for start LinearElement {start_element}")
-                    linear_skipped += 1
-                    continue
-                
-                start_point = interpolate_point_on_linestring(start_wkt, start_offset)
-                if not start_point:
-                    linear_skipped += 1
-                    continue
-                
-                # Interpolate end point
-                end_wkt = linear_element_geometries.get(end_element)
-                if not end_wkt:
-                    print(f"  ⚠️  No geometry for end LinearElement {end_element}")
-                    linear_skipped += 1
-                    continue
-                
-                end_point = interpolate_point_on_linestring(end_wkt, end_offset)
-                if not end_point:
-                    linear_skipped += 1
-                    continue
-                
-                # Create LineString from start to end
-                # For simplicity, use a straight line between the two points
-                # Future enhancement: extract the actual segment from the LineString if on same element
-                linestring = LineString([(start_point.x, start_point.y), (end_point.x, end_point.y)])
-                
-                # Create geometry triple
-                turtle = create_geometry_triple(net_linear_ref, linestring, "linestring")
-                geometry_triples.append(turtle)
-                linear_successful += 1
-            
-            print(f"   ✓ NetLinearReferences enriched: {linear_successful}")
-            if linear_skipped > 0:
-                print(f"   ⚠️  Skipped: {linear_skipped}")
-            
-            successful += linear_successful
-            skipped += linear_skipped
-        
-        # Step 5: Process NetAreaReferences
-        if net_area_ref_records:
-            print(f"\n🔧 Enriching {len(net_area_ref_records)} NetAreaReferences with MULTILINESTRING geometries...")
-            
-            area_successful = 0
-            area_skipped = 0
-            
-            for record in net_area_ref_records:
-                net_area_ref = record['netAreaRef']
-                linear_refs = record['netLinearRefs']
-                
-                if not linear_refs:
-                    area_skipped += 1
-                    continue
-                
-                # Collect LineString geometries for each included NetLinearReference
-                linestrings = []
-                
-                for linear_ref in linear_refs:
-                    # Find the matching NetLinearReference record
-                    found = False
-                    for linear_record in net_linear_ref_records:
-                        if linear_record['netLinearRef'] == linear_ref:
-                            # Reconstruct the geometry
-                            start_element = linear_record['startLinearElement']
-                            start_offset = linear_record['startOffset']
-                            end_element = linear_record['endLinearElement']
-                            end_offset = linear_record['endOffset']
-                            
-                            start_wkt = linear_element_geometries.get(start_element)
-                            end_wkt = linear_element_geometries.get(end_element)
-                            
-                            if start_wkt and end_wkt:
-                                start_point = interpolate_point_on_linestring(start_wkt, start_offset)
-                                end_point = interpolate_point_on_linestring(end_wkt, end_offset)
-                                
-                                if start_point and end_point:
-                                    linestrings.append(LineString([(start_point.x, start_point.y), 
-                                                                  (end_point.x, end_point.y)]))
-                                    found = True
-                            break
-                    
-                    if not found:
-                        print(f"  ⚠️  Could not create geometry for NetLinearReference {linear_ref}")
-                
-                if len(linestrings) == 0:
-                    area_skipped += 1
-                    continue
-                
-                # Create MultiLineString
-                multilinestring = MultiLineString(linestrings)
-                
-                # Create geometry triple
-                turtle = create_geometry_triple(net_area_ref, multilinestring, "multilinestring")
-                geometry_triples.append(turtle)
-                area_successful += 1
-            
-            print(f"   ✓ NetAreaReferences enriched: {area_successful}")
-            if area_skipped > 0:
-                print(f"   ⚠️  Skipped: {area_skipped}")
-            
-            successful += area_successful
-            skipped += area_skipped
-        
-        print(f"\n   ══════════════════════════════")
-        print(f"   Total successfully enriched: {successful}")
-        print(f"   Total skipped: {skipped}")
-        print(f"   ══════════════════════════════")
-        
-        # Step 4: Insert geometry triples
-        if geometry_triples:
-            combined_turtle = "\n".join(geometry_triples)
-            triple_count = combined_turtle.count('\n')
-            
-            action = "Inserting" if FUSEKI_AVAILABLE else "Saving"
-            print(f"\n📤 {action} ~{triple_count} geometry triples...")
-            
-            if FUSEKI_AVAILABLE or OXIGRAPH_CONTAINER_ID:
-                insert_geometry_triples(combined_turtle)
-                print("   ✓ Inserted successfully")
-            
-            # Always save to local file when not using Fuseki
-            if not FUSEKI_AVAILABLE:
-                save_enriched_graph_to_file(combined_turtle)
-        
-        # Summary
-        print("\n" + "=" * 70)
-        print("✅ Geometry enrichment complete!")
-        print(f"   Total references enriched: {successful}")
-        if net_point_ref_records:
-            point_enriched = len([t for t in geometry_triples if '"point/' in t])
-            print(f"     - NetPointReferences: {point_enriched}")
-        if net_linear_ref_records:
-            linear_enriched = len([t for t in geometry_triples if '"linestring/' in t])
-            print(f"     - NetLinearReferences: {linear_enriched}")
-        if net_area_ref_records:
-            area_enriched = len([t for t in geometry_triples if '"multilinestring/' in t])
-            print(f"     - NetAreaReferences: {area_enriched}")
-        print(f"   Geometry triples added: ~{len(geometry_triples) * 2}")
-        if FUSEKI_AVAILABLE:
-            print(f"   Saved to Fuseki: {TARGET_ENDPOINT}")
-        else:
-            print(f"   Saved to file: {OUTPUT_TTL_FILE}")
-        print("=" * 70)
-        
-        return 0 if skipped == 0 else 1
-    
-    finally:
-        # Always clean up Oxigraph container if it was started
-        stop_oxigraph_container()
+    fuseki = check_fuseki()
+
+    if fuseki:
+        print("  Loading graph from Fuseki...")
+        graph = load_graph_from_fuseki()
+    else:
+        print(f"  Fuseki not available - loading from {INPUT_TTL}")
+        graph = Graph()
+        graph.parse(INPUT_TTL, format="turtle")
+
+    print(f"  Loaded {len(graph)} triples")
+
+    graph.bind("era", ERA)
+    graph.bind("gsp", GSP)
+
+    new_triples = Graph()
+
+    # Enrich in order: points -> lines -> areas -> subjects
+    # (areas depend on line geometries, subjects depend on all reference geometries)
+    n = enrich_points(graph, new_triples)
+    print(f"  + {n} NetPointReference geometries")
+
+    n = enrich_lines(graph, new_triples)
+    print(f"  + {n} NetLinearReference geometries")
+
+    n = enrich_areas(graph, new_triples)
+    print(f"  + {n} NetAreaReference geometries")
+
+    n = enrich_subjects(graph, new_triples)
+    print(f"  + {n} subject geometries (via era:netReference)")
+
+    print(f"  {len(new_triples)} new triples, {len(graph)} total triples")
+
+    if fuseki:
+        print("  Uploading new triples to Fuseki...")
+        upload_triples_to_fuseki(new_triples)
+        print("  ✓ Uploaded to Fuseki")
+
+    os.makedirs(os.path.dirname(OUTPUT_TTL) or ".", exist_ok=True)
+    graph.serialize(destination=OUTPUT_TTL, format="turtle")
+    print(f"  ✓ Saved to {OUTPUT_TTL}")
 
 
 if __name__ == "__main__":
-    exit(main())
+    main()
