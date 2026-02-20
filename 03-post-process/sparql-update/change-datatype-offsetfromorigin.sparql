@@ -1,0 +1,14 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# ERA adapted the ontology/shacl
+DELETE {   
+    ?ref_uri era:offsetFromOrigin ?offsetFromOrigin_value_int . 
+}
+INSERT {
+    ?ref_uri era:offsetFromOrigin ?offsetFromOrigin_value_double . 
+}
+WHERE {
+    ?ref_uri era:offsetFromOrigin ?offsetFromOrigin_value_int .
+    BIND(xsd:double(?offsetFromOrigin_value_int) AS ?offsetFromOrigin_value_double)
+}

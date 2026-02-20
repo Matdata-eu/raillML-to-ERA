@@ -1,0 +1,13 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+DELETE {   
+    ?kp_uri era:kilometer ?km_value_int . 
+}
+INSERT {
+    ?kp_uri era:kilometer ?km_value_double . 
+}
+WHERE {
+    ?kp_uri era:kilometer ?km_value_int .
+    BIND(xsd:double(?km_value_int) AS ?km_value_double)
+}
