@@ -187,8 +187,12 @@ if ($fusekiAvailable) {
             -Body $body `
             -ErrorAction Stop
         
-        # Save to file
-        $turtleData | Out-File -FilePath $outputTtlFile -Encoding UTF8
+        # Save to file (UTF-8 without BOM; Out-File -Encoding UTF8 adds BOM in PS5)
+        [System.IO.File]::WriteAllText(
+            (Join-Path (Get-Location) $outputTtlFile),
+            $turtleData,
+            [System.Text.UTF8Encoding]::new($false)
+        )
         
         Write-Host "  ✓ Exported from Fuseki to $outputTtlFile" -ForegroundColor Green
     } catch {
