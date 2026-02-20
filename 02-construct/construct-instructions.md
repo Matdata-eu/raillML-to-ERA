@@ -977,18 +977,22 @@ Instead, `era:Track` resources reference ContactLineSystems via `era:contactLine
       - `xyz:measure` — position in meters
       - `xyz:positioningSystemRef` — reference to `railml:linearPositioningSystem`
 
-**Target**: `era:Bridge` with linear extent positioning via `era:NetLinearReference`
+**Target**: `era:Bridge` with area coverage positioning via `era:NetAreaReference`
 - `rdfs:label` — bridge name (langString, optional)
 - `era:inCountry` → `country:NOR` (Norway country code, maxCount=1)
 - `era:infrastructureManager` → `era:OrganisationRole` (hardcoded to `organisations/0076_IM` for workshop)
-- `era:netReference` → `era:NetLinearReference` (one per segment)
+- `era:netReference` → `era:NetAreaReference` (one per bridge, containing all segments)
 
 **SHACL Required Properties** (with dummy values for workshop):
 - `era:existBridgeWindRestriction` → `false` (boolean, maxCount=1) — indicates if wind restrictions exist
 - `era:maxbridgeWind` → `0` (integer, maxCount=1) — maximum wind speed (km/h), 0 when no restriction
 - `era:existOpeningHoursLimitation` → `false` (boolean, maxCount=1) — indicates if opening hours are limited
 
-**NetLinearReference structure** (linear extent positioning):
+**NetAreaReference structure** (area coverage with multiple segments):
+- `era:includes` → RDF List of `era:NetLinearReference` (one per segment)
+
+**NetLinearReference structure** (one per segment, linear extent positioning):
+- `era:hasSequence` → RDF List of LinearElements
 - `era:startsAt` → `era:NetPointReference` (start of extent)
 - `era:endsAt` → `era:NetPointReference` (end of extent)
 
@@ -1006,6 +1010,7 @@ Each `era:KilometricPost`:
 
 **URI Patterns**:
 - Bridge: `functionalInfrastructure/bridges/{id}`
+- NetAreaReference: `topology/netAreaReferences/{bridgeId}`
 - NetLinearReference: `topology/netLinearReferences/{bridgeId}_segment_{sequence}`
 - NetPointReference (start/end): `topology/netPointReferences/{bridgeId}_segment_{sequence}_{start|end}`
 - TopologicalCoordinate: `topology/topologicalCoordinates/{bridgeId}_{netElementId}_{position}`
