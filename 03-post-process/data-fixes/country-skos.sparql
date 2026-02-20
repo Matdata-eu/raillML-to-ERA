@@ -1,0 +1,6 @@
+
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+INSERT DATA {
+    <http://publications.europa.eu/resource/authority/country/NOR> skos:inScheme <http://publications.europa.eu/resource/authority/country>
+}
