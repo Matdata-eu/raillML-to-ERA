@@ -1,0 +1,18 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# This should be fixed in the shacl...
+DELETE {
+    ?tunnel era:lineReferenceTunnelStart ?start ;
+            era:lineReferenceTunnelEnd ?end .
+}
+WHERE {
+    SELECT ?tunnel (SAMPLE(?tunnel_start) AS ?start) (SAMPLE(?tunnel_end) AS ?end)
+    WHERE {
+        ?tunnel era:lineReferenceTunnelStart ?tunnel_start ;
+                era:lineReferenceTunnelEnd ?tunnel_end .
+    }    
+    GROUP BY ?tunnel
+}
