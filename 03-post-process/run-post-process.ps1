@@ -102,6 +102,57 @@ if (-not (Test-Path $venvPython)) {
     }
 }
 
+# Step 3: Apply data fixes
+$dataFixesDir = "data-fixes"
+if (Test-Path $dataFixesDir) {
+    $fixFiles = Get-ChildItem -Path $dataFixesDir -Filter "*.sparql" | Sort-Object Name
+    
+    if ($fixFiles.Count -gt 0) {
+        Write-Host "Step 3: Applying data fixes from $dataFixesDir..." -ForegroundColor Green
+        Write-Host "  Found $($fixFiles.Count) fix file(s)" -ForegroundColor Cyan
+        Write-Host ""
+        
+        $fixCounter = 1
+        foreach ($file in $fixFiles) {
+            $stepLabel = "3.$([char](96 + $fixCounter))"
+            $fixCounter++
+            
+            Write-Host "  Step $stepLabel`: Processing $($file.Name)..." -ForegroundColor Cyan
+            
+            $queryContent = Get-Content $file.FullName -Raw
+            if ($queryContent.Trim().Length -eq 0) {
+                Write-Host "    ⚠️  Skipped (file is empty)" -ForegroundColor Yellow
+                continue
+            }
+            
+            if ($fusekiAvailable) {
+                try {
+                    $updateBody = "update=$([System.Uri]::EscapeDataString($queryContent))"
+                    
+                    $null = Invoke-RestMethod -Uri $fusekiUpdateEndpoint `
+                        -Method POST `
+                        -ContentType "application/x-www-form-urlencoded" `
+                        -Body $updateBody `
+                        -ErrorAction Stop
+                    
+                    Write-Host "    ✓ Applied successfully" -ForegroundColor Green
+                } catch {
+                    Write-Host "    ⚠️  WARNING: Failed to apply: $_" -ForegroundColor Yellow
+                }
+            } else {
+                Write-Host "    ⚠️  Skipped (Fuseki not available)" -ForegroundColor Yellow
+            }
+        }
+        Write-Host ""
+    } else {
+        Write-Host "Step 3: No data fixes found in $dataFixesDir" -ForegroundColor Yellow
+        Write-Host ""
+    }
+} else {
+    Write-Host "Step 3: Data fixes directory not found ($dataFixesDir)" -ForegroundColor Yellow
+    Write-Host ""
+}
+
 # Run geometry enrichment script
 Write-Host "  Running enrich-geometries.py with: $venvPython" -ForegroundColor Cyan
 & $venvPython enrich-geometries.py
@@ -114,8 +165,8 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "  ✓ Geometry enrichment completed" -ForegroundColor Green
 Write-Host ""
 
-# Step 3: Finalizing output
-Write-Host "Step 3: Finalizing output..." -ForegroundColor Green
+# Step 4: Finalizing output
+Write-Host "Step 4: Finalizing output..." -ForegroundColor Green
 
 if ($fusekiAvailable) {
     try {

@@ -1,0 +1,6 @@
+PREFIX era: <http://data.europa.eu/949/>
+
+DELETE DATA {
+    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp740>
+        era:uopid                  "NOOIB" .
+}
