@@ -53,7 +53,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT {
   # ETCS resource
   ?eraETCS a era:ETCS ;
-           rdfs:label ?etcsLabel ;
+           rdfs:label ?etcsLabel , ?etcsLabelEn ;
            era:etcsSystemVersion ?mVersionInt ;
            era:etcsLevel ?etcsLevelConcept ;
            era:inCountry country:NOR ;
@@ -71,7 +71,11 @@ WHERE {
   # Get ETCS level from name description
   OPTIONAL {
     ?etcsArea fx:name ?nameNode .
-    ?nameNode xyz:description ?etcsDescription .
+    ?nameNode xyz:description ?descValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?descValue,?lang),?descValue) AS ?etcsDescription)
   }
   
   # Get associated netElements for ETCS coverage area
@@ -92,8 +96,12 @@ WHERE {
     AS ?etcsLevelConcept
   )
   
-  # Create label from ETCS description
-  BIND(IF(BOUND(?etcsDescription), ?etcsDescription, CONCAT("ETCS v", ?mVersion)) AS ?etcsLabel)
+  # Create label from ETCS description (with English fallback)
+  BIND(IF(BOUND(?lang), 
+    IF(BOUND(?descValue), STRLANG(?descValue, ?lang), STRLANG(CONCAT("ETCS v", ?mVersion), ?lang)),
+    IF(BOUND(?descValue), ?descValue, CONCAT("ETCS v", ?mVersion))
+  ) AS ?etcsLabel)
+  BIND(IF(BOUND(?descValue), STRLANG(?descValue, "en"), STRLANG(CONCAT("ETCS v", ?mVersion), "en")) AS ?etcsLabelEn)
   
   # Find tracks sharing the same netElement reference
   ?track a railml:track ;

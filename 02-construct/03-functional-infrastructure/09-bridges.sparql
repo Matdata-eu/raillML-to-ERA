@@ -65,7 +65,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT {
   # Bridge resource
   ?eraBridge a era:Bridge ;
-             rdfs:label ?bridgeName ;
+             rdfs:label ?bridgeName , ?bridgeNameEn ;
              era:inCountry country:NOR ;
              era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
              era:netReference ?netLinearRef ;
@@ -132,10 +132,15 @@ WHERE {
   # Mint ERA Bridge URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/bridges/", ?bridgeId)) AS ?eraBridge)
 
-  # Get bridge name (optional)
+  # Get bridge name
   OPTIONAL {
     ?bridge fx:name ?nameNode .
-    ?nameNode xyz:name ?bridgeName .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?bridgeName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?bridgeNameEn) # need an English name
   }
 
   # Get area location with associated net elements

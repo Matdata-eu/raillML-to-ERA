@@ -64,7 +64,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT {
   ?eraSwitch a era:Switch ;
              era:switchId ?switchId ;
-             rdfs:label ?switchName ;
+             rdfs:label ?switchName , ?switchNameEn ;
              era:inCountry country:NOR ;
              era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
              era:netReference ?netPointRef .
@@ -99,7 +99,12 @@ WHERE {
   # Get switch name
   OPTIONAL {
     ?switch fx:name ?nameNode .
-    ?nameNode xyz:name ?switchName .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?switchName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?switchNameEn) # need an English name
   }
 
   # Get spot location for topological positioning

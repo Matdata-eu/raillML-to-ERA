@@ -70,7 +70,7 @@ CONSTRUCT {
   # Tunnel resource
   ?eraTunnel a era:Tunnel ;
              era:tunnelIdentification ?tunnelId ;
-             rdfs:label ?tunnelName ;
+             rdfs:label ?tunnelName , ?tunnelNameEn ;
              era:inCountry country:NOR ;
              era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
              era:lineReferenceTunnelStart ?startPointRef ;
@@ -144,7 +144,12 @@ WHERE {
   # Get tunnel name (optional)
   OPTIONAL {
     ?tunnel fx:name ?nameNode .
-    ?nameNode xyz:name ?tunnelName .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?tunnelName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?tunnelNameEn) # need an English name
   }
 
   # Get area location with associated net elements

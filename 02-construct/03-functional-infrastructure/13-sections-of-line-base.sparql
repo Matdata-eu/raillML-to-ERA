@@ -40,6 +40,7 @@ CONSTRUCT {
           era:opEnd ?eraOpEnd .
 
   ?thisDoesntMakeSense a era:LinearPositioningSystem ;
+          rdfs:label "This doesn't make sense"@en ;
           era:lineId ?nationalLineNameStr .
 }
 WHERE {

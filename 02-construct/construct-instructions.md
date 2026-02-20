@@ -1498,12 +1498,33 @@ linearPositioningSystems/LPS_8176 a era:LinearPositioningSystem ;
   ```
   Then mint the target URI from `?refValue`.
 
-- **Name Extraction Pattern**:
+- **Name Extraction Pattern (with langString for rdfs:label)**:
+  
+  All rdfs:label values must be proper langStrings using STRLANG:
+  
   ```sparql
-  ?entity fx:name ?nameNode .
-  ?nameNode xyz:name ?nameValue .
-  ?nameNode xyz:language ?lang .
+  # Get entity name
+  OPTIONAL {
+    ?entity fx:name ?nameNode .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?entityName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?entityNameEn) # need an English name
+  }
   ```
+  
+  Then in CONSTRUCT clause:
+  ```sparql
+  ?eraEntity rdfs:label ?entityName , ?entityNameEn .
+  ```
+  
+  **Rationale**:
+  - Creates proper RDF langStrings when language tags are present in railML
+  - Provides both the original language version and an English fallback
+  - Ensures SHACL validation passes for properties requiring langStrings
+  - If no language tag exists in source, plain literals are used
 
 - **SpotLocation Pattern** (topology linking) — ⚠️ **Micro Topology Only**:
   ```sparql
