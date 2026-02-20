@@ -24,7 +24,6 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:hasTopoCoordinate → TopologicalCoordinate
 #   - era:hasLrsCoordinate → LinearPositioningSystemCoordinate
 #   - era:appliesToDirection → (SKOS concept from applicationDirection) towards topology direction
-#   - gsp:hasGeometry → gsp:Geometry (POINT - added by post-processing script)
 #
 # LinearPositioningSystemCoordinate structure:
 #   - era:kmPost → KilometricPost (reference to km post)
@@ -178,7 +177,4 @@ WHERE {
   
   # LinearPositioningSystem: reference to common resource
   BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
-  
-  # Note: gsp:hasGeometry triples for NetPointReferences are added by
-  # enrich-geometries.py post-processing script using Shapely linear referencing
 }

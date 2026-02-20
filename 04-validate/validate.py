@@ -24,6 +24,14 @@ era_skos_base_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-
 # Download SHACL shapes
 era_rinf_shapes_file = download_dir / "ERA-RINF-shapes.ttl"
 
+# Initialize mapping and load data
+m = Model()
+print(f"\nLoading data from {data_file}...")
+
+# Load main data file
+print("  Loading main data...")
+m.read(data_file, format='turtle')
+
 if era_rinf_shapes_file.exists():
     print(f"ERA RINF SHACL shapes already exists at {era_rinf_shapes_file}")
 else:
@@ -84,23 +92,11 @@ except Exception as e:
     print(f"  ⚠️  Warning: Failed to download SKOS files: {e}")
     print("     Validation may be incomplete")
 
-# Initialize mapping and load data
-m = Model()
-print(f"\nLoading data from {data_file}...")
-
-# Workaround: Use rdflib to parse and re-serialize the turtle file
-# This handles any encoding or format quirks that maplib's parser doesn't like
-print("Preprocessing TTL file with rdflib...")
-g_temp = rdflib.Graph()
-
-# Load main data file
-print("  Loading main data...")
-g_temp.parse(str(data_file), format="turtle")
 
 # Load ERA ontology into data graph
 print("  Loading ERA ontology...")
 try:
-    g_temp.parse(str(era_ontology_file), format="turtle")
+    m.read(str(era_ontology_file), format="turtle")
     print(f"    ✓ Loaded ontology")
 except Exception as e:
     print(f"    ⚠️  Warning: Failed to load ontology: {e}")
@@ -110,22 +106,13 @@ if skos_files:
     print("  Loading SKOS files...")
     for skos_file in skos_files:
         try:
-            g_temp.parse(str(skos_file), format="turtle")
+            m.read(str(skos_file), format="turtle")
             print(f"    ✓ Loaded {skos_file.name}")
         except Exception as e:
             print(f"    ⚠️  Warning: Failed to load {skos_file.name}: {e}")
 
-temp_nt_file = download_dir / "temp_data.nt"
-g_temp.serialize(destination=str(temp_nt_file), format="ntriples")
-print(f"Converted to N-Triples format at {temp_nt_file}")
-
-# Load the normalized N-Triples file into maplib
-m.read(str(temp_nt_file), format="ntriples")
 print("Data loaded successfully")
-print(f"  Total triples in data graph: {len(g_temp)}")
-
-# Clean up temporary file
-temp_nt_file.unlink()
+print(f"  Total triples in data graph")
 
 # Filter SHACL shapes to remove unsupported GeoSPARQL constraints
 print("Filtering SHACL shapes to remove unsupported GeoSPARQL functions...")

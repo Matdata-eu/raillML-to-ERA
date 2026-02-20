@@ -22,7 +22,6 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:infrastructureManager — OrganisationRole
 #     → For workshop: all platform edges assigned to organisations/0076_IM (Belgian IM)
 #   - era:netReference — NetLinearReference for linear extent positioning
-#   - gsp:hasGeometry — Geometry resource with screen visualization coordinates
 #
 # NetLinearReference structure (ERA standard - multi-element sequence):
 #   - era:hasSequence → RDF List of LinearElements (all segments in order)
@@ -77,12 +76,7 @@ CONSTRUCT {
                    rdfs:label ?platformEdgeName , ?platformEdgeNameEn ;
                    era:platformHeight ?platformHeightConcept ;
                    era:inCountry country:NOR ;
-                   era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
-                   gsp:hasGeometry ?geometry .
-
-  # Geometry (screen visualization)
-  ?geometry a gsp:Geometry ;
-            gsp:asWKT ?wkt .
+                   era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
 }
 WHERE {
   # Get all platform edges

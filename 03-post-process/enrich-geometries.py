@@ -385,8 +385,7 @@ def main():
         print("  ✓ Uploaded to Fuseki")
 
     os.makedirs(os.path.dirname(OUTPUT_TTL) or ".", exist_ok=True)
-    graph.serialize(destination=OUTPUT_TTL, format="turtle", encoding='utf-8')
-    
+    graph.serialize(destination=OUTPUT_TTL, format="turtle")
     print(f"  ✓ Saved to {OUTPUT_TTL}")
 
 
