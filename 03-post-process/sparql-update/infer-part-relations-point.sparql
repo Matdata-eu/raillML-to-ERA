@@ -21,7 +21,7 @@ INSERT {
   ?masterPart era:hasPart ?childElement .
 }
 WHERE {
-  VALUES ?masterPartType { era:RunningTrack era:Siding era:Track era:OperationalPoint era:SectionOfLine }
+  VALUES ?masterPartType { era:RunningTrack era:Siding }
   {
     # Define master part types (parent elements that contain other elements)
     ?masterPart a ?masterPartType .
@@ -50,7 +50,7 @@ WHERE {
   ?childElement a ?pointType ;
                 era:netReference ?pointNetRef .
   # Filter to point element types
-  FILTER (?pointType IN (era:Signal, era:Switch, era:LevelCrossing))
+  FILTER (?pointType IN (era:KilometerPost))
   # Get the point's topological coordinate
   ?pointNetRef a era:NetPointReference ;
                 era:hasTopoCoordinate ?pointTopoCoord .
