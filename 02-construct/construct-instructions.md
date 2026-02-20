@@ -1048,13 +1048,14 @@ Each `era:KilometricPost`:
       - `xyz:measure` — position in meters
       - `xyz:positioningSystemRef` — reference to `railml:linearPositioningSystem`
 
-**Target**: `era:Tunnel` with point-based start/end references
+**Target**: `era:Tunnel` with dual positioning references
 - `era:tunnelIdentification` — identifier string (**REQUIRED by SHACL minCount=1**)
 - `rdfs:label` — tunnel name (langString, optional)
 - `era:inCountry` → `country:NOR` (Norway country code, maxCount=1)
 - `era:infrastructureManager` → `era:OrganisationRole` (hardcoded to `organisations/0076_IM` for workshop)
-- `era:lineReferenceTunnelStart` → `era:NetPointReference` (tunnel entrance)
-- `era:lineReferenceTunnelEnd` → `era:NetPointReference` (tunnel exit)
+- `era:lineReferenceTunnelStart` → `era:NetPointReference` (tunnel entrance - **SHACL required**)
+- `era:lineReferenceTunnelEnd` → `era:NetPointReference` (tunnel exit - **SHACL required**)
+- `era:netReference` → `era:NetAreaReference` (area coverage positioning - modern pattern)
 
 **Optional Properties** (included for workshop completeness with conservative defaults):
 - `era:lengthOfTunnel` → calculated from start/end positions (double) — length in metres
@@ -1070,7 +1071,7 @@ Each `era:KilometricPost`:
 
 **Note**: Only `era:tunnelIdentification` is required by SHACL (minCount=1). All other properties are optional but included in this workshop example to demonstrate common tunnel attributes.
 
-**NetPointReference structure** (for tunnel start/end):
+**NetPointReference structure** (for tunnel start/end - legacy SHACL-required pattern):
 - `era:hasTopoCoordinate` → `era:TopologicalCoordinate`
   - `era:onLinearElement` → micro-level `era:LinearElement`
   - `era:offsetFromOrigin` — position on element (xsd:double)
@@ -1082,19 +1083,40 @@ Each `era:KilometricPost`:
 - `era:hasLRS` → `era:LinearPositioningSystem`
 - `era:kilometer` — km number (xsd:integer, rounded from measure)
 
+**NetAreaReference structure** (modern area coverage pattern):
+- `era:includes` → RDF List of `era:NetLinearReference` instances (one per segment)
+  - Uses `rdf:first` → NetLinearReference, `rdf:rest` → next list node or `rdf:nil`
+  - List nodes: `{tunnelUri}/netAreaReference/includes#rest{segmentIndex}`
+  - List container: `{tunnelUri}/netAreaReference/includes`
+  
+Each `era:NetLinearReference` (per segment):
+- `era:hasStartCoordinate` → `era:NetPointReference` (segment start)
+- `era:hasEndCoordinate` → `era:NetPointReference` (segment end)
+- Both coordinates use TopologicalCoordinate and optional LrsCoordinate (as above)
+
 **URI Patterns**:
 - Tunnel: `functionalInfrastructure/tunnels/{id}`
-- NetPointReference (start/end): `topology/netPointReferences/{tunnelId}_{start|end}`
+- NetAreaReference (area coverage): `functionalInfrastructure/tunnels/{id}/netAreaReference`
+- RDF List includes: `functionalInfrastructure/tunnels/{id}/netAreaReference/includes`
+- RDF List nodes: `functionalInfrastructure/tunnels/{id}/netAreaReference/includes#rest{segmentIndex}`
+- NetLinearReference (per segment): `functionalInfrastructure/tunnels/{id}/segment/{segmentIndex}/lineReference`
+- NetPointReference (segment start): `functionalInfrastructure/tunnels/{id}/segment/{segmentIndex}/startReference`
+- NetPointReference (segment end): `functionalInfrastructure/tunnels/{id}/segment/{segmentIndex}/endReference`
+- NetPointReference (tunnel start - legacy): `topology/netPointReferences/{tunnelId}_start`
+- NetPointReference (tunnel end - legacy): `topology/netPointReferences/{tunnelId}_end`
 - TopologicalCoordinate: `topology/topologicalCoordinates/{tunnelId}_{netElementId}_{position}`
 - LinearPositioningSystemCoordinate: `topology/linearPositioningSystemCoordinates/{tunnelId}_{start|end}_{posSystemRef}_{measure}`
 - KilometricPost: `kilometricPosts/{posSystemRef}_km_{kmNumber}`
 
 **Mapping Notes**:
 - railML represents tunnels as `railml:overCrossing` with `xyz:constructionType="tunnel"`
-- ERA Tunnel uses `era:lineReferenceTunnelStart` and `era:lineReferenceTunnelEnd` (NetPointReference) instead of NetLinearReference
+- **Dual positioning pattern**: Tunnels use BOTH legacy point-based references (SHACL-required) AND modern area coverage
+  - **Legacy**: `era:lineReferenceTunnelStart` and `era:lineReferenceTunnelEnd` (NetPointReference) — **REQUIRED by SHACL**
+  - **Modern**: `era:netReference` → `era:NetAreaReference` → `era:includes` → RDF List of NetLinearReferences
 - Start/end points extracted from first/last segment in areaLocation:
   - Start: `posBegin` of first segment (sequence=1 or lowest)
   - End: `posEnd` of last segment (sequence=max or highest)
+- Area coverage created from all `associatedNetElement` segments with NetLinearReferences in RDF List
 - Follows same dual positioning pattern as other infrastructure (topological + LRS coordinates)
 - ⚠️ **Micro topology conversion**: Link to topology via `xyz:netElementRef`, resolving to micro-level LinearElements
 - LRS coordinates from `linearCoordinateBegin/End` provide KilometricPost references (if available)

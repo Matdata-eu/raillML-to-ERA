@@ -19,8 +19,9 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:inCountry → country:NOR (Norway country code)
 #   - era:infrastructureManager (OrganisationRole)
 #     → For workshop: all tunnels assigned to organisations/0076_IM (Belgian IM)
-#   - era:lineReferenceTunnelStart → NetPointReference (tunnel entrance)
-#   - era:lineReferenceTunnelEnd → NetPointReference (tunnel exit)
+#   - era:lineReferenceTunnelStart → NetPointReference (tunnel entrance - SHACL required)
+#   - era:lineReferenceTunnelEnd → NetPointReference (tunnel exit - SHACL required)
+#   - era:netReference → NetAreaReference (area coverage positioning)
 #
 # Optional Properties (included for workshop completeness with conservative defaults):
 #   - era:lengthOfTunnel → calculated from start/end positions (double)
@@ -33,6 +34,14 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:maxTunnelSpeed → 120 (integer - km/h)
 #   - era:nationalRollingStockFireCategory → "A" (string)
 #   - era:rollingStockFireCategory → concepts/rolling-stock-fire/10 (SKOS Concept - Category A)
+#
+# NetAreaReference structure (area coverage with multiple segments):
+#   - era:includes → RDF List of NetLinearReferences
+#
+# NetLinearReference structure (one per segment, linear extent not point):
+#   - era:hasSequence → RDF List of LinearElements
+#   - era:startsAt → NetPointReference (start of extent)
+#   - era:endsAt → NetPointReference (end of extent)
 #
 # NetPointReference structure:
 #   - era:hasTopoCoordinate → TopologicalCoordinate
@@ -57,8 +66,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # URI Patterns:
 #   Tunnel: http://data.europa.eu/949/functionalInfrastructure/tunnels/{id}
-#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_start
-#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_end
+#   NetAreaReference: http://data.europa.eu/949/topology/netAreaReferences/{tunnelId}
+#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{tunnelId}_segment_{sequence}
+#   NetPointReference (start/end for lineReference): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_{start|end}
+#   NetPointReference (segment start/end): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_segment_{sequence}_{start|end}
 #   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{tunnelId}_{start_or_end}_{netElementId}_{position}
 #   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{tunnelId}_{start_or_end}_{positioningSystemRef}_{measure}
 #   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
@@ -75,6 +86,7 @@ CONSTRUCT {
              era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
              era:lineReferenceTunnelStart ?startPointRef ;
              era:lineReferenceTunnelEnd ?endPointRef ;
+             era:netReference ?netAreaRef ;
              # Optional properties with conservative defaults for workshop
              era:lengthOfTunnel ?tunnelLength ;
              era:complianceInfTsi true ;
@@ -92,6 +104,24 @@ CONSTRUCT {
   <http://data.europa.eu/949/documents/skienstunnelen> a era:Document;
             era:documentUrl "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx"^^xsd:anyURI .
 
+  # NetAreaReference (one per tunnel)
+  ?netAreaRef a era:NetAreaReference ;
+              era:includes ?includesList .
+
+  # RDF List structure for includes (list of NetLinearReferences)
+  ?includesList rdf:first ?netLinearRef ;
+                rdf:rest ?restList .
+
+  # NetLinearReference (one per associatedNetElement segment)
+  ?netLinearRef a era:NetLinearReference ;
+                era:hasSequence ?sequenceList ;
+                era:startsAt ?startPointRef ;
+                era:endsAt ?endPointRef .
+
+  # RDF List structure for hasSequence (single-element list)
+  ?sequenceList rdf:first ?eraLinearElement ;
+                rdf:rest rdf:nil .
+
   # Start point NetPointReference
   ?startPointRef a era:NetPointReference ;
                  era:hasTopoCoordinate ?startTopoCoord ;
@@ -99,8 +129,8 @@ CONSTRUCT {
 
   # Start TopologicalCoordinate
   ?startTopoCoord a era:TopologicalCoordinate ;
-                  era:onLinearElement ?startLinearElement ;
-                  era:offsetFromOrigin ?startPosInteger .
+                  era:onLinearElement ?eraLinearElement ;
+                  era:offsetFromOrigin ?posBeginInteger .
   
   # Start LinearPositioningSystemCoordinate
   ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -112,15 +142,15 @@ CONSTRUCT {
                era:hasLRS ?eraLPS ;
                era:kilometer ?startKmNumber .
 
-  # End point NetPointReference
+  # End point NetPointReference  
   ?endPointRef a era:NetPointReference ;
                era:hasTopoCoordinate ?endTopoCoord ;
                era:hasLrsCoordinate ?endLrsCoord .
 
   # End TopologicalCoordinate
   ?endTopoCoord a era:TopologicalCoordinate ;
-                era:onLinearElement ?endLinearElement ;
-                era:offsetFromOrigin ?endPosInteger .
+                era:onLinearElement ?eraLinearElement ;
+                era:offsetFromOrigin ?posEndInteger .
   
   # End LinearPositioningSystemCoordinate
   ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
@@ -138,8 +168,24 @@ WHERE {
           xyz:id ?tunnelId ;
           xyz:constructionType "tunnel" .
 
+  # Get max sequence for this tunnel (to determine last segment for rdf:nil)
+  {
+    SELECT ?tunnel (MAX(xsd:integer(COALESCE(?seqVal, "1"))) AS ?maxSequence)
+    WHERE {
+      ?tun a railml:overCrossing ;
+           xyz:id ?tunnelId ;
+           xyz:constructionType "tunnel" .
+      ?tun fx:areaLocation/fx:associatedNetElement ?an .
+      OPTIONAL { ?an xyz:sequence ?seqVal . }
+    }
+    GROUP BY ?tunnel
+  }
+
   # Mint ERA Tunnel URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tunnels/", ?tunnelId)) AS ?eraTunnel)
+
+  # Mint NetAreaReference URI (one per tunnel)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId)) AS ?netAreaRef)
 
   # Get tunnel name (optional)
   OPTIONAL {
@@ -154,111 +200,96 @@ WHERE {
 
   # Get area location with associated net elements
   ?tunnel fx:areaLocation ?areaLoc .
+  ?areaLoc fx:associatedNetElement ?assocNode .
   
-  # ===== START POINT (first segment) =====
-  {
-    SELECT ?tunnel (MIN(?seq) AS ?minSequence)
-    WHERE {
-      ?tunnel fx:areaLocation/fx:associatedNetElement ?assoc .
-      OPTIONAL { ?assoc xyz:sequence ?seqVal . }
-      BIND (COALESCE(?seqVal, "1") AS ?seq)
-    }
-    GROUP BY ?tunnel
-  }
+  # Get net element reference and positions
+  ?assocNode xyz:netElementRef ?netElementRef ;
+             xyz:posBegin ?posBegin ;
+             xyz:posEnd ?posEnd .
   
-  ?areaLoc fx:associatedNetElement ?startAssocNode .
-  OPTIONAL { ?startAssocNode xyz:sequence ?startSeqValue . }
-  BIND (COALESCE(?startSeqValue, "1") AS ?startSequence)
-  FILTER(?startSequence = ?minSequence)
+  # Get sequence (for ordering segments), default to "1" if not present
+  OPTIONAL { ?assocNode xyz:sequence ?seqValue . }
+  BIND (COALESCE(?seqValue, "1") AS ?sequence)
   
-  ?startAssocNode xyz:netElementRef ?startNetElementRef ;
-                  xyz:posBegin ?startPos .
+  # Convert positions to integer (round to nearest meter)
+  BIND (xsd:integer(ROUND(xsd:double(?posBegin))) AS ?posBeginInteger)
+  BIND (xsd:integer(ROUND(xsd:double(?posEnd))) AS ?posEndInteger)
   
-  # Convert start position to integer (round to nearest meter)
-  BIND (xsd:integer(ROUND(xsd:double(?startPos))) AS ?startPosInteger)
-  
-  # Dereference start netElement
-  ?startNetElement a railml:netElement ;
-                   xyz:id ?startNetElementRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?startNetElementRef)) AS ?startLinearElement)
-  
-  # Mint start point URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_start")) AS ?startPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_start_", ?startNetElementRef, "_", STR(?startPos))) AS ?startTopoCoord)
-  
-  # Get start LRS coordinates (optional)
-  OPTIONAL {
-    ?startAssocNode fx:linearCoordinateBegin ?startLinCoord .
-    ?startLinCoord xyz:measure ?startMeasure ;
-                   xyz:positioningSystemRef ?posSystemRef .
-    
-    BIND (xsd:double(?startMeasure) AS ?startMeasureDouble)
-    
-    # Dereference LinearPositioningSystem
-    ?lps a railml:linearPositioningSystem ;
-         xyz:id ?posSystemRef .
-    BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
-    
-    # Calculate start KilometricPost
-    BIND (xsd:double(FLOOR(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
-    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
-    
-    # Calculate start offset
-    BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
-    
-    # Mint start LRS coordinate URI
-    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
-  }
+  # Dereference netElement to get LinearElement URI
+  ?netElement a railml:netElement ;
+              xyz:id ?netElementRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
 
-  # ===== END POINT (last segment) =====
-  {
-    SELECT ?tunnel (MAX(?seq) AS ?maxSequence)
-    WHERE {
-      ?tunnel fx:areaLocation/fx:associatedNetElement ?assoc .
-      OPTIONAL { ?assoc xyz:sequence ?seqVal . }
-      BIND (COALESCE(?seqVal, "1") AS ?seq)
-    }
-    GROUP BY ?tunnel
-  }
+  # Mint NetLinearReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence))) AS ?netLinearRef)
+
+  # Mint includes list URI (for NetAreaReference)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(?sequence))) AS ?includesList)
+
+  # Build rest of list: rdf:nil if last segment, otherwise next segment's list node
+  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(xsd:integer(?sequence) + 1)))) AS ?restList)
+
+  # Mint sequence list URI (for hasSequence in NetLinearReference)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence), "_seqlist")) AS ?sequenceList)
+
+  # ===== START POINT =====
   
-  ?areaLoc fx:associatedNetElement ?endAssocNode .
-  OPTIONAL { ?endAssocNode xyz:sequence ?endSeqValue . }
-  BIND (COALESCE(?endSeqValue, "1") AS ?endSequence)
-  FILTER(?endSequence = ?maxSequence)
+  # Mint start point NetPointReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_start")) AS ?startPointRef)
   
-  ?endAssocNode xyz:netElementRef ?endNetElementRef ;
-                xyz:posEnd ?endPos .
+  # Mint start TopologicalCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
   
-  # Convert end position to integer (round to nearest meter)
-  BIND (xsd:integer(ROUND(xsd:double(?endPos))) AS ?endPosInteger)
+  # ===== END POINT =====
   
-  # Dereference end netElement
-  ?endNetElement a railml:netElement ;
-                 xyz:id ?endNetElementRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?endNetElementRef)) AS ?endLinearElement)
+  # Mint end point NetPointReference URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_end")) AS ?endPointRef)
   
-  # Mint end point URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_end")) AS ?endPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_end_", ?endNetElementRef, "_", STR(?endPos))) AS ?endTopoCoord)
+  # Mint end TopologicalCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
   
-  # Get end LRS coordinates (optional)
-  OPTIONAL {
-    ?endAssocNode fx:linearCoordinateEnd ?endLinCoord .
-    ?endLinCoord xyz:measure ?endMeasure ;
-                 xyz:positioningSystemRef ?posSystemRef .  # Same positioning system
+  
+  # ===== Get start LRS coordinates  =====
     
-    BIND (xsd:double(?endMeasure) AS ?endMeasureDouble)
-    
-    # Calculate end KilometricPost
-    BIND (xsd:double(FLOOR(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
-    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
-    
-    # Calculate end offset
-    BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
-    
-    # Mint end LRS coordinate URI
-    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
-  }
+  ?assocNode fx:linearCoordinateBegin ?startLinCoord .
+  ?startLinCoord xyz:measure ?startMeasure ;
+                  xyz:positioningSystemRef ?posSystemRef .
+  
+  BIND (xsd:double(?startMeasure) AS ?startMeasureDouble)
+  
+  # Dereference LinearPositioningSystem
+  ?lps a railml:linearPositioningSystem ;
+        xyz:id ?posSystemRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+  
+  # Calculate start KilometricPost (round to nearest km)
+  BIND (xsd:double(FLOOR(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+  
+  # Calculate start offset from km post
+  BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
+  
+  # Mint start LinearPositioningSystemCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+
+
+  # ===== Get end LRS coordinates  =====
+  
+  ?assocNode fx:linearCoordinateEnd ?endLinCoord .
+  ?endLinCoord xyz:measure ?endMeasure ;
+                xyz:positioningSystemRef ?posSystemRef .  # Same positioning system as start
+  
+  BIND (xsd:double(?endMeasure) AS ?endMeasureDouble)
+
+  # Calculate end KilometricPost (round to nearest km)
+  BIND (xsd:double(FLOOR(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  
+  # Calculate end offset from km post
+  BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
+  
+  # Mint end LinearPositioningSystemCoordinate URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
   
   OPTIONAL {
     # Get tunnel length
