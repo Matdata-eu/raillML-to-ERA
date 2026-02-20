@@ -64,6 +64,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 CONSTRUCT {
   ?eraSignal a era:Signal ;
              era:signalId ?signalId ;
+             rdfs:label ?signalName , ?finalSignalNameEn ;
              era:signalType ?eraSignalType ;
              era:inCountry country:NOR ;
              # era:hasOrientation ?orientation ; ⚠️ DANGER! Refers to KM direction, not topology direction
@@ -95,6 +96,18 @@ WHERE {
 
   # Mint ERA Signal URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/signals/", ?signalId)) AS ?eraSignal)
+
+  # Get switch name
+  OPTIONAL {
+    ?signal fx:name ?nameNode .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?signalName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?signalNameEn) # need an English name
+  }
+  BIND (COALESCE(?signalNameEn, ?signalName, STRLANG(?signalId,"en")) AS ?finalSignalNameEn)
 
   # Extract signal type from typeDesignator (TJN rulebook)
   # TJN codes map to ERA signal type concepts - see TJN-TO-ERA-SIGNAL-TYPE-MAPPING.md
