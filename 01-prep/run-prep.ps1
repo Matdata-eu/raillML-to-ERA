@@ -39,6 +39,17 @@ try {
     exit 0
 }
 
+# Clear existing data from Fuseki
+Write-Host "  Clearing existing data from Fuseki..." -ForegroundColor Cyan
+try {
+    Invoke-RestMethod -Uri "$fusekiDataEndpoint`?default" `
+        -Method DELETE `
+        -ErrorAction Stop
+    Write-Host "  Existing data cleared successfully" -ForegroundColor Cyan
+} catch {
+    Write-Host "[WARNING] Failed to clear existing data: $_" -ForegroundColor Yellow
+}
+
 # Upload the TTL file to Fuseki
 try {
     $headers = @{

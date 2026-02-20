@@ -1,6 +1,7 @@
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 # This CONSTRUCT query transforms XML data into RDF, normalizing URIs and handling RDF container predicates.
 # See https://github.com/w3c-facade-x/meetings/tree/main/meetings/2026-01-12 for the rationale behind the one-eyed-graph approach
@@ -52,10 +53,7 @@ WHERE {
     }
     
     # --- Optional: Extract the order number from the predicate if it's numeric ---
-    OPTIONAL {
-      FILTER (?isNumPred)
-      BIND (STRAFTER(str(?p), "_") AS ?orderNum)
-    }
+    BIND (IF(?isNumPred && isURI(?newO), STRDT(STRAFTER(str(?p), "_"), xsd:integer), ?undef) AS ?orderNum)
     
     # --- Calculate the final predicate to use in the output triple ---
     # If the predicate is numeric:
