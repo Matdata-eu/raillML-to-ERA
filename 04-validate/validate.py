@@ -14,8 +14,7 @@ download_dir.mkdir(exist_ok=True)
 shape_fixes_dir = Path("shape-fixes")
 
 # URLs for ERA SHACL shapes
-era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/era-shacl/ERA-RINF-shapes.ttl"
-skos_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/era-shacl/SKOS-shapes.ttl"
+era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/ERA-RINF-shapes.ttl"
 
 # URLs for ERA ontology and SKOS data
 era_ontology_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/ontology.ttl"
@@ -32,13 +31,6 @@ else:
     print("Downloading ERA RINF SHACL shapes...")
     urllib.request.urlretrieve(era_rinf_shapes_url, era_rinf_shapes_file)
     print(f"Downloaded to {era_rinf_shapes_file}")
-
-if skos_shapes_file.exists():
-    print(f"SKOS SHACL shapes already exists at {skos_shapes_file}")
-else:
-    print("Downloading SKOS SHACL shapes...")
-    urllib.request.urlretrieve(skos_shapes_url, skos_shapes_file)
-    print(f"Downloaded to {skos_shapes_file}")
 
 # Download ERA ontology
 era_ontology_file = download_dir / "era-ontology.ttl"
