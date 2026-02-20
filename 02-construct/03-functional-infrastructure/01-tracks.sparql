@@ -73,7 +73,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 CONSTRUCT {
   # Track resource (with subclass)
-  ?eraTrack a ?trackClass ;
+  ?eraTrack a ?trackClass, era:Track ;
             era:trackId ?runningTrackId ; 
             era:sidingId ?sidingTrackId ;
             rdfs:label ?trackName , ?trackNameEn ;
