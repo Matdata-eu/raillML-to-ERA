@@ -33,7 +33,8 @@ CONSTRUCT {
               era:includes ?includesList .
 
   # RDF List structure for includes - list node per NetLinearReference
-  ?listNode rdf:first ?netLinearRef ;
+  ?listNode a rdf:List;
+            rdf:first ?netLinearRef ;
             rdf:rest ?restNode .
 
   # NetLinearReference (one per micro element in the meso element)
@@ -43,7 +44,8 @@ CONSTRUCT {
                 era:endsAt ?endPointRef .
 
   # RDF List structure for hasSequence (single-element list)
-  ?sequenceList rdf:first ?eraLinearElement ;
+  ?sequenceList a rdf:List;
+                rdf:first ?eraLinearElement ;
                 rdf:rest rdf:nil .
 
   # Start point

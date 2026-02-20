@@ -109,7 +109,8 @@ CONSTRUCT {
               era:includes ?includesList .
 
   # RDF List structure for includes (list of NetLinearReferences)
-  ?includesList rdf:first ?netLinearRef ;
+  ?includesList a rdf:List;
+                rdf:first ?netLinearRef ;
                 rdf:rest ?restList .
 
   # NetLinearReference (one per associatedNetElement segment)
@@ -119,7 +120,8 @@ CONSTRUCT {
                 era:endsAt ?endPointRef .
 
   # RDF List structure for hasSequence (single-element list)
-  ?sequenceList rdf:first ?eraLinearElement ;
+  ?sequenceList a rdf:List;
+                rdf:first ?eraLinearElement ;
                 rdf:rest rdf:nil .
 
   # Start point NetPointReference

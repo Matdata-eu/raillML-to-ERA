@@ -82,7 +82,8 @@ CONSTRUCT {
                 era:endsAt ?endPointRef .
 
   # RDF List structure for hasSequence (single-element list)
-  ?sequenceList rdf:first ?eraLinearElement ;
+  ?sequenceList a rdf:List;
+                rdf:first ?eraLinearElement ;
                 rdf:rest rdf:nil .
 
   # Start point NetPointReference
