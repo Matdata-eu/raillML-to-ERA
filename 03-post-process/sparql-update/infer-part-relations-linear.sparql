@@ -21,8 +21,8 @@ INSERT {
   ?masterPart era:hasPart ?childElement .
 }
 WHERE {
-  VALUES ?masterPartType { era:RunningTrack era:Siding era:Track era:OperationalPoint era:SectionOfLine }
   {
+  VALUES ?masterPartType { era:RunningTrack era:Siding era:OperationalPoint era:SectionOfLine }
     # Define master part types (parent elements that contain other elements)
     ?masterPart a ?masterPartType .
     ?masterPart era:netReference ?masterNetLinRef .
@@ -30,6 +30,7 @@ WHERE {
   }
   UNION
   {
+  VALUES ?masterPartType { era:RunningTrack era:Siding era:OperationalPoint era:SectionOfLine }
     ?masterPart a ?masterPartType .
     ?masterPart era:netReference ?masterNetAreaRef .
     ?masterNetAreaRef a era:NetAreaReference ;
@@ -50,7 +51,7 @@ WHERE {
   ?childElement a ?pointType ;
                 era:netReference ?childNetRef .
 
-  VALUES ?pointType { era:RunningTrack era:Siding era:Track era:Tunnel era:Bridge era:PlatformEdge }
+  VALUES ?pointType { era:RunningTrack era:Siding era:Tunnel era:Bridge era:PlatformEdge }
   # Filter to linear element types
   FILTER (?pointType != ?masterPartType)
   # Get child element's extent
