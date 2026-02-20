@@ -1,0 +1,24 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+# Fix RDF List termination: replace rdf:rest with rdf:nil when the target is not an rdf:List
+# This handles cases where list construction creates dangling references to non-existent next nodes
+
+DELETE {
+  ?list rdf:rest ?invalidRest .
+}
+INSERT {
+  ?list rdf:rest rdf:nil .
+}
+WHERE {
+  # Find all rdf:List nodes with rdf:rest pointing to something
+  ?list a rdf:List ;
+        rdf:rest ?invalidRest .
+  
+  # Ensure we're not touching already-correct nil terminations
+  FILTER (?invalidRest != rdf:nil)
+  
+  # The target of rdf:rest is NOT itself a list (it's a dangling reference)
+  FILTER NOT EXISTS {
+    ?invalidRest a rdf:List .
+  }
+}
