@@ -266,43 +266,59 @@ advanced-example/era-construct/
 - **Frequency**: 1000 meters (1 km) is standard kilometer marker spacing in European rail
 - **Production**: These would be sourced from infrastructure documentation or field surveys
 
-**NetLinearReference structure** (linear extent, not point):
-- `era:startsAt` → `era:NetPointReference` (segment start point)
-- `era:endsAt` → `era:NetPointReference` (segment end point)
+**NetLinearReference structure** (linear extent with multi-element sequence):
+- `era:hasSequence` → RDF List of `era:LinearElement` (all segments in order)
+- `era:startsAt` → `era:NetPointReference` (start of FIRST segment)
+- `era:endsAt` → `era:NetPointReference` (end of LAST segment)
 
-**NetPointReference structure** (for segment start/end points):
+**NetPointReference structure** (for overall track start/end points):
 - `era:hasTopoCoordinate` → `era:TopologicalCoordinate` (topology-based position)
-  - `era:onLinearElement` → `era:LinearElement` (from `netElementRef`)
-  - `era:offsetFromOrigin` → `xsd:double` (from `posBegin`/`posEnd`)
+  - `era:onLinearElement` → `era:LinearElement` (from first/last segment `netElementRef`)
+  - `era:offsetFromOrigin` → `xsd:double` (from first/last segment `posBegin`/`posEnd`)
 - `era:hasLrsCoordinate` → `era:LinearPositioningSystemCoordinate` (LRS-based position)
   - `era:kmPost` → `era:KilometricPost` (inferred from measure)
   - `era:offsetFromKilometricPost` → `xsd:double` (measure - km * 1000)
 
-**Linear extent pattern**:
+**RDF List building pattern** (for hasSequence):
+- First element: `rdf:first` → first LinearElement, `rdf:rest` → second list node
+- Intermediate elements: `rdf:first` → next LinearElement, `rdf:rest` → next list node
+- Last element: `rdf:first` → last LinearElement, `rdf:rest` → `rdf:nil`
+- List node URIs: `{trackId}_hasSequence_list_{sequence}`
+
+**Linear extent pattern** (ERA standard):
 ```
-Track → era:netReference → NetLinearReference (per segment)
-  ├─ era:startsAt → NetPointReference (segment start)
-  │   ├─ hasTopoCoordinate → TopologicalCoordinate (posBegin on netElement)
-  │   └─ hasLrsCoordinate → LinearPositioningSystemCoordinate (linearCoordinateBegin)
-  └─ era:endsAt → NetPointReference (segment end)
-      ├─ hasTopoCoordinate → TopologicalCoordinate (posEnd on netElement)
-      └─ hasLrsCoordinate → LinearPositioningSystemCoordinate (linearCoordinateEnd)
+Track → era:netReference → NetLinearReference (ONE per track)
+  ├─ era:hasSequence → RDF List of LinearElements (all segments)
+  │   ├─ List node 1: first LinearElement → List node 2
+  │   ├─ List node 2: second LinearElement → List node 3
+  │   └─ Last list node: last LinearElement → rdf:nil
+  ├─ era:startsAt → NetPointReference (overall track start)
+  │   ├─ hasTopoCoordinate → TopologicalCoordinate (posBegin of first segment)
+  │   └─ hasLrsCoordinate → LinearPositioningSystemCoordinate (linearCoordinateBegin of first)
+  └─ era:endsAt → NetPointReference (overall track end)
+      ├─ hasTopoCoordinate → TopologicalCoordinate (posEnd of last segment)
+      └─ hasLrsCoordinate → LinearPositioningSystemCoordinate (linearCoordinateEnd of last)
 ```
 
 **URI Patterns**:
 - Track: `http://data.europa.eu/949/functionalInfrastructure/tracks/{id}`
 - LinesideDistanceIndication: `http://data.europa.eu/949/topology/linesideDistanceIndications/{trackId}`
-- NetLinearReference: `http://data.europa.eu/949/topology/netLinearReferences/{trackId}_segment_{sequence}`
-- NetPointReference (start): `http://data.europa.eu/949/topology/netPointReferences/{trackId}_segment_{sequence}_start`
-- NetPointReference (end): `http://data.europa.eu/949/topology/netPointReferences/{trackId}_segment_{sequence}_end`
-- TopologicalCoordinate: `http://data.europa.eu/949/topology/topologicalCoordinates/{trackId}_{netElementId}_{position}`
-- LinearPositioningSystemCoordinate: `http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{trackId}_segment_{sequence}_{start_or_end}_{positioningSystemRef}_{measure}`
+- NetLinearReference: `http://data.europa.eu/949/topology/netLinearReferences/{trackId}` (ONE per track)
+- RDF List nodes: `http://data.europa.eu/949/topology/netLinearReferences/{trackId}_hasSequence_list_{sequence}`
+- NetPointReference (start): `http://data.europa.eu/949/topology/netPointReferences/{trackId}_start`
+- NetPointReference (end): `http://data.europa.eu/949/topology/netPointReferences/{trackId}_end`
+- TopologicalCoordinate (start): `http://data.europa.eu/949/topology/topologicalCoordinates/{trackId}_start_{firstNetElementId}_{firstPosBegin}`
+- TopologicalCoordinate (end): `http://data.europa.eu/949/topology/topologicalCoordinates/{trackId}_end_{lastNetElementId}_{lastPosEnd}`
+- LinearPositioningSystemCoordinate (start): `http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{trackId}_start_{positioningSystemRef}_{firstMeasure}`
+- LinearPositioningSystemCoordinate (end): `http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{trackId}_end_{positioningSystemRef}_{lastMeasure}`
 - KilometricPost: `http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}` (shared)
 
 **Mapping Notes**:
-- **Linear extent vs point position**: Unlike signals (which use `NetPointReference` with single `TopologicalCoordinate`), tracks use `NetLinearReference` with start/end `NetPointReference` pairs
-- **Multiple segments**: Tracks spanning multiple `netElements` create multiple `NetLinearReference` instances (54 segments total for 36 tracks, avg 1.5 per track)
-- **Dual positioning**: Both segment start and end points have topology-based (`TopologicalCoordinate`) and LRS-based (`LinearPositioningSystemCoordinate`) positions
+- **ERA standard pattern**: Each track has ONE NetLinearReference containing ALL segments in a multi-element hasSequence RDF List
+- **Linear extent vs point position**: Unlike signals (which use `NetPointReference` with single `TopologicalCoordinate`), tracks use `NetLinearReference` with start/end `NetPointReference` for overall extent
+- **Multiple segments**: Tracks spanning multiple `netElements` aggregate all LinearElements into one hasSequence RDF List (54 segments total for 36 tracks, avg 1.5 per track)
+- **RDF List construction**: Uses max sequence calculation to determine last segment for `rdf:nil` termination; builds rest of list conditionally based on sequence number
+- **Dual positioning**: Overall track start and end points have topology-based (`TopologicalCoordinate`) and LRS-based (`LinearPositioningSystemCoordinate`) positions
 - **KilometricPost inference**: Same pattern as signals — KilometricPost inferred from LRS measure, shared across all elements using same positioning system
 - **Track subclass determination**: Uses `xyz:type` attribute to determine whether track is RunningTrack or Siding
 - **SHACL compliance**: All required properties implemented with dummy data where railML source lacks information
@@ -479,14 +495,20 @@ Each `era:KilometricPost`:
 
 **URI Patterns**:
 - PlatformEdge: `functionalInfrastructure/platformEdges/{id}`
-- NetLinearReference: `topology/netLinearReferences/{platformEdgeId}_segment_{sequence}`
-- NetPointReference (start/end): `topology/netPointReferences/{platformEdgeId}_segment_{sequence}_{start|end}`
-- TopologicalCoordinate: `topology/topologicalCoordinates/{platformEdgeId}_{netElementId}_{position}`
-- LinearPositioningSystemCoordinate: `topology/linearPositioningSystemCoordinates/{platformEdgeId}_segment_{sequence}_{start|end}_{posSystemRef}_{measure}`
+- NetLinearReference: `topology/netLinearReferences/{platformEdgeId}` (ONE per platform edge)
+- RDF List nodes: `topology/netLinearReferences/{platformEdgeId}_hasSequence_list_{sequence}`
+- NetPointReference (start): `topology/netPointReferences/{platformEdgeId}_start`
+- NetPointReference (end): `topology/netPointReferences/{platformEdgeId}_end`
+- TopologicalCoordinate (start): `topology/topologicalCoordinates/{platformEdgeId}_start_{firstNetElementId}_{firstPosBegin}`
+- TopologicalCoordinate (end): `topology/topologicalCoordinates/{platformEdgeId}_end_{lastNetElementId}_{lastPosEnd}`
+- LinearPositioningSystemCoordinate (start): `topology/linearPositioningSystemCoordinates/{platformEdgeId}_start_{posSystemRef}_{firstMeasure}`
+- LinearPositioningSystemCoordinate (end): `topology/linearPositioningSystemCoordinates/{platformEdgeId}_end_{posSystemRef}_{lastMeasure}`
 - KilometricPost: `kilometricPosts/{posSystemRef}_km_{kmNumber}`
 
 **Mapping Notes**:
-- Platform edges typically span a single netElement, but multi-segment extents are supported
+- **ERA standard pattern**: Each platform edge has ONE NetLinearReference containing ALL segments in a multi-element hasSequence RDF List
+- Platform edges typically span a single netElement, but multi-segment extents are supported (all aggregated into one RDF List)
+- **RDF List construction**: Uses max sequence calculation to determine last segment for `rdf:nil` termination; builds rest of list conditionally based on sequence number
 - Follows same dual positioning pattern as tracks (topological + LRS coordinates)
 - ⚠️ **Micro topology conversion**: Link to topology via `xyz:netElementRef`, resolving to micro-level LinearElements
 - LRS coordinates from `linearCoordinateBegin/End` provide KilometricPost references

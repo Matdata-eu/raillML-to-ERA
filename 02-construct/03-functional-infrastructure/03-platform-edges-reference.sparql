@@ -1,0 +1,206 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://publications.europa.eu/resource/authority/country/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.3b — Platform Edge NetLinearReferences (topology references)
+# Maps railml:platformEdge/linearLocation/associatedNetElement → era:NetLinearReference
+#
+# Creates topology references linking platform edges to the network topology (NetElements)
+# using both topological coordinates (intrinsic positions) and linear positioning
+# system coordinates (kilometer posts).
+#
+# Source: railML platformEdge linearLocation elements with ordered associatedNetElements
+#
+# Target properties (SHACL-compliant):
+#   - era:netReference → era:NetLinearReference (references platform edge to topology)
+#   - era:hasSequence → RDF List of era:LinearElement (ordered sequence of net elements)
+#   - era:startsAt → era:NetPointReference (start point of platform edge extent)
+#   - era:endsAt → era:NetPointReference (end point of platform edge extent)
+#
+# NetPointReference structure (for start and end points):
+#   - era:hasTopoCoordinate → era:TopologicalCoordinate (intrinsic position on net element)
+#     - era:onLinearElement → era:LinearElement (which net element)
+#     - era:offsetFromOrigin → xsd:integer (offset in meters from element origin)
+#   - era:hasLrsCoordinate → era:LinearPositioningSystemCoordinate (km-based position)
+#     - era:kmPost → era:KilometricPost (reference post)
+#     - era:offsetFromKilometricPost → xsd:double (offset in meters)
+#
+# RDF List structure:
+#   - Properly terminated with rdf:nil for the last element
+#   - One list node per associated net element, ordered by fx:order
+#
+# URI Patterns:
+#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{platformEdgeId}_{linearLocOrder}
+#   RDF List nodes: http://data.europa.eu/949/topology/netLinearReferences/{platformEdgeId}_{linearLocOrder}_{assocNodeOrder}
+#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{platformEdgeId}_{linearLocOrder}_{start|end}
+#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{platformEdgeId}_{linearLocOrder}_{start|end}
+#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{platformEdgeId}_{linearLocOrder}_{start|end}
+#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{lpsId}_km_{kmNumber}
+
+CONSTRUCT {
+  # PlatformEdge resource (with netReference)
+  ?eraPlatformEdge era:netReference ?netLinearRef .
+
+  # NetLinearReference (ONE per platformEdge/LinearLocation with multi-element hasSequence)
+  ?netLinearRef a era:NetLinearReference ;
+                era:hasSequence ?firstSequenceListNode ;
+                era:startsAt ?startPointRef ;
+                era:endsAt ?endPointRef .
+
+  # RDF List nodes for hasSequence (chained list of all segments)
+  ?sequenceListNode a rdf:List;
+                    rdf:first ?eraLinearElement ;
+                    rdf:rest ?nextListNode .
+
+
+
+  # Start point NetPointReference (ONLY for first segment)
+  ?startPointRef a era:NetPointReference ;
+                 era:hasTopoCoordinate ?startTopoCoord ;
+                 era:hasLrsCoordinate ?startLrsCoord .
+
+  # Start TopologicalCoordinate
+  ?startTopoCoord a era:TopologicalCoordinate ;
+                  era:onLinearElement ?eraLinearElement ;
+                  era:offsetFromOrigin ?posBeginInteger .
+  
+  # Start LinearPositioningSystemCoordinate
+  ?startLrsCoord a era:LinearPositioningSystemCoordinate ;
+                 era:kmPost ?startKmPost ;
+                 era:offsetFromKilometricPost ?startKmOffset .
+  
+  # Start KilometricPost
+  ?startKmPost a era:KilometricPost ;
+               era:hasLRS ?startEraLPS ;
+               era:kilometer ?startKmNumber .
+
+
+
+  # End point NetPointReference (ONLY for last segment)
+  ?endPointRef a era:NetPointReference ;
+               era:hasTopoCoordinate ?endTopoCoord ;
+               era:hasLrsCoordinate ?endLrsCoord .
+
+  # End TopologicalCoordinate
+  ?endTopoCoord a era:TopologicalCoordinate ;
+                era:onLinearElement ?eraLinearElement ;
+                era:offsetFromOrigin ?posEndInteger .
+  
+  # End LinearPositioningSystemCoordinate
+  ?endLrsCoord a era:LinearPositioningSystemCoordinate ;
+               era:kmPost ?endKmPost ;
+               era:offsetFromKilometricPost ?endKmOffset .
+  
+  # End KilometricPost
+  ?endKmPost a era:KilometricPost ;
+             era:hasLRS ?endEraLPS ;
+             era:kilometer ?endKmNumber .
+}
+WHERE {
+  # Get all platform edges
+  ?platformEdge a railml:platformEdge ;
+         xyz:id ?platformEdgeId .
+
+  # Mint ERA PlatformEdge URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/platformEdges/", str(?platformEdgeId))) AS ?eraPlatformEdge)
+
+  # Get linear location with associated net elements
+  ?platformEdge fx:linearLocation ?linearLoc .
+  ?linearLoc fx:order ?linearLocOrder .
+  # Mint NetLinearReference URI (ONE per platformEdge, no segment suffix)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?platformEdgeId), "_", str(?linearLocOrder))) AS ?netLinearRef)
+
+  # Calculate max assocNodeOrder for this linearLoc to know when to terminate the RDF list
+  {
+    SELECT ?linearLoc (MAX(?assocNodeOrder) AS ?maxAssocNodeOrder)
+    WHERE {      
+      ?platformEdge a railml:platformEdge ;
+             fx:linearLocation ?linearLoc .
+      ?linearLoc fx:associatedNetElement ?assocNode .
+      ?assocNode fx:order ?assocNodeOrder .
+    }
+    GROUP BY ?linearLoc
+  }
+
+  # Go deeper, to the associated net elements
+  ?linearLoc fx:associatedNetElement ?assocNode .
+  ?assocNode fx:order ?assocNodeOrder .
+  # Mint RDF List node URI for this segment, each assocNode gets its own list node
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?platformEdgeId), "_", str(?linearLocOrder), "_", str(?assocNodeOrder))) AS ?sequenceListNode)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?platformEdgeId), "_", str(?linearLocOrder), "_1")) AS ?firstSequenceListNode)
+  # Terminate RDF list with rdf:nil for last segment, otherwise point to next node
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?platformEdge), "_", str(?linearLocOrder), "_", str(?assocNodeOrder+1)))) AS ?nextListNode)
+
+  # Get net element reference and positions
+  ?assocNode xyz:netElementRef ?netElementRef ;
+             xyz:posBegin ?posBegin ;
+             xyz:posEnd ?posEnd .
+    
+  # Dereference netElement to get LinearElement URI
+  ?netElement a railml:netElement ;
+              xyz:id ?netElementRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", str(?netElementRef))) AS ?eraLinearElement)
+
+
+  #
+  # Get startPointRef
+  #
+  # Mint startPoint URI's only for first segment
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", str(?platformEdgeId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startPointRef)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", str(?platformEdgeId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startTopoCoord)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", str(?platformEdgeId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startLrsCoord)
+  # Get start position and convert to integer
+  BIND (xsd:integer(ROUND(xsd:double(?posBegin))) AS ?posBeginInteger)
+
+  # Get LRS coordinates for start point
+  ?assocNode fx:linearCoordinateBegin ?startLinCoord .
+  ?startLinCoord xyz:positioningSystemRef ?startPositioningSystemRef ;
+                  xyz:measure ?startMeasureStr .
+  
+  # Calculate start KilometricPost and offset
+  BIND (IF(?assocNodeOrder = 1, STRDT(?startMeasureStr,xsd:double), ?UNDEF) AS ?startMeasureDouble)
+  BIND (IF(?assocNodeOrder = 1, xsd:integer(FLOOR(?startMeasureDouble / 1000.0)), ?UNDEF) AS ?startKmNumber)
+  BIND (IF(?assocNodeOrder = 1, ?startMeasureDouble - (?startKmNumber * 1000.0), ?UNDEF) AS ?startKmOffset)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?startPositioningSystemRef, "_km_", STR(?startKmNumber))), ?UNDEF) AS ?startKmPost)
+
+  # Dereference LinearPositioningSystem
+  ?startLps a railml:linearPositioningSystem ;
+       xyz:id ?startPositioningSystemRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?startPositioningSystemRef)) AS ?startEraLPS)
+
+
+  #
+  # Get endPointRef
+  #
+
+  # Mint endPointRef URI only for last segment
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", str(?platformEdgeId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endPointRef)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", str(?platformEdgeId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endTopoCoord)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", str(?platformEdgeId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endLrsCoord)
+
+  # Get end position and convert to integer
+  BIND (xsd:integer(ROUND(xsd:double(?posEnd))) AS ?posEndInteger)
+
+  # Get LRS coordinates for end point
+  ?assocNode fx:linearCoordinateEnd ?endLinCoord .
+  ?endLinCoord xyz:positioningSystemRef ?endPositioningSystemRef ;
+                xyz:measure ?endMeasureStr .
+
+  # Calculate end KilometricPost and offset
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, STRDT(?endMeasureStr,xsd:double), ?UNDEF) AS ?endMeasureDouble)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, xsd:integer(FLOOR(?endMeasureDouble / 1000.0)), ?UNDEF) AS ?endKmNumber)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, ?endMeasureDouble - (?endKmNumber * 1000.0), ?UNDEF) AS ?endKmOffset)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?endPositioningSystemRef, "_km_", STR(?endKmNumber))), ?UNDEF) AS ?endKmPost)
+
+  # Dereference LinearPositioningSystem
+  ?endLps a railml:linearPositioningSystem ;
+       xyz:id ?endPositioningSystemRef .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?endPositioningSystemRef)) AS ?endEraLPS)
+}
+ORDER BY ?platformEdgeId ?linearLocOrder ?assocNodeOrder

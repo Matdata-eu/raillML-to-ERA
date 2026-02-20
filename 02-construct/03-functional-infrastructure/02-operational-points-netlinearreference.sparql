@@ -133,9 +133,14 @@ WHERE {
                     xyz:id ?mesoMacroRef ;
                     fx:elementCollectionUnordered ?collection .
   
-  # Expand to constituent micro elements
+  # Expand to constituent micro elements with ordering
   ?collection fx:elementPart ?elementPart .
+  OPTIONAL { ?elementPart xyz:sequence ?seqValue . }
   ?elementPart xyz:ref ?microElementRef .
+  
+  # Use sequence if available, otherwise derive order from alphabetical sorting of refs
+  # This ensures consistent ordering for list building
+  BIND (COALESCE(?seqValue, "999") AS ?seqStr)
   
   # Get micro element details
   ?microElement a railml:netElement ;
@@ -144,6 +149,52 @@ WHERE {
   
   # Ensure it's truly a micro element (no sub-collections)
   FILTER NOT EXISTS { ?microElement fx:elementCollectionUnordered ?microColl . }
+  
+  # Calculate max sequence number for this areaLocation to know when to terminate lists
+  {
+    SELECT ?oppId ?mesoMacroRef (COUNT(?microRef) AS ?microCount)
+    WHERE {
+      ?op2 a railml:operationalPoint ;
+           xyz:id ?oppId .
+      ?op2 fx:areaLocation ?areaLoc2 .
+      ?areaLoc2 fx:associatedNetElement ?assocNetElem2 .
+      ?assocNetElem2 xyz:netElementRef ?mesoMacroRef .
+      ?mesoMacroElement2 a railml:netElement ;
+                        xyz:id ?mesoMacroRef ;
+                        fx:elementCollectionUnordered ?collection2 .
+      ?collection2 fx:elementPart ?ep .
+      ?ep xyz:ref ?microRef .
+      ?microElement2 a railml:netElement ;
+                     xyz:id ?microRef .
+      FILTER NOT EXISTS { ?microElement2 fx:elementCollectionUnordered ?microColl2 . }
+    }
+    GROUP BY ?oppId ?mesoMacroRef
+  }
+  
+  # Assign sequence number to each micro element (sorted by ref ID for consistency)
+  {
+    SELECT ?oppId ?mesoMacroRef ?microElementRef (COUNT(?earlierRef) + 1 AS ?microSeq)
+    WHERE {
+      ?op3 a railml:operationalPoint ;
+           xyz:id ?oppId .
+      ?op3 fx:areaLocation ?areaLoc3 .
+      ?areaLoc3 fx:associatedNetElement ?assocNetElem3 .
+      ?assocNetElem3 xyz:netElementRef ?mesoMacroRef .
+      ?mesoMacroElement3 a railml:netElement ;
+                        xyz:id ?mesoMacroRef ;
+                        fx:elementCollectionUnordered ?collection3 .
+      ?collection3 fx:elementPart ?ep1 .
+      ?ep1 xyz:ref ?microElementRef .
+      
+      # Count how many refs come before this one alphabetically
+      OPTIONAL {
+        ?collection3 fx:elementPart ?ep2 .
+        ?ep2 xyz:ref ?earlierRef .
+        FILTER (STR(?earlierRef) < STR(?microElementRef))
+      }
+    }
+    GROUP BY ?oppId ?mesoMacroRef ?microElementRef
+  }
   
   # Linear extent: from 0 to element length (convert to integer)
   BIND (0 AS ?posBeginInteger)
@@ -155,68 +206,21 @@ WHERE {
   # Mint NetLinearReference URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?oppId, "_", ?microElementRef)) AS ?netLinearRef)
 
-  # Mint sequence list URI
+  # Mint sequence list URI (single-element list for this NetLinearReference)
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?oppId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
   
   # Build RDF List structure for era:includes
   # Create list node for this NetLinearReference
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", ?microElementRef)) AS ?listNode)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", STR(?microSeq))) AS ?listNode)
   
-  # Determine the next element in the list (sorted by microElementRef)
-  OPTIONAL {
-    ?collection fx:elementPart ?nextElementPart .
-    ?nextElementPart xyz:ref ?nextMicroRef .
-    FILTER (?nextMicroRef > ?microElementRef)
-    # Find the minimum next reference (immediate successor)
-    {
-      SELECT ?oppId ?mesoMacroRef ?microElementRef (MIN(?nextMicroRef) AS ?immediateNext)
-      WHERE {
-        ?op2 a railml:operationalPoint ;
-             xyz:id ?oppId .
-        ?op2 fx:areaLocation ?areaLoc2 .
-        ?areaLoc2 fx:associatedNetElement ?assocNetElem2 .
-        ?assocNetElem2 xyz:netElementRef ?mesoMacroRef .
-        ?mesoMacroElement2 a railml:netElement ;
-                          xyz:id ?mesoMacroRef ;
-                          fx:elementCollectionUnordered ?collection2 .
-        ?collection2 fx:elementPart ?ep1 .
-        ?ep1 xyz:ref ?microElementRef .
-        ?collection2 fx:elementPart ?ep2 .
-        ?ep2 xyz:ref ?nextMicroRef .
-        FILTER (?nextMicroRef > ?microElementRef)
-      }
-      GROUP BY ?oppId ?mesoMacroRef ?microElementRef
-    }
-  }
+  # Determine rdf:rest value: rdf:nil for last element, next list node otherwise
+  BIND (IF(?microSeq = ?microCount, 
+           rdf:nil, 
+           IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", STR(?microSeq + 1)))) 
+        AS ?restNode)
   
-  # Bind rest node (points to next list node or rdf:nil)
-  BIND (
-    IF(BOUND(?immediateNext),
-      IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", ?immediateNext)),
-      rdf:nil
-    ) AS ?restNode
-  )
-  
-  # Determine the head of the list (minimum microElementRef)
-  {
-    SELECT ?oppId ?mesoMacroRef (MIN(?microRef) AS ?firstMicroRef)
-    WHERE {
-      ?op3 a railml:operationalPoint ;
-           xyz:id ?oppId .
-      ?op3 fx:areaLocation ?areaLoc3 .
-      ?areaLoc3 fx:associatedNetElement ?assocNetElem3 .
-      ?assocNetElem3 xyz:netElementRef ?mesoMacroRef .
-      ?mesoMacroElement3 a railml:netElement ;
-                        xyz:id ?mesoMacroRef ;
-                        fx:elementCollectionUnordered ?collection3 .
-      ?collection3 fx:elementPart ?ep3 .
-      ?ep3 xyz:ref ?microRef .
-    }
-    GROUP BY ?oppId ?mesoMacroRef
-  }
-  
-  # Bind includesList (head of the list)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", ?firstMicroRef)) AS ?includesList)
+  # Bind includesList to first list node
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_1")) AS ?includesList)
   
   # Mint start point URIs
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?oppId, "_", ?microElementRef, "_start")) AS ?startPointRef)
@@ -253,8 +257,10 @@ WHERE {
 
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?oppId, "_", ?microElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
   BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
-  # LinearPositioningSystem URI
+  
+  # Dereference LinearPositioningSystem
+  ?lps a railml:linearPositioningSystem ;
+       xyz:id ?posSystemRef .
   BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
-  FILTER(?oppId = "opp141")
 }
-ORDER BY ?oppId ?mesoMacroRef ?microElementRef
+ORDER BY ?oppId ?mesoMacroRef ?microSeq

@@ -1,0 +1,131 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX country: <http://publications.europa.eu/resource/authority/country/>
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX railml: <https://www.railml.org/schemas/3.2#>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX fx: <http://sparql.xyz/facade-x/ns/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Phase 3.1a — Tracks (functional infrastructure base)
+# Maps railml:track → era:Track (with subclasses era:RunningTrack or era:Siding)
+#
+# Source: railML track instances with type classification
+#
+# Target properties (SHACL-compliant):
+#   - rdf:type → era:RunningTrack or era:Siding (determined by railML type attribute)
+#   - era:trackId → track identifier (for RunningTrack only)
+#   - era:sidingId → siding identifier (for Siding only)
+#   - rdfs:label → track name (from railML name element)
+#   - era:inCountry → country:NOR (hardcoded for workshop)
+#   - era:infrastructureManager → era:OrganisationRole (hardcoded to 0076_IM)
+#   - era:wheelSetGauge → SKOS concept (hardcoded to 1435mm nominal gauge)
+#   - era:gaugingProfile → SKOS concept (mapped from railML loadingGauge code)
+#   - era:linesideDistanceIndication → era:LinesideDistanceIndication (RunningTrack only)
+#
+# Track type mapping:
+#   mainTrack, secondaryTrack, connectingTrack → era:RunningTrack
+#   sidingTrack → era:Siding
+#
+# Loading gauge mapping (via shared netElement references):
+#   GA → gaugings/10, GB → gaugings/20, GC → gaugings/30
+#   G1 → gaugings/40, GB1 → gaugings/70, GB2 → gaugings/80
+#
+# LinesideDistanceIndication (dummy data for RunningTrack):
+#   - Appearance: 02 (hectometer posts)
+#   - Positioning: 02 (both sides)
+#   - Frequency: 500m
+#
+# URI Patterns:
+#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{trackId}
+#   LinesideDistanceIndication: http://data.europa.eu/949/topology/linesideDistanceIndications/{trackId}
+#   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded)
+
+CONSTRUCT {
+  # Track resource (with subclass)
+  ?eraTrack a ?trackClass, era:Track ;
+            era:trackId ?runningTrackId ; 
+            era:sidingId ?sidingTrackId ;
+            rdfs:label ?trackName , ?trackNameEn ;
+            era:inCountry country:NOR ;
+            era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+            era:linesideDistanceIndication ?ldi ;
+            era:wheelSetGauge <http://data.europa.eu/949/concepts/nominal-track-gauges/30> ;
+            era:gaugingProfile ?gaugingProfileConcept .
+
+  # LinesideDistanceIndication (dummy data for RunningTrack)
+  ?ldi a era:LinesideDistanceIndication ;
+       era:linesideDistanceIndicationAppearance <http://data.europa.eu/949/concepts/lineside-distance-indication-appearance/02> ;
+       era:linesideDistanceIndicationPositioning <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> ;
+       era:linesideDistanceIndicationFrequency 500 .
+}
+WHERE {
+  # Get all tracks
+  ?track a railml:track ;
+         xyz:id ?trackId ;
+         xyz:type ?trackType .
+
+  # Determine track subclass based on railML type
+  # mainTrack, secondaryTrack, connectingTrack → RunningTrack
+  # sidingTrack → Siding
+  BIND (
+    IF(?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"),
+      era:RunningTrack,
+      era:Siding
+    ) AS ?trackClass
+  )
+
+  # Mint ERA Track URI
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+
+  # Conditionally assign trackId or sidingId based on track subclass
+  BIND (IF(?trackClass = era:RunningTrack, ?trackId, ?UNDEF) AS ?runningTrackId)
+  BIND (IF(?trackClass = era:Siding, ?trackId, ?UNDEF) AS ?sidingTrackId)
+
+  # Mint LinesideDistanceIndication URI (for RunningTrack only)
+  BIND (
+    IF(?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"),
+      IRI(CONCAT("http://data.europa.eu/949/topology/linesideDistanceIndications/", ?trackId)),
+      ?UNDEF
+    ) AS ?ldi
+  )
+
+  # Get track name (optional)
+  OPTIONAL {
+    ?track fx:name ?nameNode .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?trackName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?trackNameEn) # need an English name
+  }
+
+  # Get loading gauge via shared netElement references (optional)
+  # Tracks and loading gauges are linked via common netElementRef values
+  OPTIONAL {
+    # Get netElement reference from track's linear location
+    ?track fx:linearLocation/fx:associatedNetElement ?trackAssoc .
+    ?trackAssoc xyz:netElementRef ?sharedNetElementRef .
+    
+    # Find loading gauge with same netElement reference
+    ?loadingGauge a railml:loadingGauge ;
+                  xyz:code ?gaugeCode ;
+                  fx:linearLocation/fx:associatedNetElement ?gaugeAssoc .
+    ?gaugeAssoc xyz:netElementRef ?sharedNetElementRef .
+  }
+  
+  # Map railML loading gauge code to ERA gauging profile SKOS concept
+  BIND(
+    IF(?gaugeCode = "GA", <http://data.europa.eu/949/concepts/gaugings/10>,
+    IF(?gaugeCode = "GB", <http://data.europa.eu/949/concepts/gaugings/20>,
+    IF(?gaugeCode = "GC", <http://data.europa.eu/949/concepts/gaugings/30>,
+    IF(?gaugeCode = "G1", <http://data.europa.eu/949/concepts/gaugings/40>,
+    IF(?gaugeCode = "GB1", <http://data.europa.eu/949/concepts/gaugings/70>,
+    IF(?gaugeCode = "GB2", <http://data.europa.eu/949/concepts/gaugings/80>,
+    ?UNDEF))))))
+    AS ?gaugingProfileConcept
+  )
+}
+ORDER BY ?trackId ?sequence

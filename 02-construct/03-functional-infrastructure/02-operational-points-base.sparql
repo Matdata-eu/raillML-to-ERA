@@ -42,8 +42,8 @@ CONSTRUCT {
          era:hasSchematicOverviewOPDigitalForm "true"^^xsd:boolean . # This is the schematic topology we are using from the screencoordinates
 
   # Geometry (POINT from spotElementProjection, Strategy 2)
-  ?geometry a gsp:Geometry ;
-            gsp:asWKT ?wkt .
+  # ?geometry a gsp:Geometry ;
+  #           gsp:asWKT ?wkt .
 }
 WHERE {
   # Get all operational points
