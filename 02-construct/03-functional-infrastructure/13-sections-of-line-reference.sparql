@@ -68,6 +68,16 @@ WHERE {
         xyz:id ?lineId ;
         xyz:belongsToParent ?parentLineId .
 
+  # Get line name (format: "[opStartName]-[opEndName]")
+  OPTIONAL {
+    ?line fx:name ?nameNode .
+    ?nameNode xyz:name ?nameValue .
+    OPTIONAL {
+      ?nameNode xyz:language ?lang
+    }
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?lineName)
+  }
+  
   # Mint ERA SectionOfLine URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/", ?lineId)) AS ?eraSol)
 
@@ -75,6 +85,28 @@ WHERE {
   ?line fx:linearLocation ?linLoc .
   ?linLoc fx:associatedNetElement ?assocNetElem .
   ?assocNetElem xyz:netElementRef ?mesoElementRef .
+
+  
+  # ===== MAKE SURE SoL has start and end OP =====
+  # Extract operational point names from line name
+  # Line name format: "[opStart]-[opEnd]"
+  BIND (STR(?nameValue) AS ?lineNameStr)
+  BIND (STRBEFORE(?lineNameStr, "-") AS ?opStartName)
+  BIND (STRAFTER(?lineNameStr, "-") AS ?opEndName)
+
+  # Find operational points by matching their names
+  # Find opStart
+  ?opStart a railml:operationalPoint ;
+            xyz:id ?opStartId ;
+            fx:designator/xyz:entry ?opStartName .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opStartId)) AS ?eraOpStart)
+
+  # Find opEnd
+  ?opEnd a railml:operationalPoint ;
+          xyz:id ?opEndId ;
+          fx:designator/xyz:entry ?opEndName .
+  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opEndId)) AS ?eraOpEnd)
+
 
   # ===== MICRO TOPOLOGY EXPANSION =====
   
