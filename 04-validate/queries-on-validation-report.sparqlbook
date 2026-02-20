@@ -1,0 +1,32 @@
+[
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "prefix sh: <http://www.w3.org/ns/shacl#>\r\n\r\nselect ?focusNode where {\r\n    ?violation sh:resultMessage \"Resource must have at least one rdf:type\";\r\n    sh:focusNode ?focusNode .\r\n}\r\nORDER BY ?focusNode",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "   PREFIX sh: <http://www.w3.org/ns/shacl#>\r\n    SELECT ?level ?path ?message ?sourceConstraintComponent (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)\r\n    WHERE {\r\n        ?violation a sh:ValidationResult ;\r\n                    sh:resultPath ?path ;\r\n                    sh:focusNode ?focusNode ;\r\n                    sh:sourceConstraintComponent ?sourceConstraintComponent .\r\n        \r\n        OPTIONAL { ?violation sh:resultMessage ?message }\r\n        OPTIONAL { ?violation sh:resultSeverity ?level }\r\n    }\r\n    GROUP BY ?level ?path ?message ?sourceConstraintComponent\r\n    ORDER BY ?level ?path ?message ?sourceConstraintComponent",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "\r\n    PREFIX sh: <http://www.w3.org/ns/shacl#>\r\n    SELECT ?level ?sourceShape (SAMPLE(?path) AS ?path) (SAMPLE(?message) AS ?message) (SAMPLE(?sourceConstraintComponent) AS ?sourceConstraintComponent) (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)\r\n    WHERE {\r\n        ?violation a sh:ValidationResult ;\r\n                    sh:sourceShape ?sourceShape ;\r\n                    sh:focusNode ?focusNode ;\r\n                     .\r\n                     \r\n        OPTIONAL { ?violation sh:resultPath ?path }\r\n        OPTIONAL { ?violation sh:sourceConstraintComponent ?sourceConstraintComponent }\r\n        OPTIONAL { ?violation sh:resultMessage ?message }\r\n        OPTIONAL { ?violation sh:resultSeverity ?level }\r\n    }\r\n    GROUP BY ?level ?sourceShape\r\n    ORDER BY ?level ?sourceShape",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX era: <http://data.europa.eu/949/>\r\nPREFIX era-sh: <http://data.europa.eu/949/shapes/>\r\nPREFIX geosparql: <http://www.opengis.net/ont/geosparql#>\r\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\r\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\nPREFIX sh: <http://www.w3.org/ns/shacl#>\r\nPREFIX skos: <http://www.w3.org/2004/02/skos/core#>\r\nPREFIX time: <http://www.w3.org/2006/time#>\r\nPREFIX wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#>\r\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\r\nPREFIX dcterms: <http://purl.org/dc/terms/>\r\nPREFIX prov: <http://www.w3.org/ns/prov#>\r\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\nPREFIX dcat: <http://www.w3.org/ns/dcat#>\r\nPREFIX erad: <http://data.europa.eu/949/id/dataset/>\r\nPREFIX erag: <http://data.europa.eu/949/id/graph/> \r\nPREFIX erat: <http://data.europa.eu/949/id/distribution/>\r\n\r\nselect * where {\r\n    era-sh:ContactLineSystemShape sh:sparql ?propertyShape .\r\n    ?propertyShape a ?class; sh:severity ?severity .\r\n    OPTIONAL { ?propertyShape sh:path ?path }\r\n    OPTIONAL { ?propertyShape sh:path ?path }\r\n    \r\n}",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "select * where {<urn:maplib:tr7364ba17-8139-4e64-a879-5db21b2ca403_130> ?p ?o }",
+    "metadata": {}
+  }
+]

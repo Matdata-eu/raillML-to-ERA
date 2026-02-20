@@ -2,22 +2,21 @@
 
 **Status:** ❌ FAILED
 
-**Date:** 2026-02-19 23:28:42
+**Date:** 2026-02-20 23:37:17
 
-Found 8 types of violations
+Found 7 types of violations
 
 ## Violation Details
 
 | Level | Property Path | Constraint Component | Violations | Message | Example Node |
 |-------|---------------|---------------------|------------|---------|-------------|
-| `<sh:Violation>` | `<era:endsAt>` | `<sh:MinCountConstraintComponent>` | 1 | "endsAt: The net linear reference specifies an ending point that must be an instance of a NetPointReference. This error is due to not having a value, having more than one value or having a value that is not an instance of NetPointReference."@en | `<era:topology/netLinearReferences/bri200_segment_1>` |
-| `<sh:Violation>` | `<era:uopid>` | `<sh:MaxCountConstraintComponent>` | 1 | "uopid (1.2.0.0.0.2): This error is due to having more than one op id, not having an op id, having a value that is not a string, or having a value that does not follow the pattern where the first part 'AA' is the country code in two-letter system of ISO (or 'EU' for border points) and the second part is the alphanumeric OP code within the MS."@en | `<era:functionalInfrastructure/operationalPoints/opp740>` |
-| `<sh:Violation>` | `<http://www.opengis.net/ont/geosparql#hasGeometry>` | `<sh:MaxCountConstraintComponent>` | 3 | "hasGeometry (1.2.0.0.0.5):  Each feature must have at most one location. This error may be due to having a feature with more than one location or having a value that is not a geosparql:Geometry."@en | `<era:topology/netPointReferences/bri200_segment_1_start>` |
-| `<sh:Violation>` | `<http://www.w3.org/2000/01/rdf-schema#label>` | `<sh:SPARQLConstraintComponent>` | 3 | "rdfs:label: Each LinearPositioningSystem must have at least one label in English (@en). Additional multilingual labels are allowed, but only one value per language tag is permitted. All values must be language-tagged string literals."@en | `<era:functionalInfrastructure/lps/2444>` |
-| `<sh:Violation>` | `<http://www.w3.org/2000/01/rdf-schema#label>` | `<sh:DatatypeConstraintComponent>` | 1 | "rdfs:label: Each infrastructure element must have at least one label in English (@en). Additional multilingual labels are allowed, but only one value per language tag is permitted. All values must be language-tagged string literals."@en | `<era:functionalInfrastructure/bridges/bri200>` |
-| `<sh:Violation>` | `<http://www.w3.org/2000/01/rdf-schema#label>` | `<sh:SPARQLConstraintComponent>` | 1 | "rdfs:label: Each infrastructure element must have at least one label in English (@en). Additional multilingual labels are allowed, but only one value per language tag is permitted. All values must be language-tagged string literals."@en | `<era:functionalInfrastructure/bridges/bri200>` |
-| `<sh:Violation>` | `_:b7a8c41e0ae9b7b969812701b3de084c_1` | `<sh:ClassConstraintComponent>` | 4 | "hasPart: The SectionOfLine must have a hasPart reference that is an IRI that refers to an instance of Track. This error is due to not having a value or having a value that is not an instance of Track."@en | `<era:functionalInfrastructure/sectionsOfLine/ls_ne_ml_724>` |
-| `<sh:Warning>` | `<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>` | `<sh:MinCountConstraintComponent>` | 3 | "Resource must have at least one rdf:type" | `<era:functionalInfrastructure/sectionsOfLine/ls_ne_ml_163>` |
+| `<sh:Violation>` | `None` | `<sh:SPARQLConstraintComponent>` | 7 | "conditionsAppliedRegenerativeBraking (1.1.1.2.2.4.1):The Contact Line System <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc732> (), has a 'Overhead contact line (OCL)' type which makes the conditionsAppliedRegenerativeBraking parameter applicable. This error is due to <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc732> not having a value for such a parameter."@en | `<era:functionalInfrastructure/contactLineSystems/elc732>` |
+| `<sh:Violation>` | `None` | `<sh:SPARQLConstraintComponent>` | 3 | "ObjectProperty <http://data.europa.eu/949/definesSubset> has deprecated class <http://data.europa.eu/949/InfrastructureManager> in its domain" | `<era:definesSubset>` |
+| `<sh:Violation>` | `None` | `<sh:SPARQLConstraintComponent>` | 5 | "ObjectProperty <http://data.europa.eu/949/tdsMinAxleLoadVehicleCategory> has deprecated class <http://data.europa.eu/949/MinAxleLoadVehicleCategory> in its range" | `<era:tdsMinAxleLoadVehicleCategory>` |
+| `<sh:Violation>` | `None` | `<sh:SPARQLConstraintComponent>` | 8 | "referenceBorderPoint: The OperationalPoint <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp740> with name "Kudowa chranice"@no is a border point but does not have a referenceBorderPoint property."@en | `<era:functionalInfrastructure/operationalPoints/opp740>` |
+| `<sh:Violation>` | `None` | `<sh:SPARQLConstraintComponent>` | 14 | "There should be at least one Track Direction. There is a problem with SoL <http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/ls_ne_ml_16> ("OAR-OC"@no) and its track <http://data.europa.eu/949/functionalInfrastructure/tracks/trc2> ("H"@en). This track has no values for this property"@en | `<era:functionalInfrastructure/sectionsOfLine/ls_ne_ml_16>` |
+| `<sh:Violation>` | `None` | `<sh:SPARQLConstraintComponent>` | 114 | "trainDetectionSystemSpecificCheckDocument (1.1.1.3.7.1.3, 1.2.1.1.6.2):The Train Detection System <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde214> (), has a type that makes the trainDetectionSystemSpecificCheckDocument parameter applicable. This error is due to <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde214> not having a value for such a parameter."@en | `<era:functionalInfrastructure/trainDetectionSystems/tde214>` |
+| `<sh:Warning>` | `<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>` | `<sh:MinCountConstraintComponent>` | 2 | "Resource must have at least one rdf:type" | `<era:bridgeWindRestriction>` |
 
 ## Recommendations
 
