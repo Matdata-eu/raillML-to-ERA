@@ -20,6 +20,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - Signals (via ownsSignal)
 #   - Tracks and sidings (spatial match: tracks/sidings that intersect OP area location)
 #
+# Note: ERA SHACL only allows OP's to era:hasPart tracks/sidings or kilometer posts...
+#
 # URI Patterns:
 #   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
 #   PlatformEdge: http://data.europa.eu/949/functionalInfrastructure/platformEdges/{id}
