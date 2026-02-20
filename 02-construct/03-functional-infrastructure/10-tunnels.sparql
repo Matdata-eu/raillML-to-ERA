@@ -222,30 +222,31 @@ WHERE {
               xyz:id ?netElementRef .
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
 
-  # Mint NetLinearReference URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence))) AS ?netLinearRef)
+  # Mint NetLinearReference URI (include netElementRef for parallel track uniqueness)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef)) AS ?netLinearRef)
 
-  # Mint includes list URI (for NetAreaReference)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(?sequence))) AS ?includesList)
+  # Mint includes list URI (for NetAreaReference - include netElementRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(?sequence), "_", ?netElementRef)) AS ?includesList)
 
   # Build rest of list: rdf:nil if last segment, otherwise next segment's list node
-  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(xsd:integer(?sequence) + 1)))) AS ?restList)
+  # Note: For parallel tracks, this creates separate list nodes per track
+  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(xsd:integer(?sequence) + 1), "_", ?netElementRef))) AS ?restList)
 
-  # Mint sequence list URI (for hasSequence in NetLinearReference)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence), "_seqlist")) AS ?sequenceList)
+  # Mint sequence listURI (for hasSequence in NetLinearReference - include netElementRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_seqlist")) AS ?sequenceList)
 
   # ===== START POINT =====
   
-  # Mint start point NetPointReference URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_start")) AS ?startPointRef)
+  # Mint start point NetPointReference URI (include netElementRef for uniqueness)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start")) AS ?startPointRef)
   
   # Mint start TopologicalCoordinate URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
   
   # ===== END POINT =====
   
-  # Mint end point NetPointReference URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_end")) AS ?endPointRef)
+  # Mint end point NetPointReference URI (include netElementRef for uniqueness)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end")) AS ?endPointRef)
   
   # Mint end TopologicalCoordinate URI
   BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
@@ -271,8 +272,8 @@ WHERE {
   # Calculate start offset from km post
   BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
   
-  # Mint start LinearPositioningSystemCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+  # Mint start LinearPositioningSystemCoordinate URI (include netElementRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
 
 
   # ===== Get end LRS coordinates  =====
@@ -290,8 +291,8 @@ WHERE {
   # Calculate end offset from km post
   BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
   
-  # Mint end LinearPositioningSystemCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  # Mint end LinearPositioningSystemCoordinate URI (include netElementRef)
+  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
   
   OPTIONAL {
     # Get tunnel length
