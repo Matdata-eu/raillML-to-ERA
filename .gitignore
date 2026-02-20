@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 dist
 *.local
+*.whl
 .remote-assets
 components.d.ts
 *.log
