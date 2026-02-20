@@ -23,7 +23,6 @@ era_skos_base_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-
 
 # Download SHACL shapes
 era_rinf_shapes_file = download_dir / "ERA-RINF-shapes.ttl"
-skos_shapes_file = download_dir / "SKOS-shapes.ttl"
 
 if era_rinf_shapes_file.exists():
     print(f"ERA RINF SHACL shapes already exists at {era_rinf_shapes_file}")
@@ -135,7 +134,6 @@ filtered_shapes_file = download_dir / "filtered-shapes.ttl"
 # Load shapes into rdflib
 shapes_graph = rdflib.Graph()
 shapes_graph.parse(str(era_rinf_shapes_file), format="turtle")
-shapes_graph.parse(str(skos_shapes_file), format="turtle")
 
 # Identify and remove SPARQL constraints that use unimplemented GeoSPARQL functions
 SH = rdflib.Namespace("http://www.w3.org/ns/shacl#")
