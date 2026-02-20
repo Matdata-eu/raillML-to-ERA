@@ -200,18 +200,20 @@ try:
 
     query = """
     PREFIX sh: <http://www.w3.org/ns/shacl#>
-    SELECT ?level ?path ?message ?sourceConstraintComponent (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)
+    SELECT ?level ?sourceShape (SAMPLE(?path) AS ?path) (SAMPLE(?message) AS ?message) (SAMPLE(?sourceConstraintComponent) AS ?sourceConstraintComponent) (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)
     WHERE {
         ?violation a sh:ValidationResult ;
-                    sh:resultPath ?path ;
+                    sh:sourceShape ?sourceShape ;
                     sh:focusNode ?focusNode ;
-                    sh:sourceConstraintComponent ?sourceConstraintComponent .
-        
+                     .
+                     
+        OPTIONAL { ?violation sh:resultPath ?path }
+        OPTIONAL { ?violation sh:sourceConstraintComponent ?sourceConstraintComponent }
         OPTIONAL { ?violation sh:resultMessage ?message }
         OPTIONAL { ?violation sh:resultSeverity ?level }
     }
-    GROUP BY ?level ?path ?message ?sourceConstraintComponent
-    ORDER BY ?level ?path ?message ?sourceConstraintComponent
+    GROUP BY ?level ?sourceShape
+    ORDER BY ?level ?sourceShape
     """
     # Get query results
     df = validation_model.query(query)
