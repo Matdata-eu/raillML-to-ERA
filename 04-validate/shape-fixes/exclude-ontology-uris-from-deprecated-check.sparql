@@ -1,14 +1,14 @@
-PREFIX sh: <http://www.w3.org/ns/shacl#>
 PREFIX era-sh: <http://data.europa.eu/949/shapes/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-
-# Fix: Exclude ontology/vocabulary URIs from the InstancesMustHaveTypeShape validation
-# This prevents validation warnings on well-known vocabulary terms (OWL, RDF, SKOS, etc.)
 
 DELETE {
-    era-sh:NoDeprecatedDomainInObjectPropertyShape ?p ?o .
+    ?s ?p ?o .
 }
 WHERE {
-    era-sh:NoDeprecatedDomainInObjectPropertyShape ?p ?o .
+    ?s ?p ?o .
+    FILTER (?s IN (
+        era-sh:NoDeprecatedRangeInDatatypePropertyShape,
+        era-sh:NoDeprecatedRangeInObjectPropertyShape,
+        era-sh:NoDeprecatedDomainInDatatypePropertyShape,
+        era-sh:NoDeprecatedDomainInObjectPropertyShape
+    ))
 }
