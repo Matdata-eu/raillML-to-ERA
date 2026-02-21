@@ -14,6 +14,7 @@ Additions applied:
 - <length> on overCrossing tun199
 - height attribute on select <platformEdge> elements
 - <trackGauges> section in functionalInfrastructure
+- Removal of <designator entry="OXB" register="_railML"/> line
 """
 
 import re
@@ -312,6 +313,15 @@ def main():
         TRACK_GAUGES + "      <trainDetectionElements>",
         1,
     )
+
+    # 7. Remove designator line for OXB/_railML
+    print("  + Removing OXB/_railML designator line")
+    lines = text.splitlines(keepends=True)
+    original_count = len(lines)
+    lines = [l for l in lines if '<designator entry="OXB" register="_railML"/>' not in l]
+    if len(lines) == original_count:
+        print("    WARNING: OXB/_railML designator line not found")
+    text = "".join(lines)
 
     print(f"Saving: {OUTPUT}")
     with open(OUTPUT, "w", encoding="utf-8") as f:
