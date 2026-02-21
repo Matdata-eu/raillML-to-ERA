@@ -52,7 +52,8 @@ CONSTRUCT {
             era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
             era:linesideDistanceIndication ?ldi ;
             era:wheelSetGauge <http://data.europa.eu/949/concepts/nominal-track-gauges/30> ;
-            era:gaugingProfile ?gaugingProfileConcept .
+            era:gaugingProfile ?gaugingProfileConcept ;
+            era:trackDirection <http://data.europa.eu/949/concepts/track-running-directions/10> . # mmmh, required by SHACL to have a value on this...
 
   # LinesideDistanceIndication (dummy data for RunningTrack)
   ?ldi a era:LinesideDistanceIndication ;
