@@ -58,11 +58,15 @@ CONSTRUCT {
                      era:trainDetectionSystemType ?eraType ;
                      era:inCountry country:NOR ;
                      era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM>;
-                     era:trainDetectionSystemSpecificCheck ?tdsc .
+                     era:trainDetectionSystemSpecificCheck ?tdsc ;
+                     era:trainDetectionSystemSpecificCheckDocument <http://data.europa.eu/949/document/nya>.
   
   # Link from Track to TrainDetectionSystem (topology-based)
   ?eraTrack era:trainDetectionSystem ?eraTrainDetection .
 
+  <http://data.europa.eu/949/document/nya> a era:Document ;
+                     rdfs:label "Placeholder document / NYA"@en ;
+                     era:documentUrl "<http://data.europa.eu/949/"^^xsd:anyURI.
 }
 WHERE {
   # Bind to trainDetectionElements container
