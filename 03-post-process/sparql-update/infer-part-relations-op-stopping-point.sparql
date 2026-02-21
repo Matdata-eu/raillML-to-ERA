@@ -1,0 +1,85 @@
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# Infer era:isPartOf / era:hasPart relations for "stoppingPoint" OperationalPoints
+#
+# Context:
+#   ERA SHACL requires that tracks (RunningTrack, Siding) are declared as parts of
+#   the OperationalPoints they physically pass through. This is modelled as:
+#     track era:isPartOf operationalPoint  (child → parent)
+#     operationalPoint era:hasPart track   (parent → child, inverse)
+#
+#   StoppingPoint OPs are referenced by a single NetPointReference (a point on the
+#   network), unlike most OPs which span a NetLinearReference. This means the generic
+#   infer-part-relations-linear query does not cover them.
+#
+#   Note: ERA ontology issue #269 flags that requiring tracks to be parts of
+#   stoppingPoints is arguably incorrect railway design, but is currently mandated
+#   by SHACL validation.
+#   https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/issues/269
+#
+# Matching logic:
+#   1. Find OperationalPoints that are stoppingPoints (identified by "opp190" in URI)
+#      and are positioned via a NetPointReference → TopologicalCoordinate giving a
+#      single (linearElement, offset) pair.
+#   2. Find tracks whose NetLinearReference sequence spans one or more net elements,
+#      including the OP's linearElement.
+#   3. Determine the effective start/end offset of the track on that specific net
+#      element:
+#        - If the net element is the first one in the track's sequence, use the
+#          track's declared start offset; otherwise use 0 (the element's start).
+#        - If the net element is the last one in the track's sequence, use the
+#          track's declared end offset; otherwise use the element's full length.
+#   4. If the OP's position falls within that range, assert the part relations.
+
+INSERT {
+  ?childElement era:isPartOf ?masterPart .
+  ?masterPart era:hasPart ?childElement .
+}
+WHERE {
+  # --- Master part: stoppingPoint OperationalPoint (point-referenced) ---
+  ?masterPart a era:OperationalPoint ;
+              era:netReference ?masterPartNetRef .
+              
+  ?masterPartNetRef a era:NetPointReference ;
+                    era:hasTopoCoordinate ?masterTopoCoord .
+  ?masterTopoCoord a era:TopologicalCoordinate ;
+                   era:onLinearElement ?linearElement ;
+                   era:offsetFromOrigin ?masterPos .
+
+  # --- Child element: track spanning the OP's position ---
+  VALUES ?trackClasses { era:Track era:RunningTrack era:Siding }
+  ?childElement a ?trackClasses ;
+                era:netReference ?childPartNetRef .
+
+  # The track's net reference covers a sequence of net elements
+  ?childPartNetRef a era:NetLinearReference ;
+                   era:hasSequence ?sequenceList ;
+                   era:startsAt/era:hasTopoCoordinate ?firstNetElementStartPoint ;
+                   era:endsAt/era:hasTopoCoordinate ?lastNetElementEndPoint .
+
+  # The OP's linearElement must appear somewhere in the track's sequence
+  ?sequenceList rdf:rest*/rdf:first ?linearElement .
+  
+  # Needed to default end offset when this element is not the last in the sequence
+  ?linearElement era:lengthOfNetLinearElement ?netElementMaxPos .
+
+  # Resolve the track's declared start/end coordinates for boundary checking
+  ?firstNetElementStartPoint a era:TopologicalCoordinate ;
+                             era:onLinearElement ?firstLinearElement ;
+                             era:offsetFromOrigin ?firstLinearElementStartPointPos .
+  ?lastNetElementEndPoint a era:TopologicalCoordinate ;
+                          era:onLinearElement ?lastLinearElement ;
+                          era:offsetFromOrigin ?lastLinearElementEndPointPos .
+
+  # Effective window of the track on this specific net element:
+  #   start = track's offset if this is the first element, else 0
+  #   end   = track's offset if this is the last element,  else element length
+  BIND (IF(?linearElement = ?firstLinearElement, ?firstLinearElementStartPointPos, 0) AS ?startPointOnThisNetElement)
+  BIND (IF(?linearElement = ?lastLinearElement, ?lastLinearElementEndPointPos, ?netElementMaxPos) AS ?endPointOnThisNetElement)
+
+  # Assert part relation only when the OP's position falls within the track's window
+  FILTER (?startPointOnThisNetElement <= ?masterPos && ?masterPos <= ?endPointOnThisNetElement)
+}
