@@ -37,7 +37,12 @@ CONSTRUCT {
          era:uopid ?uopid ;
          era:inCountry country:NOR ;
          era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM>;
-         era:hasSchematicOverviewOPDigitalForm "true"^^xsd:boolean . # This is the schematic topology we are using from the screencoordinates
+         era:hasSchematicOverviewOPDigitalForm "true"^^xsd:boolean ; # This is the schematic topology we are using from the screencoordinates
+         era:referenceBorderPoint ?refBorderPoint ;
+         . 
+         
+ ?refBorderPoint a era:ReferenceBorderPoint ;
+    era:borderPointId ?uopid ;
 }
 WHERE {
   # Get all operational points
@@ -83,6 +88,7 @@ WHERE {
                     xyz:entry ?uopid_suffix .
                     
   BIND(IF(BOUND(?eraOpType) &&?eraOpType=IRI("http://data.europa.eu/949/concepts/op-types/90"),"EU","NO") as ?uopid_prefix)
+  BIND(IF(BOUND(?eraOpType) &&?eraOpType=IRI("http://data.europa.eu/949/concepts/op-types/90"),IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/borderpoint/", ?oppId)),?UNDEF) as ?refBorderPoint)
 
   BIND(CONCAT(?uopid_prefix, ?uopid_suffix) as ?uopid )
 
