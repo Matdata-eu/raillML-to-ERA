@@ -81,7 +81,9 @@ CONSTRUCT {
                         era:minimumContactWireHeight ?minWireHeight ;
                         era:tsiPantographHead ?tsiPantographConcept ;
                         era:inCountry country:NOR ;
-                        era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
+                        era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
+                        era:conditionsAppliedRegenerativeBraking ?regenBrakingDocument ; 
+                        .
 
   # Track references ContactLineSystem (via shared netElements)
   ?eraTrack era:contactLineSystem ?eraContactLineSystem ;
@@ -91,6 +93,11 @@ CONSTRUCT {
   ?raisedPantographsInstance a era:RaisedPantographsDistanceAndSpeed ;
                               era:raisedPantographsNumber ?pantographsNumber ;
                               era:raisedPantographsDistance ?pantographsDistance .
+
+   ?regenBrakingDocument a era:Document ;
+                          rdfs:label "Regenerative Braking Conditions Document" ;
+                          era:documentUrl "https://oppslagsverk.banenor.no/siteassets/network-statement/vedlegg/layout_ns_v239_kart4.png"^^xsd:anyURI .
+
 }
 WHERE {
   # Get all electrification sections
@@ -110,6 +117,12 @@ WHERE {
            IRI("http://data.europa.eu/949/concepts/contact-line-systems/10"),
            IRI("http://data.europa.eu/949/concepts/contact-line-systems/40")
        ) AS ?contactLineSystemTypeConcept)
+
+  # SHACL (wrongly IMHO) forces a regenBrakingDocument if contact line is present
+  BIND (IF(BOUND(?hasContactLineType) && ?hasContactLineType != "none",
+      IRI("http://data.europa.eu/949/documents/regenbraking-conditions"),
+      ?UNDEF)
+        as ?regenBrakingDocument)
 
   # Get regenerative braking permission from energyCatenary (only for electrified sections)
   OPTIONAL {
