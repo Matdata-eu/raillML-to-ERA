@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -24,8 +24,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - Coordinates transformed from railML visualization to WGS84
 #
 # URI Patterns:
-#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
-#   Geometry: http://data.europa.eu/949/geometry/{?coordLon}/{?coordLat}
+#   OperationalPoint: https://data.matdata.eu/_operationalPoints_{id}
+#   Geometry: https://data.matdata.eu/_geometry_{?coordLon}_{?coordLat}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop)
 
 CONSTRUCT {
@@ -50,7 +50,7 @@ WHERE {
       xyz:id ?oppId .
 
   # Mint ERA OperationalPoint URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?oppId)) AS ?eraOp)
 
   # Get operational point name
   OPTIONAL {
@@ -102,7 +102,7 @@ WHERE {
                 xyz:y ?yStr .
     BIND (3.0 + xsd:decimal(?xStr) / 10000.0 AS ?coordLon)
     BIND (53.0 + xsd:decimal(?yStr) / 10000.0 AS ?coordLat)
-    BIND (IRI(CONCAT("http://data.europa.eu/949/geometry/", STR(?coordLon), "/", STR(?coordLat))) AS ?geometry)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_geometry_", STR(?coordLon), "_", STR(?coordLat))) AS ?geometry)
     BIND (STRDT(CONCAT("POINT(", STR(?coordLon), " ", STR(?coordLat), ")"), gsp:wktLiteral) AS ?wkt)
   }
 }

@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
@@ -23,10 +23,10 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 # Note: ERA SHACL only allows OP's to era:hasPart tracks/sidings or kilometer posts...
 #
 # URI Patterns:
-#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
-#   PlatformEdge: http://data.europa.eu/949/functionalInfrastructure/platformEdges/{id}
-#   Signal: http://data.europa.eu/949/functionalInfrastructure/signals/{id}
-#   RunningTrack/Siding: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+#   OperationalPoint: https://data.matdata.eu/_operationalPoints_{id}
+#   PlatformEdge: https://data.matdata.eu/_platformEdges_{id}
+#   Signal: https://data.matdata.eu/_signals_{id}
+#   RunningTrack/Siding: https://data.matdata.eu/_tracks_{id}
 
 CONSTRUCT {
   # Operational Point owns platform edges
@@ -44,7 +44,7 @@ WHERE {
        xyz:id ?oppId .
 
   # Mint ERA OperationalPoint URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?oppId)) AS ?eraOp)
 
   {
     # === SIGNALS of type kilometer post ===
@@ -57,7 +57,7 @@ WHERE {
     ?signalNode fx:isMilepost ?isMilepostNode .
     
     # Mint ERA Signal URI
-    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/signals/", ?signalRef)) AS ?eraSignal)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_signals_", ?signalRef)) AS ?eraSignal)
   }
   UNION
   {
@@ -85,7 +85,7 @@ WHERE {
     ?trackAssocNode xyz:netElementRef ?microRef .
     
     # Mint ERA Track URI (handles both RunningTrack and Siding)
-    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", ?trackId)) AS ?eraTrack)
   }
 }
 ORDER BY ?oppId

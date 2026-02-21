@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -36,12 +36,12 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - One list node per associated net element, ordered by fx:order
 #
 # URI Patterns:
-#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{trackId}_{linearLocOrder}
-#   RDF List nodes: http://data.europa.eu/949/topology/netLinearReferences/{trackId}_{linearLocOrder}_{assocNodeOrder}
-#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{trackId}_{linearLocOrder}_{start|end}
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{trackId}_{linearLocOrder}_{start|end}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{trackId}_{linearLocOrder}_{start|end}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{lpsId}_km_{kmNumber}
+#   NetLinearReference: https://data.matdata.eu/_netLinearReferences_{trackId}_{linearLocOrder}
+#   RDF List nodes: https://data.matdata.eu/_netLinearReferences_{trackId}_{linearLocOrder}_{assocNodeOrder}
+#   NetPointReference: https://data.matdata.eu/_netPointReferences_{trackId}_{linearLocOrder}_{start|end}
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{trackId}_{linearLocOrder}_{start|end}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{trackId}_{linearLocOrder}_{start|end}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{lpsId}_km_{kmNumber}
 
 CONSTRUCT {
   # Track resource (with subclass)
@@ -108,13 +108,13 @@ WHERE {
          xyz:id ?trackId .
 
   # Mint ERA Track URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", str(?trackId))) AS ?eraTrack)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", str(?trackId))) AS ?eraTrack)
 
   # Get linear location with associated net elements
   ?track fx:linearLocation ?linearLoc .
   ?linearLoc fx:order ?linearLocOrder .
   # Mint NetLinearReference URI (ONE per track, no segment suffix)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?trackId), "_", str(?linearLocOrder))) AS ?netLinearRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", str(?trackId), "_", str(?linearLocOrder))) AS ?netLinearRef)
 
   # Calculate max assocNodeOrder for this linearLoc to know when to terminate the RDF list
   {
@@ -132,10 +132,10 @@ WHERE {
   ?linearLoc fx:associatedNetElement ?assocNode .
   ?assocNode fx:order ?assocNodeOrder .
   # Mint RDF List node URI for this segment, each assocNode gets its own list node
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?trackId), "_", str(?linearLocOrder), "_", str(?assocNodeOrder))) AS ?sequenceListNode)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?trackId), "_", str(?linearLocOrder), "_1")) AS ?firstSequenceListNode)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", str(?trackId), "_", str(?linearLocOrder), "_", str(?assocNodeOrder))) AS ?sequenceListNode)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", str(?trackId), "_", str(?linearLocOrder), "_1")) AS ?firstSequenceListNode)
   # Terminate RDF list with rdf:nil for last segment, otherwise point to next node
-  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", str(?trackId), "_", str(?linearLocOrder), "_", str(?assocNodeOrder+1)))) AS ?nextListNode)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, rdf:nil, IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", str(?trackId), "_", str(?linearLocOrder), "_", str(?assocNodeOrder+1)))) AS ?nextListNode)
 
   # Get net element reference and positions
   ?assocNode xyz:netElementRef ?netElementRef ;
@@ -145,16 +145,16 @@ WHERE {
   # Dereference netElement to get LinearElement URI
   ?netElement a railml:netElement ;
               xyz:id ?netElementRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", str(?netElementRef))) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", str(?netElementRef))) AS ?eraLinearElement)
 
 
   #
   # Get startPointRef
   #
   # Mint startPoint URI's only for first segment
-  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", str(?trackId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startPointRef)
-  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", str(?trackId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startTopoCoord)
-  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", str(?trackId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startLrsCoord)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", str(?trackId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startPointRef)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", str(?trackId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startTopoCoord)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", str(?trackId), "_", str(?linearLocOrder), "_start")), ?UNDEF) AS ?startLrsCoord)
   
   # Get start position and convert to integer
   BIND (xsd:integer(ROUND(xsd:double(?posBegin))) AS ?posBeginInteger)
@@ -168,12 +168,12 @@ WHERE {
   BIND (IF(?assocNodeOrder = 1, STRDT(?startMeasureStr,xsd:double), ?UNDEF) AS ?startMeasureDouble)
   BIND (IF(?assocNodeOrder = 1, xsd:integer(FLOOR(?startMeasureDouble / 1000.0)), ?UNDEF) AS ?startKmNumber)
   BIND (IF(?assocNodeOrder = 1, ?startMeasureDouble - (?startKmNumber * 1000.0), ?UNDEF) AS ?startKmOffset)
-  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?startPositioningSystemRef, "_km_", STR(?startKmNumber))), ?UNDEF) AS ?startKmPost)
+  BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?startPositioningSystemRef, "_km_", STR(?startKmNumber))), ?UNDEF) AS ?startKmPost)
 
   # Dereference LinearPositioningSystem
   ?startLps a railml:linearPositioningSystem ;
        xyz:id ?startPositioningSystemRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?startPositioningSystemRef)) AS ?startEraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?startPositioningSystemRef)) AS ?startEraLPS)
 
 
   #
@@ -181,9 +181,9 @@ WHERE {
   #
 
   # Mint endPointRef URI only for last segment
-  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", str(?trackId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endPointRef)
-  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", str(?trackId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endTopoCoord)
-  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", str(?trackId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endLrsCoord)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", str(?trackId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endPointRef)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", str(?trackId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endTopoCoord)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", str(?trackId), "_", str(?linearLocOrder), "_end")), ?UNDEF) AS ?endLrsCoord)
 
   # Get end position and convert to integer
   BIND (xsd:integer(ROUND(xsd:double(?posEnd))) AS ?posEndInteger)
@@ -197,11 +197,11 @@ WHERE {
   BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, STRDT(?endMeasureStr,xsd:double), ?UNDEF) AS ?endMeasureDouble)
   BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, xsd:integer(FLOOR(?endMeasureDouble / 1000.0)), ?UNDEF) AS ?endKmNumber)
   BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, ?endMeasureDouble - (?endKmNumber * 1000.0), ?UNDEF) AS ?endKmOffset)
-  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?endPositioningSystemRef, "_km_", STR(?endKmNumber))), ?UNDEF) AS ?endKmPost)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?endPositioningSystemRef, "_km_", STR(?endKmNumber))), ?UNDEF) AS ?endKmPost)
 
   # Dereference LinearPositioningSystem
   ?endLps a railml:linearPositioningSystem ;
        xyz:id ?endPositioningSystemRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?endPositioningSystemRef)) AS ?endEraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?endPositioningSystemRef)) AS ?endEraLPS)
 }
 ORDER BY ?trackId ?linearLocOrder ?assocNodeOrder

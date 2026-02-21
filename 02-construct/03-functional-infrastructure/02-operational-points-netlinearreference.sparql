@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
@@ -46,15 +46,15 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:kilometer → xsd:double
 #
 # URI Patterns:
-#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
-#   NetAreaReference: http://data.europa.eu/949/topology/netAreaReferences/{oppId}_{mesoMacroRef}
-#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{oppId}_{microElementRef}
-#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{oppId}_{microElementRef}_start
-#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{oppId}_{microElementRef}_end
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{oppId}_{netElementId}_{position}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{oppId}_{microElementRef}_{start|end}_{positioningSystemRef}_{measure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
-#   LinearPositioningSystem: http://data.europa.eu/949/linearPositioningSystems/{positioningSystemRef}
+#   OperationalPoint: https://data.matdata.eu/_operationalPoints_{id}
+#   NetAreaReference: https://data.matdata.eu/_netAreaReferences_{oppId}_{mesoMacroRef}
+#   NetLinearReference: https://data.matdata.eu/_netLinearReferences_{oppId}_{microElementRef}
+#   NetPointReference (start): https://data.matdata.eu/_netPointReferences_{oppId}_{microElementRef}_start
+#   NetPointReference (end): https://data.matdata.eu/_netPointReferences_{oppId}_{microElementRef}_end
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{oppId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{oppId}_{microElementRef}_{start|end}_{positioningSystemRef}_{measure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
+#   LinearPositioningSystem: https://data.matdata.eu/_linearPositioningSystems_{positioningSystemRef}
 
 CONSTRUCT {
   # Operational Point with NetAreaReference
@@ -119,14 +119,14 @@ WHERE {
       xyz:id ?oppId .
 
   # Mint ERA OperationalPoint URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?oppId)) AS ?eraOp)
   
   ?op fx:areaLocation ?areaLoc .
   ?areaLoc fx:associatedNetElement ?assocNetElem .
   ?assocNetElem xyz:netElementRef ?mesoMacroRef .
   
   # Mint NetAreaReference URI (one per areaLocation)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef)) AS ?netAreaRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?oppId, "_", ?mesoMacroRef)) AS ?netAreaRef)
   
   # Verify this references a meso/macro element
   ?mesoMacroElement a railml:netElement ;
@@ -201,34 +201,34 @@ WHERE {
   BIND (xsd:integer(ROUND(xsd:double(?microLength))) AS ?posEndInteger)
   
   # Mint LinearElement URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?microElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?microElementRef)) AS ?eraLinearElement)
   
   # Mint NetLinearReference URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?oppId, "_", ?microElementRef)) AS ?netLinearRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?oppId, "_", ?microElementRef)) AS ?netLinearRef)
 
   # Mint sequence list URI (single-element list for this NetLinearReference)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?oppId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?oppId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
   
   # Build RDF List structure for era:includes
   # Create list node for this NetLinearReference
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", STR(?microSeq))) AS ?listNode)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?oppId, "_", ?mesoMacroRef, "_list_", STR(?microSeq))) AS ?listNode)
   
   # Determine rdf:rest value: rdf:nil for last element, next list node otherwise
   BIND (IF(?microSeq = ?microCount, 
            rdf:nil, 
-           IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_", STR(?microSeq + 1)))) 
+           IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?oppId, "_", ?mesoMacroRef, "_list_", STR(?microSeq + 1)))) 
         AS ?restNode)
   
   # Bind includesList to first list node
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?oppId, "_", ?mesoMacroRef, "_list_1")) AS ?includesList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?oppId, "_", ?mesoMacroRef, "_list_1")) AS ?includesList)
   
   # Mint start point URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?oppId, "_", ?microElementRef, "_start")) AS ?startPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?oppId, "_", ?microElementRef, "_0.0")) AS ?startTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?oppId, "_", ?microElementRef, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?oppId, "_", ?microElementRef, "_0.0")) AS ?startTopoCoord)
   
   # Mint end point URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?oppId, "_", ?microElementRef, "_end")) AS ?endPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?oppId, "_", ?microElementRef, "_", STR(?posEndInteger))) AS ?endTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?oppId, "_", ?microElementRef, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?oppId, "_", ?microElementRef, "_", STR(?posEndInteger))) AS ?endTopoCoord)
 
   # Get LRS coordinates from the track that covers this micro element
   OPTIONAL {
@@ -252,15 +252,15 @@ WHERE {
     BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
   }
 
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?oppId, "_", ?microElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?oppId, "_", ?microElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
 
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?oppId, "_", ?microElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?oppId, "_", ?microElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
   
   # Dereference LinearPositioningSystem
   ?lps a railml:linearPositioningSystem ;
        xyz:id ?posSystemRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?posSystemRef)) AS ?eraLPS)
 }
 ORDER BY ?oppId ?mesoMacroRef ?microSeq

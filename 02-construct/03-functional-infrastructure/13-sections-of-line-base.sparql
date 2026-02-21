@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -27,7 +27,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   era:opStart → era:OperationalPoint
 #   era:opEnd → era:OperationalPoint
 #
-# URI Pattern: http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/{id}
+# URI Pattern: https://data.matdata.eu/_sectionsOfLine_{id}
 
 CONSTRUCT {
   ?eraSol a era:SectionOfLine ;
@@ -60,7 +60,7 @@ WHERE {
   }
 
   # Mint ERA SectionOfLine URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/", ?lineId)) AS ?eraSol)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_sectionsOfLine_", ?lineId)) AS ?eraSol)
 
   # Get parent line to extract nationalLine name
   ?parentLine a railml:line ;
@@ -70,7 +70,7 @@ WHERE {
                   xyz:language ?nationalLineLang .
   
   # Create language-tagged string for nationalLine
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/lps/", ?nationalLineNameStr)) AS ?thisDoesntMakeSense)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_lps_", ?nationalLineNameStr)) AS ?thisDoesntMakeSense)
 
   # Extract operational point names from line name
   # Line name format: "[opStart]-[opEnd]"
@@ -83,13 +83,13 @@ WHERE {
   ?opStart a railml:operationalPoint ;
             xyz:id ?opStartId ;
             fx:designator/xyz:entry ?opStartName .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opStartId)) AS ?eraOpStart)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?opStartId)) AS ?eraOpStart)
 
   # Find opEnd
   ?opEnd a railml:operationalPoint ;
           xyz:id ?opEndId ;
           fx:designator/xyz:entry ?opEndName .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opEndId)) AS ?eraOpEnd)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?opEndId)) AS ?eraOpEnd)
 
 
   # Default: solNature = "Line"

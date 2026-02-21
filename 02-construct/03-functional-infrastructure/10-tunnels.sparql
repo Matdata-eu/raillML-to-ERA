@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -65,17 +65,17 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   End point: posEnd of segment with highest sequence value
 #
 # URI Patterns:
-#   Tunnel: http://data.europa.eu/949/functionalInfrastructure/tunnels/{id}
-#   NetAreaReference: http://data.europa.eu/949/topology/netAreaReferences/{tunnelId}
-#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{tunnelId}_segment_{sequence}
-#   NetPointReference (start/end for lineReference): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_{start|end}
-#   NetPointReference (segment start/end): http://data.europa.eu/949/topology/netPointReferences/{tunnelId}_segment_{sequence}_{start|end}
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{tunnelId}_{start_or_end}_{netElementId}_{position}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{tunnelId}_{start_or_end}_{positioningSystemRef}_{measure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   Tunnel: https://data.matdata.eu/_tunnels_{id}
+#   NetAreaReference: https://data.matdata.eu/_netAreaReferences_{tunnelId}
+#   NetLinearReference: https://data.matdata.eu/_netLinearReferences_{tunnelId}_segment_{sequence}
+#   NetPointReference (start/end for lineReference): https://data.matdata.eu/_netPointReferences_{tunnelId}_{start|end}
+#   NetPointReference (segment start/end): https://data.matdata.eu/_netPointReferences_{tunnelId}_segment_{sequence}_{start|end}
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{tunnelId}_{start_or_end}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{tunnelId}_{start_or_end}_{positioningSystemRef}_{measure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
-#   Geometry (start): http://data.europa.eu/949/geometry/{tunnelId}_start (added by post-processing)
-#   Geometry (end): http://data.europa.eu/949/geometry/{tunnelId}_end (added by post-processing)
+#   Geometry (start): https://data.matdata.eu/_geometry_{tunnelId}_start (added by post-processing)
+#   Geometry (end): https://data.matdata.eu/_geometry_{tunnelId}_end (added by post-processing)
 
 CONSTRUCT {
   # Tunnel resource
@@ -100,8 +100,8 @@ CONSTRUCT {
              era:rollingStockFireCategory <http://data.europa.eu/949/concepts/rolling-stock-fire/10> .
 
   # Adding a dummy document
-  ?eraTunnel era:document <http://data.europa.eu/949/documents/skienstunnelen> .
-  <http://data.europa.eu/949/documents/skienstunnelen> a era:Document;
+  ?eraTunnel era:document <https://data.matdata.eu/_documents_skienstunnelen> .
+  <https://data.matdata.eu/_documents_skienstunnelen> a era:Document;
             era:documentUrl "https://banenor.sharepoint.com/sites/Beredskapsportalen/SitePages/Beredskapskort-Skienstunnelen.aspx"^^xsd:anyURI .
 
   # NetAreaReference (one per tunnel)
@@ -184,10 +184,10 @@ WHERE {
   }
 
   # Mint ERA Tunnel URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tunnels/", ?tunnelId)) AS ?eraTunnel)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tunnels_", ?tunnelId)) AS ?eraTunnel)
 
   # Mint NetAreaReference URI (one per tunnel)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId)) AS ?netAreaRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?tunnelId)) AS ?netAreaRef)
 
   # Get tunnel name (optional)
   OPTIONAL {
@@ -220,36 +220,36 @@ WHERE {
   # Dereference netElement to get LinearElement URI
   ?netElement a railml:netElement ;
               xyz:id ?netElementRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?netElementRef)) AS ?eraLinearElement)
 
   # Mint NetLinearReference URI (include netElementRef for parallel track uniqueness)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef)) AS ?netLinearRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef)) AS ?netLinearRef)
 
   # Mint includes list URI (for NetAreaReference - include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(?sequence), "_", ?netElementRef)) AS ?includesList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?tunnelId, "_includes_", STR(?sequence), "_", ?netElementRef)) AS ?includesList)
 
   # Build rest of list: rdf:nil if last segment, otherwise next segment's list node
   # Note: For parallel tracks, this creates separate list nodes per track
-  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?tunnelId, "_includes_", STR(xsd:integer(?sequence) + 1), "_", ?netElementRef))) AS ?restList)
+  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?tunnelId, "_includes_", STR(xsd:integer(?sequence) + 1), "_", ?netElementRef))) AS ?restList)
 
   # Mint sequence listURI (for hasSequence in NetLinearReference - include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_seqlist")) AS ?sequenceList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_seqlist")) AS ?sequenceList)
 
   # ===== START POINT =====
   
   # Mint start point NetPointReference URI (include netElementRef for uniqueness)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start")) AS ?startPointRef)
   
   # Mint start TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?tunnelId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
   
   # ===== END POINT =====
   
   # Mint end point NetPointReference URI (include netElementRef for uniqueness)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end")) AS ?endPointRef)
   
   # Mint end TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?tunnelId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?tunnelId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
   
   
   # ===== Get start LRS coordinates  =====
@@ -263,17 +263,17 @@ WHERE {
   # Dereference LinearPositioningSystem
   ?lps a railml:linearPositioningSystem ;
         xyz:id ?posSystemRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?posSystemRef)) AS ?eraLPS)
   
   # Calculate start KilometricPost (round to nearest km)
   BIND (xsd:double(FLOOR(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
   
   # Calculate start offset from km post
   BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
   
   # Mint start LinearPositioningSystemCoordinate URI (include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
 
 
   # ===== Get end LRS coordinates  =====
@@ -286,13 +286,13 @@ WHERE {
 
   # Calculate end KilometricPost (round to nearest km)
   BIND (xsd:double(FLOOR(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
   
   # Calculate end offset from km post
   BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
   
   # Mint end LinearPositioningSystemCoordinate URI (include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?tunnelId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
   
   OPTIONAL {
     # Get tunnel length

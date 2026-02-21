@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -56,11 +56,11 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:imCode (property) → replaced by era:infrastructureManager
 #
 # URI Patterns:
-#   Signal: http://data.europa.eu/949/functionalInfrastructure/signals/{id}
-#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{signalId}_on_{netElementId}
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{signalId}_{netElementId}_{position}
+#   Signal: https://data.matdata.eu/_signals_{id}
+#   NetPointReference: https://data.matdata.eu/_netPointReferences_{signalId}_on_{netElementId}
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{signalId}_{netElementId}_{position}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
-#   Geometry: http://data.europa.eu/949/geometry/{lon}/{lat} (using decimal coordinates)
+#   Geometry: https://data.matdata.eu/_geometry_{lon}/{lat} (using decimal coordinates)
 CONSTRUCT {
   ?eraSignal a era:Signal ;
              era:signalId ?signalId ;
@@ -95,7 +95,7 @@ WHERE {
           xyz:id ?signalId .
 
   # Mint ERA Signal URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/signals/", ?signalId)) AS ?eraSignal)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_signals_", ?signalId)) AS ?eraSignal)
 
   # Get switch name
   OPTIONAL {
@@ -167,7 +167,7 @@ WHERE {
               xyz:id ?netElementRef .
 
   # Mint ERA netElement URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?netElementRef)) AS ?eraLinearElement)
 
   # Convert position to integer (round to nearest meter) for TopologicalCoordinate
   BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posInteger)
@@ -178,16 +178,16 @@ WHERE {
   
   # Mint URIs for NetPointReference and TopologicalCoordinate
   # Pattern: Use signal ID + netElement ref for uniqueness
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?signalId, "_on_", ?netElementRef)) AS ?netPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?signalId, "_", ?netElementRef, "_", STR(?posInteger))) AS ?topoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?signalId, "_on_", ?netElementRef)) AS ?netPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?signalId, "_", ?netElementRef, "_", STR(?posInteger))) AS ?topoCoord)
   
   # Mint URIs for LinearPositioningSystemCoordinate and KilometricPost
   # LinearPositioningSystemCoordinate: unique per signal
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?signalId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?signalId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
   
   # KilometricPost: shared resource per positioning system + km number
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
   
   # LinearPositioningSystem: reference to common resource
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?positioningSystemRef)) AS ?eraLPS)
 }

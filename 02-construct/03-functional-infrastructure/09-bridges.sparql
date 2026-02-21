@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -56,14 +56,14 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - sequence: ordering of segments
 #
 # URI Patterns:
-#   Bridge: http://data.europa.eu/949/functionalInfrastructure/bridges/{id}
-#   NetAreaReference: http://data.europa.eu/949/topology/netAreaReferences/{bridgeId}
-#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{bridgeId}_segment_{sequence}
-#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{bridgeId}_segment_{sequence}_start
-#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{bridgeId}_segment_{sequence}_end
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{bridgeId}_{netElementId}_{position}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{bridgeId}_{segment}_{start_or_end}_{positioningSystemRef}_{measure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   Bridge: https://data.matdata.eu/_bridges_{id}
+#   NetAreaReference: https://data.matdata.eu/_netAreaReferences_{bridgeId}
+#   NetLinearReference: https://data.matdata.eu/_netLinearReferences_{bridgeId}_segment_{sequence}
+#   NetPointReference (start): https://data.matdata.eu/_netPointReferences_{bridgeId}_segment_{sequence}_start
+#   NetPointReference (end): https://data.matdata.eu/_netPointReferences_{bridgeId}_segment_{sequence}_end
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{bridgeId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{bridgeId}_{segment}_{start_or_end}_{positioningSystemRef}_{measure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
 
 CONSTRUCT {
@@ -158,10 +158,10 @@ WHERE {
   }
 
   # Mint ERA Bridge URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/bridges/", ?bridgeId)) AS ?eraBridge)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_bridges_", ?bridgeId)) AS ?eraBridge)
 
   # Mint NetAreaReference URI (one per bridge)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?bridgeId)) AS ?netAreaRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?bridgeId)) AS ?netAreaRef)
 
   # Get bridge name
   OPTIONAL {
@@ -194,36 +194,36 @@ WHERE {
   # Dereference netElement to get LinearElement URI
   ?netElement a railml:netElement ;
               xyz:id ?netElementRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?netElementRef)) AS ?eraLinearElement)
 
   # Mint NetLinearReference URI (include netElementRef for parallel track uniqueness)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef)) AS ?netLinearRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef)) AS ?netLinearRef)
 
   # Mint includes list URI (for NetAreaReference - include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?bridgeId, "_includes_", STR(?sequence), "_", ?netElementRef)) AS ?includesList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?bridgeId, "_includes_", STR(?sequence), "_", ?netElementRef)) AS ?includesList)
 
   # Build rest of list: rdf:nil if last segment, otherwise next segment's list node
   # Note: For parallel tracks, this creates separate list nodes per track
-  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?bridgeId, "_includes_", STR(xsd:integer(?sequence) + 1), "_", ?netElementRef))) AS ?restList)
+  BIND (IF(?sequence = ?maxSequence, rdf:nil, IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?bridgeId, "_includes_", STR(xsd:integer(?sequence) + 1), "_", ?netElementRef))) AS ?restList)
 
   # Mint sequence list URI (for hasSequence in NetLinearReference - include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_seqlist")) AS ?sequenceList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_seqlist")) AS ?sequenceList)
 
   # ===== START POINT =====
   
   # Mint start point NetPointReference URI (include netElementRef for uniqueness)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start")) AS ?startPointRef)
   
   # Mint start TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?bridgeId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?bridgeId, "_", ?netElementRef, "_", STR(?posBegin))) AS ?startTopoCoord)
   
   # ===== END POINT =====
   
   # Mint end point NetPointReference URI (include netElementRef for uniqueness)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end")) AS ?endPointRef)
   
   # Mint end TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?bridgeId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?bridgeId, "_", ?netElementRef, "_", STR(?posEnd))) AS ?endTopoCoord)
   
   
   # ===== Get start LRS coordinates  =====
@@ -237,17 +237,17 @@ WHERE {
   # Dereference LinearPositioningSystem
   ?lps a railml:linearPositioningSystem ;
         xyz:id ?posSystemRef .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?posSystemRef)) AS ?eraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?posSystemRef)) AS ?eraLPS)
   
   # Calculate start KilometricPost (round to nearest km)
   BIND (xsd:double(FLOOR(?startMeasureDouble / 1000.0)) AS ?startKmNumber)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?startKmNumber))) AS ?startKmPost)
   
   # Calculate start offset from km post
   BIND (?startMeasureDouble - (?startKmNumber * 1000.0) AS ?startKmOffset)
   
   # Mint start LinearPositioningSystemCoordinate URI (include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_start_", ?posSystemRef, "_", STR(?startMeasure))) AS ?startLrsCoord)
 
 
   # ===== Get end LRS coordinates  =====
@@ -260,13 +260,13 @@ WHERE {
 
   # Calculate end KilometricPost (round to nearest km)
   BIND (xsd:double(FLOOR(?endMeasureDouble / 1000.0)) AS ?endKmNumber)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
   
   # Calculate end offset from km post
   BIND (?endMeasureDouble - (?endKmNumber * 1000.0) AS ?endKmOffset)
   
   # Mint end LinearPositioningSystemCoordinate URI (include netElementRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
 
 }
 ORDER BY ?bridgeId ?sequence

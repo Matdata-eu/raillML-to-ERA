@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -81,7 +81,7 @@ WHERE {
   }
   
   # Mint ERA SectionOfLine URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/", ?lineId)) AS ?eraSol)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_sectionsOfLine_", ?lineId)) AS ?eraSol)
 
   # Get the meso netElement from this line's linearLocation
   ?line fx:linearLocation ?linLoc .
@@ -101,13 +101,13 @@ WHERE {
   ?opStart a railml:operationalPoint ;
             xyz:id ?opStartId ;
             fx:designator/xyz:entry ?opStartName .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opStartId)) AS ?eraOpStart)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?opStartId)) AS ?eraOpStart)
 
   # Find opEnd
   ?opEnd a railml:operationalPoint ;
           xyz:id ?opEndId ;
           fx:designator/xyz:entry ?opEndName .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?opEndId)) AS ?eraOpEnd)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?opEndId)) AS ?eraOpEnd)
 
 
   # ===== MICRO TOPOLOGY EXPANSION =====
@@ -132,7 +132,7 @@ WHERE {
   BIND (xsd:integer(ROUND(xsd:double(?microLength))) AS ?microLengthInteger)
   
   # Mint LinearElement URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?microElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?microElementRef)) AS ?eraLinearElement)
   
   # ===== TRACK LINKING (era:hasPart) =====
   
@@ -145,30 +145,30 @@ WHERE {
   ?trackAssocNode xyz:netElementRef ?microElementRef .
   
   # Mint ERA Track URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", ?trackId)) AS ?eraTrack)
   
   # ===== NET AREA REFERENCE (era:netReference) =====
   
   # Mint NetAreaReference URI (one per section)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef)) AS ?netAreaRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?lineId, "_", ?mesoElementRef)) AS ?netAreaRef)
   
   # Mint NetLinearReference URI (one per micro element)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?lineId, "_", ?microElementRef)) AS ?netLinearRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?lineId, "_", ?microElementRef)) AS ?netLinearRef)
 
   # Mint sequence list URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netLinearReferences/", ?lineId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netLinearReferences_", ?lineId, "_", ?microElementRef, "_seqlist")) AS ?sequenceList)
   
   # Mint start point URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?lineId, "_", ?microElementRef, "_start")) AS ?startPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?lineId, "_", ?microElementRef, "_0.0")) AS ?startTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?lineId, "_", ?microElementRef, "_start")) AS ?startPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?lineId, "_", ?microElementRef, "_0.0")) AS ?startTopoCoord)
   
   # Mint end point URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?lineId, "_", ?microElementRef, "_end")) AS ?endPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?lineId, "_", ?microElementRef, "_", STR(?microLengthInteger))) AS ?endTopoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?lineId, "_", ?microElementRef, "_end")) AS ?endPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?lineId, "_", ?microElementRef, "_", STR(?microLengthInteger))) AS ?endTopoCoord)
 
   # Build RDF List structure for era:includes
   # Create list node for this NetLinearReference
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef, "_list_", ?microElementRef)) AS ?listNode)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?lineId, "_", ?mesoElementRef, "_list_", ?microElementRef)) AS ?listNode)
   
   # Determine the next element in the list (sorted by microElementRef)
   OPTIONAL {
@@ -201,7 +201,7 @@ WHERE {
   # Bind rest node (points to next list node or rdf:nil)
   BIND (
     IF(BOUND(?immediateNext),
-      IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef, "_list_", ?immediateNext)),
+      IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?lineId, "_", ?mesoElementRef, "_list_", ?immediateNext)),
       rdf:nil
     ) AS ?restNode
   )
@@ -226,7 +226,7 @@ WHERE {
   }
   
   # Bind includesList (head of the list)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netAreaReferences/", ?lineId, "_", ?mesoElementRef, "_list_", ?firstMicroRef)) AS ?includesList)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netAreaReferences_", ?lineId, "_", ?mesoElementRef, "_list_", ?firstMicroRef)) AS ?includesList)
   
   # ===== LENGTH CALCULATION =====
   

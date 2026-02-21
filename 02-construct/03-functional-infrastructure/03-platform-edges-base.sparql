@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -56,17 +56,17 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   span a single netElement, but the pattern handles both cases.
 #
 # URI Patterns:
-#   PlatformEdge: http://data.europa.eu/949/functionalInfrastructure/platformEdges/{id}
-#   Geometry: http://data.europa.eu/949/functionalInfrastructure/platformEdges/{id}/geometry
-#   NetLinearReference: http://data.europa.eu/949/topology/netLinearReferences/{platformEdgeId} (ONE per platform edge)
-#   RDF List nodes: http://data.europa.eu/949/topology/netLinearReferences/{platformEdgeId}_hasSequence_list_{sequence}
-#   NetPointReference (start): http://data.europa.eu/949/topology/netPointReferences/{platformEdgeId}_start
-#   NetPointReference (end): http://data.europa.eu/949/topology/netPointReferences/{platformEdgeId}_end
-#   TopologicalCoordinate (start): http://data.europa.eu/949/topology/topologicalCoordinates/{platformEdgeId}_start_{firstNetElementId}_{firstPosBegin}
-#   TopologicalCoordinate (end): http://data.europa.eu/949/topology/topologicalCoordinates/{platformEdgeId}_end_{lastNetElementId}_{lastPosEnd}
-#   LinearPositioningSystemCoordinate (start): http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{platformEdgeId}_start_{positioningSystemRef}_{firstMeasure}
-#   LinearPositioningSystemCoordinate (end): http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{platformEdgeId}_end_{positioningSystemRef}_{lastMeasure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   PlatformEdge: https://data.matdata.eu/_platformEdges_{id}
+#   Geometry: https://data.matdata.eu/_platformEdges_{id}/geometry
+#   NetLinearReference: https://data.matdata.eu/_netLinearReferences_{platformEdgeId} (ONE per platform edge)
+#   RDF List nodes: https://data.matdata.eu/_netLinearReferences_{platformEdgeId}_hasSequence_list_{sequence}
+#   NetPointReference (start): https://data.matdata.eu/_netPointReferences_{platformEdgeId}_start
+#   NetPointReference (end): https://data.matdata.eu/_netPointReferences_{platformEdgeId}_end
+#   TopologicalCoordinate (start): https://data.matdata.eu/_topologicalCoordinates_{platformEdgeId}_start_{firstNetElementId}_{firstPosBegin}
+#   TopologicalCoordinate (end): https://data.matdata.eu/_topologicalCoordinates_{platformEdgeId}_end_{lastNetElementId}_{lastPosEnd}
+#   LinearPositioningSystemCoordinate (start): https://data.matdata.eu/_linearPositioningSystemCoordinates_{platformEdgeId}_start_{positioningSystemRef}_{firstMeasure}
+#   LinearPositioningSystemCoordinate (end): https://data.matdata.eu/_linearPositioningSystemCoordinates_{platformEdgeId}_end_{positioningSystemRef}_{lastMeasure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
 
 CONSTRUCT {
@@ -84,10 +84,10 @@ WHERE {
                 xyz:id ?platformEdgeId .
 
   # Mint ERA PlatformEdge URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/platformEdges/", ?platformEdgeId)) AS ?eraPlatformEdge)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_platformEdges_", ?platformEdgeId)) AS ?eraPlatformEdge)
 
   # Mint Geometry URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/platformEdges/", ?platformEdgeId, "/geometry")) AS ?geometry)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_platformEdges_", ?platformEdgeId, "/geometry")) AS ?geometry)
 
   # Get platform height and map to ERA concept
   # railML @height is in meters, ERA expects reference to concept in millimeters

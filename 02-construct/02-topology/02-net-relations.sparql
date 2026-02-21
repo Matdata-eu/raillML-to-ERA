@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
@@ -23,7 +23,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #
 # Position mapping: railML "0" = origin (true), "1" = end (false)
 #
-# URI Pattern: http://data.europa.eu/949/topology/netRelations/{id}
+# URI Pattern: https://data.matdata.eu/_netRelations_{id}
 CONSTRUCT {
   ?eraNetRelation a era:NetRelation ;
                   era:elementA ?eraElementA ;
@@ -37,7 +37,7 @@ WHERE {
       xyz:id ?id .
   
   # Mint ERA URI for this relation
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netRelations/", ?id)) AS ?eraNetRelation)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netRelations_", ?id)) AS ?eraNetRelation)
   
   # Filter: elements must be in the micro level
   ?networks fx:network/fx:level ?level .
@@ -48,12 +48,12 @@ WHERE {
   # --- Element A: dereference the ref string to mint an ERA LinearElement URI ---
   ?nr fx:elementA ?elANode .
   ?elANode xyz:ref ?refA .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?refA)) AS ?eraElementA)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?refA)) AS ?eraElementA)
     
   # --- Element B: dereference the ref string to mint an ERA LinearElement URI ---
   ?nr fx:elementB ?elBNode .
   ?elBNode xyz:ref ?refB .
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?refB)) AS ?eraElementB)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?refB)) AS ?eraElementB)
   
   # --- Position on A: "0" = origin (true), "1" = end (false) ---
   ?nr xyz:positionOnA ?posA .

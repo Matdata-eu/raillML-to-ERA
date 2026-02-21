@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -38,8 +38,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - Frequency: 500m
 #
 # URI Patterns:
-#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{trackId}
-#   LinesideDistanceIndication: http://data.europa.eu/949/topology/linesideDistanceIndications/{trackId}
+#   Track: https://data.matdata.eu/_tracks_{trackId}
+#   LinesideDistanceIndication: https://data.matdata.eu/_linesideDistanceIndications_{trackId}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded)
 
 CONSTRUCT {
@@ -78,7 +78,7 @@ WHERE {
   )
 
   # Mint ERA Track URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", ?trackId)) AS ?eraTrack)
 
   # Conditionally assign trackId or sidingId based on track subclass
   BIND (IF(?trackClass = era:RunningTrack, ?trackId, ?UNDEF) AS ?runningTrackId)
@@ -87,7 +87,7 @@ WHERE {
   # Mint LinesideDistanceIndication URI (for RunningTrack only)
   BIND (
     IF(?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"),
-      IRI(CONCAT("http://data.europa.eu/949/topology/linesideDistanceIndications/", ?trackId)),
+      IRI(CONCAT("https://data.matdata.eu/_linesideDistanceIndications_", ?trackId)),
       ?UNDEF
     ) AS ?ldi
   )

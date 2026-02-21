@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -42,8 +42,8 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - Do NOT link to sidings
 #
 # URI Patterns:
-#   ETCS: http://data.europa.eu/949/functionalInfrastructure/etcs/{id}
-#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+#   ETCS: https://data.matdata.eu/_etcs_{id}
+#   Track: https://data.matdata.eu/_tracks_{id}
 #
 # Workshop Notes:
 #   - ETCS level parsed from description string (L1, L2, etc.)
@@ -116,7 +116,7 @@ WHERE {
   FILTER(?trackType IN ("mainTrack", "secondaryTrack", "connectingTrack"))
   
   # Mint URIs
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/etcs/", ?etcsId)) AS ?eraETCS)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_etcs_", ?etcsId)) AS ?eraETCS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", ?trackId)) AS ?eraTrack)
 }
 ORDER BY ?etcsId ?trackId

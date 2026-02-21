@@ -1,4 +1,4 @@
-PREFIX dct: <http://purl.org/dc/terms/>
+﻿PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX era: <http://data.europa.eu/949/>
 PREFIX fx: <http://sparql.xyz/facade-x/ns/>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -27,5 +27,5 @@ WHERE {
   }
   
   # Mint ERA URI: linearPositioningSystems/{id}
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?lpsId)) AS ?eraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?lpsId)) AS ?eraLPS)
 }

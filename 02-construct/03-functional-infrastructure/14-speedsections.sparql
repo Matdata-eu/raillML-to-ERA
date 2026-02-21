@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -42,7 +42,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 # Note: Only RunningTrack resources get speed values (not Sidings).
 #
 # URI Pattern:
-#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
+#   Track: https://data.matdata.eu/_tracks_{id}
 #
 # Example mapping:
 #   railML: <track id="trc1" type="mainTrack"> shares netElement ne_16 with
@@ -80,7 +80,7 @@ WHERE {
     }
     GROUP BY ?trackId
   }
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", ?trackId)) AS ?eraTrack)
   # Mint ERA Track URI (same pattern as 01-tracks.sparql)
 }
 ORDER BY ?trackId

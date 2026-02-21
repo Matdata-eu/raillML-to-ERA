@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -54,11 +54,11 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   railML "both" → ERA concepts/orientations/02 (Both)
 #
 # URI Patterns:
-#   Switch: http://data.europa.eu/949/functionalInfrastructure/switches/{id}
-#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{switchId}_on_{netElementId}
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{switchId}_{netElementId}_{position}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{switchId}_{positioningSystemRef}_{measure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   Switch: https://data.matdata.eu/_switches_{id}
+#   NetPointReference: https://data.matdata.eu/_netPointReferences_{switchId}_on_{netElementId}
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{switchId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{switchId}_{positioningSystemRef}_{measure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
 
 CONSTRUCT {
@@ -94,7 +94,7 @@ WHERE {
           xyz:id ?switchId .
 
   # Mint ERA Switch URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/switches/", ?switchId)) AS ?eraSwitch)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_switches_", ?switchId)) AS ?eraSwitch)
 
   # Get switch name
   OPTIONAL {
@@ -117,13 +117,13 @@ WHERE {
   BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posDouble)
 
   # Mint LinearElement URI (topology reference)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?neRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?neRef)) AS ?eraLinearElement)
 
   # Mint NetPointReference URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?switchId, "_on_", ?neRef)) AS ?netPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?switchId, "_on_", ?neRef)) AS ?netPointRef)
 
   # Mint TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?switchId, "_", ?neRef, "_", STR(?posDouble))) AS ?topoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?switchId, "_", ?neRef, "_", STR(?posDouble))) AS ?topoCoord)
 
   # Get application direction and map to ERA orientation concept
   OPTIONAL {
@@ -152,13 +152,13 @@ WHERE {
     BIND ((?measure - (?kmNumber * 1000.0)) AS ?kmOffset)
     
     # Mint URIs
-    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", 
+    BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", 
                      ?switchId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
     
-    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", 
+    BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", 
                      ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
     
-    BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", 
+    BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", 
                      ?positioningSystemRef)) AS ?eraLPS)
   }
 }

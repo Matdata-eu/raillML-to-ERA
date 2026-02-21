@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
@@ -37,12 +37,12 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:kilometer → xsd:double
 #
 # URI Patterns:
-#   OperationalPoint: http://data.europa.eu/949/functionalInfrastructure/operationalPoints/{id}
-#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{spotLocationId}
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{spotLocId}_{netElementId}_{position}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{spotLocId}_{positioningSystemRef}_{measure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
-#   LinearPositioningSystem: http://data.europa.eu/949/linearPositioningSystems/{positioningSystemRef}
+#   OperationalPoint: https://data.matdata.eu/_operationalPoints_{id}
+#   NetPointReference: https://data.matdata.eu/_netPointReferences_{spotLocationId}
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{spotLocId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{spotLocId}_{positioningSystemRef}_{measure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
+#   LinearPositioningSystem: https://data.matdata.eu/_linearPositioningSystems_{positioningSystemRef}
 
 CONSTRUCT {
   # Operational Point
@@ -74,7 +74,7 @@ WHERE {
       xyz:id ?oppId .
 
   # Mint ERA OperationalPoint URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/operationalPoints/", ?oppId)) AS ?eraOp)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_operationalPoints_", ?oppId)) AS ?eraOp)
       
   ?op fx:spotLocation ?spotLoc .
   ?spotLoc xyz:id ?spotLocId ;
@@ -92,13 +92,13 @@ WHERE {
   BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posInteger)
   
   # Mint LinearElement URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?spotNetElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?spotNetElementRef)) AS ?eraLinearElement)
   
   # Mint NetPointReference URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?spotLocId)) AS ?netPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?spotLocId)) AS ?netPointRef)
   
   # Mint TopologicalCoordinate URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?spotLocId, "_", ?spotNetElementRef, "_", STR(?posInteger))) AS ?topoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?spotLocId, "_", ?spotNetElementRef, "_", STR(?posInteger))) AS ?topoCoord)
   
   # LRS coordinates (if available)
   OPTIONAL {
@@ -111,9 +111,9 @@ WHERE {
     BIND (?measure - (?kmNumber * 1000.0) AS ?kmOffset)
   }
     
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?spotLocId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?spotLocId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?positioningSystemRef)) AS ?eraLPS)
 
 }
 ORDER BY ?oppId ?netPointRef

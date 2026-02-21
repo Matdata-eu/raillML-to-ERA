@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -63,9 +63,9 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   2. era:contactLineSystem property on Track resources that share netElements
 #
 # URI Patterns:
-#   ContactLineSystem: http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/{id}
-#   Track: http://data.europa.eu/949/functionalInfrastructure/tracks/{id}
-#   RaisedPantographsDistanceAndSpeed: http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/{electrificationSectionId}
+#   ContactLineSystem: https://data.matdata.eu/_contactLineSystems_{id}
+#   Track: https://data.matdata.eu/_tracks_{id}
+#   RaisedPantographsDistanceAndSpeed: https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_{electrificationSectionId}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
 
 CONSTRUCT {
@@ -105,7 +105,7 @@ WHERE {
                           xyz:id ?electrificationSectionId .
 
   # Mint ERA ContactLineSystem URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/", ?electrificationSectionId)) AS ?eraContactLineSystem)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_contactLineSystems_", ?electrificationSectionId)) AS ?eraContactLineSystem)
 
   # Check for hasContactWire property (indicates electrified section)
   OPTIONAL { ?electrificationSection xyz:contactLineType ?hasContactLineType . }
@@ -120,7 +120,7 @@ WHERE {
 
   # SHACL (wrongly IMHO) forces a regenBrakingDocument if contact line is present
   BIND (IF(BOUND(?hasContactLineType) && ?hasContactLineType != "none",
-      IRI("http://data.europa.eu/949/documents/regenbraking-conditions"),
+      IRI("https://data.matdata.eu/_documents_regenbraking-conditions"),
       ?UNDEF)
         as ?regenBrakingDocument)
 
@@ -239,7 +239,7 @@ WHERE {
     BIND (xsd:integer(?spacingStr) AS ?pantographsDistance)
     
     # Mint URI for RaisedPantographsDistanceAndSpeed instance
-    BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/", ?electrificationSectionId)) AS ?raisedPantographsInstance)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_", ?electrificationSectionId)) AS ?raisedPantographsInstance)
   }
 
   # Get netElements covered by this electrification section
@@ -255,6 +255,6 @@ WHERE {
   ?trackAssocNode xyz:netElementRef ?netElementRef .
   
   # Mint ERA Track URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/tracks/", ?trackId)) AS ?eraTrack)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_tracks_", ?trackId)) AS ?eraTrack)
 }
 ORDER BY ?electrificationSectionId ?trackId

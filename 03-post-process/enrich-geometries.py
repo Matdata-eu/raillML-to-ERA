@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Enrich ERA network reference geometries using linear referencing.
 
 Computes GeoSPARQL geometries for:
@@ -32,7 +32,7 @@ OUTPUT_TTL = "output/era-graph-enriched.ttl"
 def geometry_uri(geom_type: str, wkt_str: str) -> URIRef:
     """Create a deterministic geometry URI from type and WKT."""
     h = hashlib.sha256(wkt_str.encode()).hexdigest()[:8]
-    return URIRef(f"http://data.europa.eu/949/geometry/{geom_type}/{h}")
+    return URIRef(f"https://data.matdata.eu/_geometry_{geom_type}_{h}")
 
 
 def parse_wkt(wkt_str: str):

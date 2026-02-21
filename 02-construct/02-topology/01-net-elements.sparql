@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
 PREFIX xyz: <http://sparql.xyz/facade-x/data/>
@@ -27,7 +27,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   - era:currentlyValid (property) → deprecated, no replacement
 #   - era:NonLinearElement (class) → not used
 #
-# URI Pattern: http://data.europa.eu/949/topology/netElements/{id}
+# URI Pattern: https://data.matdata.eu/_netElements_{id}
 CONSTRUCT {
   ?eraLinearElement a era:LinearElement ;
                     rdfs:label ?netElementId ;
@@ -54,7 +54,7 @@ WHERE {
   }
   
   # Mint ERA URI for this micro-level element
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementId)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?netElementId)) AS ?eraLinearElement)
   
   # --- GEOMETRY MAPPING (optional) ---
   # Uses nested SELECT to aggregate spotElementProjection coordinates into LINESTRING.
@@ -91,7 +91,7 @@ WHERE {
     }
     
     # Mint geometry URI using netElementId (ensures each netElement has unique geometry)
-    BIND (IRI(CONCAT("http://data.europa.eu/949/geometry/netElement_", ?netElementId)) AS ?geometry)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_geometry_netElement_", ?netElementId)) AS ?geometry)
     
     # Create WKT LINESTRING from aggregated coordinates
     BIND (STRDT(CONCAT("LINESTRING(", ?coordString, ")"), 

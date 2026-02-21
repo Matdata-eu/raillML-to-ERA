@@ -1,4 +1,4 @@
-PREFIX era: <http://data.europa.eu/949/>
+﻿PREFIX era: <http://data.europa.eu/949/>
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
 PREFIX railml: <https://www.railml.org/schemas/3.2#>
@@ -49,13 +49,13 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   The micro-level filter ensures level crossings only reference micro netElements.
 #
 # URI Patterns:
-#   LevelCrossing: http://data.europa.eu/949/functionalInfrastructure/levelCrossings/{id}
-#   NetPointReference: http://data.europa.eu/949/topology/netPointReferences/{levelCrossingId}_on_{netElementId}
-#   TopologicalCoordinate: http://data.europa.eu/949/topology/topologicalCoordinates/{levelCrossingId}_{netElementId}_{position}
-#   LinearPositioningSystemCoordinate: http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/{levelCrossingId}_{positioningSystemRef}_{measure}
-#   KilometricPost: http://data.europa.eu/949/kilometricPosts/{positioningSystemRef}_km_{kmNumber}
+#   LevelCrossing: https://data.matdata.eu/_levelCrossings_{id}
+#   NetPointReference: https://data.matdata.eu/_netPointReferences_{levelCrossingId}_on_{netElementId}
+#   TopologicalCoordinate: https://data.matdata.eu/_topologicalCoordinates_{levelCrossingId}_{netElementId}_{position}
+#   LinearPositioningSystemCoordinate: https://data.matdata.eu/_linearPositioningSystemCoordinates_{levelCrossingId}_{positioningSystemRef}_{measure}
+#   KilometricPost: https://data.matdata.eu/_kilometricPosts_{positioningSystemRef}_km_{kmNumber}
 #   OrganisationRole: http://data.europa.eu/949/organisations/0076_IM (hardcoded for workshop demo)
-#   Geometry: http://data.europa.eu/949/geometry/{lon}/{lat} (using decimal coordinates)
+#   Geometry: https://data.matdata.eu/_geometry_{lon}/{lat} (using decimal coordinates)
 
 CONSTRUCT {
   ?eraLevelCrossing a era:LevelCrossing ;
@@ -86,7 +86,7 @@ WHERE {
                  xyz:id ?levelCrossingId .
 
   # Mint ERA LevelCrossing URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/levelCrossings/", ?levelCrossingId)) AS ?eraLevelCrossing)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_levelCrossings_", ?levelCrossingId)) AS ?eraLevelCrossing)
 
   # Get level crossing name (optional)
   OPTIONAL {
@@ -122,11 +122,11 @@ WHERE {
     # Dereference LinearPositioningSystem
     ?lps a railml:linearPositioningSystem ;
          xyz:id ?positioningSystemRef .
-    BIND (IRI(CONCAT("http://data.europa.eu/949/linearPositioningSystems/", ?positioningSystemRef)) AS ?eraLPS)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", ?positioningSystemRef)) AS ?eraLPS)
     
     # Mint URIs for LinearPositioningSystemCoordinate and KilometricPost
-    BIND (IRI(CONCAT("http://data.europa.eu/949/topology/linearPositioningSystemCoordinates/", ?levelCrossingId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
-    BIND (IRI(CONCAT("http://data.europa.eu/949/kilometricPosts/", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?levelCrossingId, "_", ?positioningSystemRef, "_", STR(?measure))) AS ?lrsCoord)
+    BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
   }
 
   # MICRO TOPOLOGY ONLY: Convert positions on micro topology
@@ -139,13 +139,13 @@ WHERE {
               xyz:id ?netElementRef .
 
   # Mint ERA netElement URI
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netElements/", ?netElementRef)) AS ?eraLinearElement)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netElements_", ?netElementRef)) AS ?eraLinearElement)
 
   # Convert position to integer (round to nearest meter) for TopologicalCoordinate
   BIND (xsd:integer(ROUND(xsd:double(?posStr))) AS ?posInteger)
   
   # Mint URIs for NetPointReference and TopologicalCoordinate
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/netPointReferences/", ?levelCrossingId, "_on_", ?netElementRef)) AS ?netPointRef)
-  BIND (IRI(CONCAT("http://data.europa.eu/949/topology/topologicalCoordinates/", ?levelCrossingId, "_", ?netElementRef, "_", STR(?posInteger))) AS ?topoCoord)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_netPointReferences_", ?levelCrossingId, "_on_", ?netElementRef)) AS ?netPointRef)
+  BIND (IRI(CONCAT("https://data.matdata.eu/_topologicalCoordinates_", ?levelCrossingId, "_", ?netElementRef, "_", STR(?posInteger))) AS ?topoCoord)
 }
 ORDER BY ?levelCrossingId
