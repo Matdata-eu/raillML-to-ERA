@@ -14,7 +14,7 @@ download_dir.mkdir(exist_ok=True)
 shape_fixes_dir = Path("shape-fixes")
 
 # URLs for ERA SHACL shapes
-era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/ERA-RINF-shapes.ttl"
+era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/72a053c51b87aab657f133dc175369e1337d1943/era-shacl/ERA-RINF-shapes.ttl?inline=false"
 
 # URLs for ERA ontology and SKOS data
 era_ontology_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/main/ontology.ttl"
@@ -103,13 +103,22 @@ except Exception as e:
 
 # Load SKOS files into data graph
 if skos_files:
-    print("  Loading SKOS files...")
+    print(f"  Merging {len(skos_files)} SKOS files...")
+    merged_skos_file = download_dir / "merged-skos.ttl"
+    skos_graph = rdflib.Graph()
     for skos_file in skos_files:
+        print(f"    ... Merging {skos_file.name}")
         try:
-            m.read(str(skos_file), format="turtle")
-            print(f"    ✓ Loaded {skos_file.name}")
+            skos_graph.parse(str(skos_file), format="turtle")
         except Exception as e:
-            print(f"    ⚠️  Warning: Failed to load {skos_file.name}: {e}")
+            print(f"    ⚠️  Warning: Failed to merge {skos_file.name}: {e}")
+    skos_graph.serialize(destination=str(merged_skos_file), format="turtle")
+    print(f"  Loading merged SKOS file ({len(skos_graph)} triples)...")
+    try:
+        m.read(str(merged_skos_file), format="turtle")
+        print(f"  ✓ Loaded merged SKOS file")
+    except Exception as e:
+        print(f"  ⚠️  Warning: Failed to load merged SKOS file: {e}")
 
 print("Data loaded successfully")
 print(f"  Total triples in data graph")
