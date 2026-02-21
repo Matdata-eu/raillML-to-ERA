@@ -5,3 +5,4 @@ tiktoken
 shapely
 maplib
 rdflib
+pyshacl
