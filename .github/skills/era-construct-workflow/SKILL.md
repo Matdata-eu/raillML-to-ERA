@@ -29,7 +29,8 @@ End-to-end process for implementing railML to ERA infrastructure element mapping
      ```
    - **Decision**:
      - ✅ IF subclass of `era:InfrastructureElement` → use `era:netReference` positioning patterns
-     - ❌ IF NOT subclass → functional resource pattern (referenced FROM other elements)
+     - ❌ IF NOT subclass → functional resource pattern (referenced FROM other elements)  
+       → See `era-functional-resources` skill for discovery workflow and SPARQL templates
    - **For functional resources**: Find linking property via:
      ```sparql
      PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -95,7 +96,10 @@ http://data.europa.eu/949/functionalInfrastructure/elementType/{railml-id}
    - Write comprehensive header comment
    - Implement CONSTRUCT clause with all required properties
    - Implement WHERE clause with source extraction
-   - Add positioning pattern (Linear/Point/Area Reference)
+   - Add positioning pattern (Linear/Point/Area Reference)  
+     → See `era-dual-positioning` skill for TopologicalCoordinate + LRS coordinate mapping
+   - After construction, WKT geometries are computed automatically in `enrich-geometries.py`  
+     → See `wkt-geometry-enrichment` skill for the enrichment algorithm and failure modes
 
 3. **Handle Edge Cases**
    - Micro-topology filtering (if applicable)
@@ -155,7 +159,8 @@ advanced-example/
 
 ### Infrastructure Elements (subclass of era:InfrastructureElement)
 
-These classes have `era:netReference` property and use positioning patterns:
+These classes have `era:netReference` property and use positioning patterns.  
+→ See `era-dual-positioning` skill for the complete TopologicalCoordinate + LinearPositioningSystemCoordinate model.
 
 #### Linear Infrastructure (Track-like)
 - ✅ Use: NetLinearReference with start/end LinearReference
@@ -175,6 +180,7 @@ These classes have `era:netReference` property and use positioning patterns:
 
 ### Functional Resources (NOT subclass of era:InfrastructureElement)
 
+→ See `era-functional-resources` skill for detailed patterns and SPARQL CONSTRUCT examples.  
 These classes do NOT have `era:netReference` and are referenced FROM infrastructure elements:
 
 #### Referenced from Track
@@ -225,6 +231,6 @@ WHERE {
 ✓ All SHACL REQUIRED properties implemented  
 ✓ Documentation updated in construct-instructions.md  
 ✓ SPARQL file follows project patterns  
-✓ URI patterns consistent with existing elements  
+✓ URI patterns consistent with existing elements (→ see `era-uri-minting` skill)  
 ✓ No syntax errors  
 ✓ Appropriate dummy values documented
