@@ -1,0 +1,12 @@
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX era: <http://data.europa.eu/949/>
+
+INSERT {
+    ?refBorderPoint gsp:hasGeometry ?geom .
+}
+WHERE {
+  ?eraOp a era:OperationalPoint ;
+         era:referenceBorderPoint ?refBorderPoint ;
+         gsp:hasGeometry ?geom ;
+         . 
+}
