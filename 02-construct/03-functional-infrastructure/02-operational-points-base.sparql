@@ -58,34 +58,33 @@ WHERE {
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?opNameEn) # need an English name
   }
 
-  # Get designator for UOPID
-  OPTIONAL {
-    ?op fx:designator ?designatorNode .
-    ?designatorNode xyz:register '_railML' ;
-                     xyz:entry ?uopid_suffix .
-    BIND(CONCAT('NO', ?uopid_suffix) as ?uopid )
-  }
-
   # Get operational type and map to ERA concept
-  OPTIONAL {
-    ?op fx:opOperations ?opOperations .
-    ?opOperations fx:opOperation ?opOperation .
-    ?opOperation xyz:operationalType ?opTypeRailML .
-    
-    # Map railML operational types to ERA concepts
-    # Common types: station, passengerStop, borderPoint, junction, etc.
-    BIND (
-      IF(?opTypeRailML = "station",        IRI("http://data.europa.eu/949/concepts/op-types/10"),
-      IF(?opTypeRailML = "stoppingPoint",  IRI("http://data.europa.eu/949/concepts/op-types/70"),
-      IF(?opTypeRailML = "borderPoint",    IRI("http://data.europa.eu/949/concepts/op-types/90"),
-      IF(?opTypeRailML = "siding",         IRI("http://data.europa.eu/949/concepts/op-types/80"),
-      IF(?opTypeRailML = "junction",       IRI("http://data.europa.eu/949/concepts/op-types/80"),
-      IF(?opTypeRailML = "passengerStop",  IRI("http://data.europa.eu/949/concepts/op-types/70"),
-      IRI("http://data.europa.eu/949/concepts/op-types/10")  # Default to station
-      ))))))
-      AS ?eraOpType
-    )
-  }
+  ?op fx:opOperations ?opOperations .
+  ?opOperations fx:opOperation ?opOperation .
+  ?opOperation xyz:operationalType ?opTypeRailML .
+  
+  # Map railML operational types to ERA concepts
+  # Common types: station, passengerStop, borderPoint, junction, etc.
+  BIND (
+    IF(?opTypeRailML = "station",        IRI("http://data.europa.eu/949/concepts/op-types/10"),
+    IF(?opTypeRailML = "stoppingPoint",  IRI("http://data.europa.eu/949/concepts/op-types/70"),
+    IF(?opTypeRailML = "borderPoint",    IRI("http://data.europa.eu/949/concepts/op-types/90"),
+    IF(?opTypeRailML = "siding",         IRI("http://data.europa.eu/949/concepts/op-types/80"),
+    IF(?opTypeRailML = "junction",       IRI("http://data.europa.eu/949/concepts/op-types/80"),
+    IF(?opTypeRailML = "passengerStop",  IRI("http://data.europa.eu/949/concepts/op-types/70"),
+    IRI("http://data.europa.eu/949/concepts/op-types/10")  # Default to station
+    ))))))
+    AS ?eraOpType
+  )
+
+  # Get designator for UOPID
+  ?op fx:designator ?designatorNode .
+  ?designatorNode xyz:register '_railML' ;
+                    xyz:entry ?uopid_suffix .
+                    
+  BIND(IF(BOUND(?eraOpType) &&?eraOpType=IRI("http://data.europa.eu/949/concepts/op-types/90"),"EU","NO") as ?uopid_prefix)
+
+  BIND(CONCAT(?uopid_prefix, ?uopid_suffix) as ?uopid )
 
   # Geometry from spotElementProjection
   OPTIONAL {
