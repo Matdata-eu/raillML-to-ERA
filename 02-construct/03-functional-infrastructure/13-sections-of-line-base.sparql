@@ -93,5 +93,5 @@ WHERE {
 
 
   # Default: solNature = "Line"
-  BIND (IRI("http://data.europa.eu/949/concepts/sol-natures/01") AS ?eraSolNature)
+  BIND (IRI("http://data.europa.eu/949/concepts/sol-natures/10") AS ?eraSolNature)
 }
