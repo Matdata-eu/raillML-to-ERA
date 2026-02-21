@@ -57,10 +57,12 @@ CONSTRUCT {
   ?eraTrainDetection a era:TrainDetectionSystem ;
                      era:trainDetectionSystemType ?eraType ;
                      era:inCountry country:NOR ;
-                     era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
+                     era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM>;
+                     era:trainDetectionSystemSpecificCheck ?tdsc .
   
   # Link from Track to TrainDetectionSystem (topology-based)
   ?eraTrack era:trainDetectionSystem ?eraTrainDetection .
+
 }
 WHERE {
   # Bind to trainDetectionElements container
@@ -82,14 +84,21 @@ WHERE {
   # Map railML type to ERA trainDetectionSystemType concept
   BIND(
     IF(?railmlType = "axleCounter", 
-       <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters>,
+       <http://data.europa.eu/949/concepts/train-detection/20>,
     IF(?railmlType = "insulatedRailJoint",
-       <http://data.europa.eu/949/concepts/train-detection/10>,
-    IF(?railmlType = "clearancePoint",
-       <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters>,
-    <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters>
-    ))) AS ?eraType
+       <http://data.europa.eu/949/concepts/train-detection/10>, ?UNDEF
+    )) AS ?eraType
   )
+  BIND(
+    IF(?railmlType = "axleCounter", 
+       <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>,
+    IF(?railmlType = "insulatedRailJoint",
+       <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>, ?UNDEF
+    )) AS ?tdsc
+  )
+
+
+
 
   # URI construction for TrainDetectionSystem
   BIND(URI(CONCAT("http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/", ?tdeId)) AS ?eraTrainDetection)
