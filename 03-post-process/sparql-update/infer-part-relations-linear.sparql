@@ -3,18 +3,33 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-# Infer isPartOf and hasPart relations between infrastructure elements based on topology
-# 
-# Logic:
-# - Point elements belong to linear elements (tracks) when positioned within their extent
-# - Linear elements belong to aggregate elements (sections) when extents overlap
-# - Point elements belong to aggregate elements (operational points) when sharing topology
+# Infer era:isPartOf / era:hasPart relations for linear child elements (tracks)
 #
-# Master parts: RunningTrack, OperationalPoint, SectionOfLine
+# Context:
+#   ERA SHACL requires that linear elements (RunningTrack, Siding) are declared as
+#   parts of the aggregate elements they physically fall within:
+#     track era:isPartOf operationalPoint / sectionOfLine  (child → parent)
+#     operationalPoint / sectionOfLine era:hasPart track   (parent → child, inverse)
 #
-# Relations:
-# - era:isPartOf (from child to parent)
-# - era:hasPart (from parent to child, inverse of isPartOf)
+#   Both master and child elements are positioned via NetLinearReference, which
+#   spans a sequence of net elements with a declared start and end offset.
+#   Masters may alternatively use a NetAreaReference that includes a list of
+#   NetLinearReferences.
+#
+# Matching logic:
+#   1. Find master parts of type OperationalPoint or SectionOfLine, with either:
+#        a. a direct NetLinearReference, or
+#        b. a NetAreaReference whose rdf:list includes NetLinearReferences.
+#   2. For each NetLinearReference of the master, traverse its sequence of net
+#      elements and determine the effective start/end offset on each element:
+#        - If it is the first element, use the declared start offset; else 0.
+#        - If it is the last element, use the declared end offset; else element length.
+#   3. Find child elements of type RunningTrack or Siding (excluding the master's own
+#      type to avoid self-containment) whose NetLinearReference sequence also includes
+#      the same net element.
+#   4. Compute the child's effective window on that element using the same rule.
+#   5. Assert the part relation when the child's window overlaps with the master's
+#      window on the shared net element (start or end of child falls within master).
 
 INSERT {
   ?childElement era:isPartOf ?masterPart .
@@ -36,32 +51,72 @@ WHERE {
                       era:includes ?includeList .
     ?includeList rdf:rest*/rdf:first ?masterNetLinRef .
   }
-  ?masterNetLinRef era:startsAt ?masterStartRef ;
-                   era:endsAt ?masterEndRef .
-  ?masterStartRef era:hasTopoCoordinate ?masterStartCoord .
-  ?masterStartCoord era:onLinearElement ?linearElement ;
-                    era:offsetFromOrigin ?masterStartOffset .
-  ?masterEndRef era:hasTopoCoordinate ?masterEndCoord .
-  ?masterEndCoord era:onLinearElement ?linearElement ;
-                  era:offsetFromOrigin ?masterEndOffset .
-                  
+  
+  # The track's net reference covers a sequence of net elements
+  ?masterNetLinRef a era:NetLinearReference ;
+                   era:hasSequence ?sequenceList ;
+                   era:startsAt/era:hasTopoCoordinate ?firstNetElementStartPoint ;
+                   era:endsAt/era:hasTopoCoordinate ?lastNetElementEndPoint .
+
+  # The OP's linearElement must appear somewhere in the track's sequence
+  ?sequenceList rdf:rest*/rdf:first ?linearElement .
+  
+  # Needed to default end offset when this element is not the last in the sequence
+  ?linearElement era:lengthOfNetLinearElement ?netElementMaxPos .
+
+  # Resolve the track's declared start/end coordinates for boundary checking
+  ?firstNetElementStartPoint a era:TopologicalCoordinate ;
+                             era:onLinearElement ?firstLinearElement ;
+                             era:offsetFromOrigin ?firstLinearElementStartPointPos .
+  ?lastNetElementEndPoint a era:TopologicalCoordinate ;
+                          era:onLinearElement ?lastLinearElement ;
+                          era:offsetFromOrigin ?lastLinearElementEndPointPos .
+
+  # Effective window of the track on this specific net element:
+  #   start = track's offset if this is the first element, else 0
+  #   end   = track's offset if this is the last element,  else element length
+  BIND (IF(?linearElement = ?firstLinearElement, ?firstLinearElementStartPointPos, 0) AS ?masterStartPointOnThisNetElement)
+  BIND (IF(?linearElement = ?lastLinearElement, ?lastLinearElementEndPointPos, ?netElementMaxPos) AS ?masterEndPointOnThisNetElement)
+
   # CASE B: Linear elements
   # Linear elements are part of master when their extents overlap
-  ?childElement a ?pointType ;
+  VALUES ?linearType { era:RunningTrack era:Siding }
+  ?childElement a ?linearType ;
                 era:netReference ?childNetRef .
 
-  VALUES ?pointType { era:RunningTrack era:Siding }
   # Filter to linear element types
-  FILTER (?pointType != ?masterPartType)
-  # Get child element's extent
+  FILTER (?linearType != ?masterPartType)
+  
+  # Get child element's extent  
+  # The child's net reference covers a sequence of net elements
   ?childNetRef a era:NetLinearReference ;
-               era:startsAt ?childStartRef ;
-               era:endsAt ?childEndRef .
-  ?childStartRef era:hasTopoCoordinate ?childStartCoord .
-  ?childStartCoord era:onLinearElement ?linearElement ;
-                   era:offsetFromOrigin ?childStartOffset .
-  ?childEndRef era:hasTopoCoordinate ?childEndCoord .
-  ?childEndCoord era:onLinearElement ?linearElement ;
-                 era:offsetFromOrigin ?childEndOffset .
-  FILTER ((?childStartOffset >= ?masterStartOffset && ?childStartOffset <= ?masterEndOffset) || (?childEndOffset >= ?masterStartOffset && ?childEndOffset <= ?masterEndOffset))
+                   era:hasSequence ?childSequenceList ;
+                   era:startsAt/era:hasTopoCoordinate ?firstChildNetElementStartPoint ;
+                   era:endsAt/era:hasTopoCoordinate ?lastChildNetElementEndPoint .
+
+  # The OP's linearElement must appear somewhere in the track's sequence
+  ?childSequenceList rdf:rest*/rdf:first ?linearElement .
+
+  # Resolve the child's declared start/end coordinates for boundary checking
+  ?firstChildNetElementStartPoint a era:TopologicalCoordinate ;
+                             era:onLinearElement ?firstChildLinearElement ;
+                             era:offsetFromOrigin ?firstChildLinearElementStartPointPos .
+  ?lastChildNetElementEndPoint a era:TopologicalCoordinate ;
+                          era:onLinearElement ?lastChildLinearElement ;
+                          era:offsetFromOrigin ?lastChildLinearElementEndPointPos .
+
+  # Effective window of the track on this specific net element:
+  #   start = child's offset if this is the first element, else 0
+  #   end   = child's offset if this is the last element,  else element length
+  BIND (IF(?linearElement = ?firstChildLinearElement, ?firstChildLinearElementStartPointPos, 0) AS ?childStartPointOnThisNetElement)
+  BIND (IF(?linearElement = ?lastChildLinearElement, ?lastChildLinearElementEndPointPos, ?netElementMaxPos) AS ?childEndPointOnThisNetElement)
+  
+  # Child needs to overlap with parent on this netElement
+  FILTER (
+    (   ?childStartPointOnThisNetElement >= ?masterStartPointOnThisNetElement 
+        && ?childStartPointOnThisNetElement <= ?masterEndPointOnThisNetElement) 
+    || 
+    (   ?childEndPointOnThisNetElement >= ?masterStartPointOnThisNetElement 
+        && ?childEndPointOnThisNetElement <= ?masterEndPointOnThisNetElement)
+  )
 }

@@ -3,18 +3,35 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-# Infer isPartOf and hasPart relations between infrastructure elements based on topology
-# 
-# Logic:
-# - Point elements belong to linear elements (tracks) when positioned within their extent
-# - Linear elements belong to aggregate elements (sections) when extents overlap
-# - Point elements belong to aggregate elements (operational points) when sharing topology
+# Infer era:isPartOf / era:hasPart relations for point child elements (KilometerPost)
 #
-# Master parts: RunningTrack, OperationalPoint, SectionOfLine
+# Context:
+#   ERA SHACL requires that point elements are declared as parts of the linear
+#   elements (RunningTrack, Siding) they lie on:
+#     pointElement era:isPartOf track   (child → parent)
+#     track era:hasPart pointElement    (parent → child, inverse)
 #
-# Relations:
-# - era:isPartOf (from child to parent)
-# - era:hasPart (from parent to child, inverse of isPartOf)
+#   Point elements are positioned via a NetPointReference → TopologicalCoordinate
+#   giving a single (linearElement, offset) pair, while master tracks are positioned
+#   via NetLinearReference spanning a sequence of net elements.
+#   Masters may alternatively use a NetAreaReference that includes a list of
+#   NetLinearReferences.
+#
+#   Currently only era:KilometerPost is a point element type in the ERA ontology,
+#   but the query pattern would generalise to any element with a NetPointReference.
+#
+# Matching logic:
+#   1. Find master parts of type RunningTrack or Siding, with either:
+#        a. a direct NetLinearReference, or
+#        b. a NetAreaReference whose rdf:list includes NetLinearReferences.
+#   2. For each NetLinearReference of the master, traverse its sequence of net
+#      elements and determine the effective start/end offset on each element:
+#        - If it is the first element, use the declared start offset; else 0.
+#        - If it is the last element, use the declared end offset; else element length.
+#   3. Find KilometerPost child elements whose NetPointReference places them on the
+#      same net element.
+#   4. Assert the part relation when the point's offset falls within the master's
+#      effective window on that net element.
 
 INSERT {
   ?childElement era:isPartOf ?masterPart .
@@ -23,39 +40,56 @@ INSERT {
 WHERE {
   VALUES ?masterPartType { era:RunningTrack era:Siding }
   {
-    # Define master part types (parent elements that contain other elements)
+    # Master via direct NetLinearReference
     ?masterPart a ?masterPartType .
     ?masterPart era:netReference ?masterNetLinRef .
     ?masterNetLinRef a era:NetLinearReference .
   }
   UNION
   {
+    # Master via NetAreaReference (includes a list of NetLinearReferences)
     ?masterPart a ?masterPartType .
     ?masterPart era:netReference ?masterNetAreaRef .
     ?masterNetAreaRef a era:NetAreaReference ;
                       era:includes ?includeList .
     ?includeList rdf:rest*/rdf:first ?masterNetLinRef .
   }
-  ?masterNetLinRef era:startsAt ?masterStartRef ;
-                   era:endsAt ?masterEndRef .
-  ?masterStartRef era:hasTopoCoordinate ?masterStartCoord .
-  ?masterStartCoord era:onLinearElement ?linearElement ;
-                    era:offsetFromOrigin ?masterStartOffset .
-  ?masterEndRef era:hasTopoCoordinate ?masterEndCoord .
-  ?masterEndCoord era:onLinearElement ?linearElement ;
-                  era:offsetFromOrigin ?masterEndOffset .
   
-  # CASE A: Point elements
-  # Point elements are part of master when positioned within extent
-  ?childElement a ?pointType ;
-                era:netReference ?pointNetRef .
-  # Filter to point element types
+  # Master's net reference spans a sequence of net elements
+  ?masterNetLinRef a era:NetLinearReference ;
+                   era:hasSequence ?sequenceList ;
+                   era:startsAt/era:hasTopoCoordinate ?firstNetElementStartPoint ;
+                   era:endsAt/era:hasTopoCoordinate ?lastNetElementEndPoint .
+
+  # Candidate net elements covered by the master's extent
+  ?sequenceList rdf:rest*/rdf:first ?linearElement .
+  
+  # Needed to default end offset when this element is not the last in the sequence
+  ?linearElement era:lengthOfNetLinearElement ?netElementMaxPos .
+
+  # Resolve the track's declared start/end coordinates for boundary checking
+  ?firstNetElementStartPoint a era:TopologicalCoordinate ;
+                             era:onLinearElement ?firstLinearElement ;
+                             era:offsetFromOrigin ?firstLinearElementStartPointPos .
+  ?lastNetElementEndPoint a era:TopologicalCoordinate ;
+                          era:onLinearElement ?lastLinearElement ;
+                          era:offsetFromOrigin ?lastLinearElementEndPointPos .
+
+  # Effective window of the track on this specific net element:
+  #   start = track's offset if this is the first element, else 0
+  #   end   = track's offset if this is the last element,  else element length
+  BIND (IF(?linearElement = ?firstLinearElement, ?firstLinearElementStartPointPos, 0) AS ?masterStartPointOnThisNetElement)
+  BIND (IF(?linearElement = ?lastLinearElement, ?lastLinearElementEndPointPos, ?netElementMaxPos) AS ?masterEndPointOnThisNetElement)
+
+  # --- Child element: KilometerPost positioned within the master's window ---
   FILTER (?pointType IN (era:KilometerPost))
-  # Get the point's topological coordinate
-  ?pointNetRef a era:NetPointReference ;
-                era:hasTopoCoordinate ?pointTopoCoord .
-  ?pointTopoCoord era:onLinearElement ?linearElement ;
-                  era:offsetFromOrigin ?pointOffset .
-  FILTER (?pointOffset >= ?masterStartOffset && ?pointOffset <= ?masterEndOffset)
-  
+  ?childElement a ?pointType ;
+                era:netReference ?childNetRef .
+  # Resolve the point's position on the network
+  ?childNetRef a era:NetPointReference ;
+                era:hasTopoCoordinate ?childPointTopoCoord .
+  ?childPointTopoCoord era:onLinearElement ?linearElement ;
+                  era:offsetFromOrigin ?childPointOffset .
+
+  FILTER (?childPointOffset >= ?masterStartPointOnThisNetElement && ?childPointOffset <= ?masterEndPointOnThisNetElement)  
 }
