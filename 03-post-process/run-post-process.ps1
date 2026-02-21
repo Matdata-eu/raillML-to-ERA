@@ -209,6 +209,31 @@ if ($fusekiAvailable) {
 
 Write-Host ""
 
+# Step 5: Convert TTL to NT
+$outputNtFile = "output/era-graph-enriched.nt"
+Write-Host "Step 5: Converting $outputTtlFile to N-Triples..." -ForegroundColor Green
+
+if (Test-Path $outputTtlFile) {
+    try {
+        & $venvPython -c @"
+import rdflib
+g = rdflib.ConjunctiveGraph()
+g.parse('$($outputTtlFile.Replace('\','/'))', format='turtle')
+g.serialize(destination='$($outputNtFile.Replace('\','/'))', format='nt')
+"@
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✓ Converted to $outputNtFile" -ForegroundColor Green
+        } else {
+            Write-Host "  ❌ Conversion failed" -ForegroundColor Red
+        }
+    } catch {
+        Write-Host "  ❌ Conversion failed: $_" -ForegroundColor Red
+    }
+} else {
+    Write-Host "  ⚠️  Skipped (source file not found: $outputTtlFile)" -ForegroundColor Yellow
+}
+Write-Host ""
+
 # Summary
 Write-Host ("=" * 70) -ForegroundColor Cyan
 Write-Host "POST-PROCESSING SUMMARY" -ForegroundColor Cyan
@@ -218,6 +243,9 @@ if ($fusekiAvailable) {
     Write-Host "✓ Results saved to Fuseki: $fusekiUrl" -ForegroundColor Green
 }
 Write-Host "✓ Results saved to file: $outputTtlFile" -ForegroundColor Green
+if (Test-Path $outputNtFile) {
+    Write-Host "✓ Results saved to file: $outputNtFile" -ForegroundColor Green
+}
 Write-Host ""
 Write-Host "✅ Post-processing complete!" -ForegroundColor Green
 Write-Host ("=" * 70) -ForegroundColor Cyan
