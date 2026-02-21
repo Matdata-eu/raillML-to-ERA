@@ -1343,6 +1343,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc9>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc9";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1361,6 +1362,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc8>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc8";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1379,6 +1381,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc7>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc7";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1389,6 +1392,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc6";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc5>
@@ -1406,6 +1410,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc5>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc5";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1425,6 +1430,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc4>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc4";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1443,6 +1449,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc36>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc36";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1452,6 +1459,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc35";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc34>
@@ -1469,6 +1477,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc34>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc34";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1487,6 +1496,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc33>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc33";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1496,6 +1506,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc32";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc31>
@@ -1504,6 +1515,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc31";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc30>
@@ -1521,6 +1533,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc30>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc30";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1539,6 +1552,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc3>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc3";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1548,6 +1562,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc29";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc28>
@@ -1556,6 +1571,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc28";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc27>
@@ -1573,6 +1589,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc27>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc27";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1591,6 +1608,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc26>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc26";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1600,6 +1618,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc25";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc24>
@@ -1617,6 +1636,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc24>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc24";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1635,6 +1655,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc23>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc23";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1653,6 +1674,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc22>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc22";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1671,6 +1693,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc21>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc21";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1689,6 +1712,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc20>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc20";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1708,6 +1732,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc2";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1717,6 +1742,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc19";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc18>
@@ -1734,6 +1760,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc18>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc18";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1743,6 +1770,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:sidingId               "trc17";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
 <http://data.europa.eu/949/topology/linesideDistanceIndications/trc16>
@@ -1760,6 +1788,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc16>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc16";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1778,6 +1807,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc15>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc15";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1795,6 +1825,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc14>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc14";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1812,6 +1843,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc13>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc13";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1829,6 +1861,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc12>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc12";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1847,6 +1880,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc11>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc11";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1866,6 +1900,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc10>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc10";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -1885,6 +1920,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc1>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc1";
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30> .
 
@@ -3661,6 +3697,10 @@ PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd:     <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
 
+<http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>
+        rdf:type           era:ReferenceBorderPoint;
+        era:borderPointId  "EUOIB" .
+
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp740>
         rdf:type                   era:OperationalPoint;
         rdfs:label                 "Kudowa chranice"@en , "Kudowa chranice"@no;
@@ -3670,7 +3710,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:opName                 "Kudowa chranice"@en , "Kudowa chranice"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/90>;
-        era:uopid                  "NOOXB" , "NOOIB" .
+        era:referenceBorderPoint   <http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>;
+        era:uopid                  "EUOIB" .
 
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp581>
         rdf:type                   era:OperationalPoint;
@@ -7912,36 +7953,60 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde766>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde767>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde768>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde769>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde770>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc10>
@@ -7951,6 +8016,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc9>
@@ -7960,6 +8029,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc30>
@@ -7969,18 +8042,30 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde425>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde424>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc23>
@@ -7990,12 +8075,20 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde422>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc28>
@@ -8005,6 +8098,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc27>
@@ -8014,6 +8111,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc26>
@@ -8023,6 +8124,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc21>
@@ -8032,6 +8137,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc24>
@@ -8041,6 +8150,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc22>
@@ -8050,6 +8163,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc36>
@@ -8059,24 +8176,40 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde408>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde407>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde406>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc15>
@@ -8086,6 +8219,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc16>
@@ -8095,6 +8232,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc34>
@@ -8104,6 +8245,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc18>
@@ -8113,6 +8258,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc17>
@@ -8122,12 +8271,20 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde303>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc12>
@@ -8137,6 +8294,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc13>
@@ -8146,36 +8307,60 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde226>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde225>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde222>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde215>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde214>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc8>
@@ -8185,42 +8370,70 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde210>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde209>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde14>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde20>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde36>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde38>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc4>
@@ -8230,7 +8443,11 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc1>
         era:trainDetectionSystem  <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde14> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde58> .
@@ -8239,18 +8456,30 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde63>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde69>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc7>
@@ -8260,13 +8489,21 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde149>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc2>
         era:trainDetectionSystem  <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde20> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde149> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde150> .
@@ -8275,7 +8512,11 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc5>
         era:trainDetectionSystem  <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde152> .
@@ -8284,6 +8525,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc3>
@@ -8293,6 +8538,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc6>
@@ -8302,7 +8551,16 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
+
+<http://data.europa.eu/949/document/nya>
+        rdf:type         era:Document;
+        rdfs:label       "Placeholder document / NYA"@en;
+        era:documentUrl  "<http://data.europa.eu/949/"^^xsd:anyURI .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc11>
         era:trainDetectionSystem  <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde303> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde226> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde222> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde207> .
@@ -8311,6 +8569,10 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
@@ -8357,6 +8619,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/50>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  true;
         era:inCountry                  country:NOR;
@@ -8406,6 +8670,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -8431,6 +8697,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -8465,6 +8733,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/50>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  true;
         era:inCountry                  country:NOR;
@@ -8485,6 +8755,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -8510,6 +8782,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -8520,6 +8794,11 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:maximumContactWireHeight   6.0e0;
         era:minimumContactWireHeight   4.5e0;
         era:tsiPantographHead          <http://data.europa.eu/949/concepts/compliant-pantograph-heads/10> .
+
+<http://data.europa.eu/949/documents/regenbraking-conditions>
+        rdf:type         era:Document;
+        rdfs:label       "Regenerative Braking Conditions Document";
+        era:documentUrl  "https://oppslagsverk.banenor.no/siteassets/network-statement/vedlegg/layout_ns_v239_kart4.png"^^xsd:anyURI .
 
 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc439>
         rdf:type                       era:RaisedPantographsDistanceAndSpeed;
@@ -8535,6 +8814,8 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -9054,7 +9335,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:nationalLine           <http://data.europa.eu/949/functionalInfrastructure/lps/2444>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01> .
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/lps/8176>
         rdf:type    era:LinearPositioningSystem;
@@ -9069,7 +9350,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:nationalLine           <http://data.europa.eu/949/functionalInfrastructure/lps/8176>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp141>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01> .
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/ls_ne_ml_724>
         rdf:type                   era:SectionOfLine;
@@ -9079,7 +9360,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:nationalLine           <http://data.europa.eu/949/functionalInfrastructure/lps/9333>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01> .
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/lps/9333>
         rdf:type    era:LinearPositioningSystem;
@@ -9094,7 +9375,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:nationalLine           <http://data.europa.eu/949/functionalInfrastructure/lps/9333>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01> .
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10> .
 
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX era:     <http://data.europa.eu/949/>

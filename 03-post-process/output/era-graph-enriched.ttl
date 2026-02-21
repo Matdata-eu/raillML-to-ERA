@@ -13,17 +13,35 @@ PREFIX skos:         <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd:          <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
-<http://data.europa.eu/949/geometry/multipoint/bdcfd8a3>
+<http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>
+        rdf:type           era:ReferenceBorderPoint;
+        era:borderPointId  "EUOIB" .
+
+<http://data.europa.eu/949/document/nya>
+        rdf:type         era:Document;
+        rdfs:label       "Placeholder document / NYA"@en;
+        era:documentUrl  "<http://data.europa.eu/949/"^^xsd:anyURI .
+
+<http://data.europa.eu/949/geometry/multipoint/6dd8a08d>
         rdf:type   geo:Geometry;
-        geo:asWKT  "MULTIPOINT ((3.016860964245772 53.007), (3.015534482758621 53.005), (3.0079644921552435 53.003), (3.00806436858812 53.001))"^^geo:wktLiteral .
+        geo:asWKT  "MULTIPOINT ((3.00806436858812 53.001), (3.0079644921552435 53.003), (3.015534482758621 53.005), (3.016860964245772 53.007))"^^geo:wktLiteral .
+
+<http://data.europa.eu/949/geometry/geometrycollection/0ba2ae55>
+        rdf:type   geo:Geometry;
+        geo:asWKT  "GEOMETRYCOLLECTION (POINT (3.0415737704918033 53.005), POINT (3.040922481472394 53.005922481472396), MULTILINESTRING ((3.052 53.007, 3.05 53.005, 3.044 53.005), (3.052 53.007, 3.042 53.007, 3.04 53.005), (3.04 53.005, 3.038 53.005), (3.055 53.008, 3.054 53.007, 3.052 53.007), (3.048 53.003, 3.046 53.003, 3.044 53.005), (3.044 53.005, 3.04 53.005)))"^^geo:wktLiteral .
+
+<http://data.europa.eu/949/geometry/geometrycollection/f85d17dd>
+        rdf:type   geo:Geometry;
+        geo:asWKT  "GEOMETRYCOLLECTION (MULTILINESTRING ((3 53.019, 3.011 53.019), (3 53.017, 3.009 53.017, 3.011 53.019), (3.011 53.019, 3.019 53.019)), POINT (3.0070970562748456 53.017), POINT (3.0066 53.019))"^^geo:wktLiteral .
+
+<http://data.europa.eu/949/documents/regenbraking-conditions>
+        rdf:type         era:Document;
+        rdfs:label       "Regenerative Braking Conditions Document";
+        era:documentUrl  "https://oppslagsverk.banenor.no/siteassets/network-statement/vedlegg/layout_ns_v239_kart4.png"^^xsd:anyURI .
 
 <http://data.europa.eu/949/geometry/multipoint/776df48c>
         rdf:type   geo:Geometry;
         geo:asWKT  "MULTIPOINT ((3.001 53.009), (3.0023653846153846 53.007))"^^geo:wktLiteral .
-
-<http://data.europa.eu/949/geometry/geometrycollection/446446b8>
-        rdf:type   geo:Geometry;
-        geo:asWKT  "GEOMETRYCOLLECTION (MULTILINESTRING ((3.052 53.007, 3.05 53.005, 3.044 53.005), (3.052 53.007, 3.042 53.007, 3.04 53.005), (3.04 53.005, 3.038 53.005), (3.055 53.008, 3.054 53.007, 3.052 53.007), (3.048 53.003, 3.046 53.003, 3.044 53.005), (3.044 53.005, 3.04 53.005)), POINT (3.040922481472394 53.005922481472396), POINT (3.0415737704918033 53.005))"^^geo:wktLiteral .
 
 <http://data.europa.eu/949/geometry/geometrycollection/78ace7a7>
         rdf:type   geo:Geometry;
@@ -36,10 +54,6 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 <http://data.europa.eu/949/geometry/geometrycollection/6256269e>
         rdf:type   geo:Geometry;
         geo:asWKT  "GEOMETRYCOLLECTION (POINT (3.053176551724138 53.017), POINT (3.052182012847966 53.019), POINT (3.0536530401531308 53.015), MULTILINESTRING ((3.059 53.019, 3.062 53.019), (3.057 53.017, 3.062 53.017), (3.057 53.017, 3.059 53.019), (3.043 53.014, 3.044 53.015, 3.046 53.015), (3.046 53.017, 3.047 53.016), (3.046 53.017, 3.048 53.017), (3.048 53.015, 3.055 53.015, 3.057 53.017), (3.046 53.015, 3.047 53.016), (3.046 53.015, 3.048 53.015), (3.047 53.016, 3.048 53.015), (3.047 53.016, 3.048 53.017), (3.048 53.017, 3.057 53.017), (3.039 53.019, 3.043 53.019), (3.043 53.019, 3.045 53.017), (3.043 53.019, 3.059 53.019), (3.041 53.017, 3.045 53.017), (3.045 53.017, 3.046 53.017)))"^^geo:wktLiteral .
-
-<http://data.europa.eu/949/geometry/geometrycollection/b795d29c>
-        rdf:type   geo:Geometry;
-        geo:asWKT  "GEOMETRYCOLLECTION (POINT (3.0066 53.019), POINT (3.0070970562748456 53.017), MULTILINESTRING ((3 53.019, 3.011 53.019), (3 53.017, 3.009 53.017, 3.011 53.019), (3.011 53.019, 3.019 53.019)))"^^geo:wktLiteral .
 
 <http://data.europa.eu/949/geometry/point/7cf79ec8>
         rdf:type   geo:Geometry;
@@ -5994,7 +6008,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:netReference           <http://data.europa.eu/949/topology/netAreaReferences/ls_ne_ml_294_ne_ml_294>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01>;
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/multilinestring/d3523462> .
 
@@ -6009,7 +6023,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:netReference           <http://data.europa.eu/949/topology/netAreaReferences/ls_ne_ml_724_ne_ml_724>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01>;
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/multilinestring/7c751f36> .
 
@@ -6024,7 +6038,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:netReference           <http://data.europa.eu/949/topology/netAreaReferences/ls_ne_ml_16_ne_ml_16>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp141>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01>;
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/multilinestring/a4a06f19> .
 
@@ -6039,7 +6053,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:netReference           <http://data.europa.eu/949/topology/netAreaReferences/ls_ne_ml_471_ne_ml_471>;
         era:opEnd                  <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:opStart                <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
-        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/01>;
+        era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/multilinestring/6d3a21ae> .
 
@@ -6162,6 +6176,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc14>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc14_1>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc14";
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
@@ -6181,13 +6196,14 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc19_2>;
         era:sidingId               "trc19";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/86a5e7d8> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc20>
-        rdf:type                        era:Track , era:TemporalFeature , era:RunningTrack;
-        rdfs:label                      "40"@no , "40"@en;
+        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdfs:label                      "40"@en , "40"@no;
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
@@ -6195,6 +6211,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc20>;
         era:maximumPermittedSpeed       60;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc20_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc20";
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
@@ -6207,8 +6224,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc33>
-        rdf:type                        era:Track , era:TemporalFeature , era:RunningTrack;
-        rdfs:label                      "1"@no , "1"@en;
+        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
@@ -6216,6 +6233,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc33>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc33_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc33";
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
@@ -6236,6 +6254,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc25_2>;
         era:sidingId               "trc25";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/32d6cd28> .
@@ -6255,6 +6274,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc31_2>;
         era:sidingId               "trc31";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/21fff072> .
@@ -6275,6 +6295,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -6294,6 +6316,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -6314,6 +6338,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -6334,6 +6360,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/50>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  true;
         era:inCountry                  country:NOR;
@@ -6365,6 +6393,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc35_2>;
         era:sidingId               "trc35";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/6c419b89> .
@@ -6373,6 +6402,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -6398,6 +6429,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/10>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  false;
         era:inCountry                  country:NOR;
@@ -6418,6 +6451,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                       era:ContactLineSystem;
         era:conditionalRegenerativeBrake
                 <http://data.europa.eu/949/concepts/regenerative-braking/50>;
+        era:conditionsAppliedRegenerativeBraking
+                <http://data.europa.eu/949/documents/regenbraking-conditions>;
         era:contactLineSystemType      <http://data.europa.eu/949/concepts/contact-line-systems/10>;
         era:currentLimitationRequired  true;
         era:inCountry                  country:NOR;
@@ -6438,12 +6473,20 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde187>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc6>
@@ -6456,6 +6499,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc6_2>;
         era:sidingId               "trc6";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc442>;
         era:trainDetectionSystem   <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde187>;
@@ -6467,12 +6511,20 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde152>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc5>
@@ -6486,6 +6538,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc5>;
         era:maximumPermittedSpeed       120;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc5_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc5";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -6498,7 +6551,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc2>
         rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
@@ -6512,6 +6569,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc2>;
         era:maximumPermittedSpeed       20;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc2_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc2";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -6524,37 +6582,61 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde95>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde69>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde63>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde58>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde52>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc4>
         rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
@@ -6568,6 +6650,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc4>;
         era:maximumPermittedSpeed       40;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc4_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc4";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc46>;
@@ -6580,42 +6663,70 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde36>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde20>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde14>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
-        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/eratv/axle-counters> .
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_AC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
+        era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/20> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde209>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde210>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde211>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc8>
@@ -6629,6 +6740,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc8>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc8_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc8";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc732>;
@@ -6641,40 +6753,64 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde215>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde222>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde225>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde226>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde261>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc13>
-        rdf:type                        era:Track , era:TemporalFeature , era:RunningTrack;
+        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc432>;
         era:etcs                        <http://data.europa.eu/949/functionalInfrastructure/etcs/trp687>;
         era:inCountry                   country:NOR;
@@ -6683,6 +6819,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc13>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc13_1>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc13";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde261>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6693,24 +6830,40 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde303>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde399>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde400>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc18>
@@ -6719,10 +6872,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc877>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/ls_ne_ml_294>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/ls_ne_ml_294> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp374> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp740>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc18>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc18_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc18";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc877>;
@@ -6735,6 +6889,10 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc34>
@@ -6747,6 +6905,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc34>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc34_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc34";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc877>;
@@ -6759,36 +6918,60 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde405>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde406>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde407>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde408>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde409>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc36>
@@ -6797,10 +6980,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc877>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/ls_ne_ml_724>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/sectionsOfLine/ls_ne_ml_724> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp376>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc36>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc36_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc36";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc877>;
@@ -6813,12 +6997,20 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde413>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc24>
@@ -6831,6 +7023,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc24>;
         era:maximumPermittedSpeed       40;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc24_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc24";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde422> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde413>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6841,6 +7034,10 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc21>
@@ -6849,10 +7046,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp581> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc21>;
         era:maximumPermittedSpeed       60;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc21_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc21";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde424> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde414>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6863,6 +7061,10 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc26>
@@ -6875,6 +7077,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc26>;
         era:maximumPermittedSpeed       60;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc26_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc26";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde415>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6885,6 +7088,10 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc27>
@@ -6893,10 +7100,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc435>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp581>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc27>;
         era:maximumPermittedSpeed       40;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc27_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc27";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde420>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6907,17 +7115,22 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc28>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
-        rdfs:label                 "5"@no , "5"@en;
+        rdf:type                   era:Siding , era:TemporalFeature , era:Track;
+        rdfs:label                 "5"@en , "5"@no;
         era:contactLineSystem      <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc436>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
+        era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp581>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc28_2>;
         era:sidingId               "trc28";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trainDetectionSystem   <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde421>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
@@ -6927,12 +7140,20 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde423>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc23>
@@ -6941,10 +7162,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp581> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc23>;
         era:maximumPermittedSpeed       60;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc23_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc23";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde425> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde423>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6955,18 +7177,30 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde425>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde426>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc30>
@@ -6979,6 +7213,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc30>;
         era:maximumPermittedSpeed       60;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc30_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc30";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde426>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -6989,48 +7224,80 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde764>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde770>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde769>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde768>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde767>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde766>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde765>
         rdf:type                      era:TrainDetectionSystem;
         era:inCountry                 country:NOR;
         era:infrastructureManager     <http://data.europa.eu/949/organisations/0076_IM>;
+        era:trainDetectionSystemSpecificCheck
+                <http://data.europa.eu/949/concepts/train-detection-specific-checks/AT_TC_100>;
+        era:trainDetectionSystemSpecificCheckDocument
+                <http://data.europa.eu/949/document/nya>;
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <http://data.europa.eu/949/functionalInfrastructure/switches/cro160>
@@ -7832,6 +8099,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp374>
         rdf:type                   era:TemporalFeature , era:OperationalPoint;
         rdfs:label                 "Instersee"@en , "Instersee"@no;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc18>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -7844,14 +8112,15 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         geo:hasGeometry            <http://data.europa.eu/949/geometry/point/96a51dea> .
 
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp580>
-        rdf:type                   era:TemporalFeature , era:OperationalPoint;
-        rdfs:label                 "Kudowa freight"@en , "Kudowa freight"@no;
+        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdfs:label                 "Kudowa freight"@no , "Kudowa freight"@en;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc32> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc29>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <http://data.europa.eu/949/topology/netPointReferences/sl582_sloc01_2444> , <http://data.europa.eu/949/topology/netPointReferences/sl583_sloc01_2444>;
-        era:opName                 "Kudowa freight"@en , "Kudowa freight"@no;
+        era:netReference           <http://data.europa.eu/949/topology/netPointReferences/sl583_sloc01_2444> , <http://data.europa.eu/949/topology/netPointReferences/sl582_sloc01_2444>;
+        era:opName                 "Kudowa freight"@no , "Kudowa freight"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOXK G";
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -7860,6 +8129,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp581>
         rdf:type                   era:OperationalPoint , era:TemporalFeature;
         rdfs:label                 "Kudowa passenger"@no , "Kudowa passenger"@en;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc21> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc27> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc23> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc28>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -7869,11 +8139,12 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOXK P";
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
-        geo:hasGeometry            <http://data.europa.eu/949/geometry/multipoint/bdcfd8a3> .
+        geo:hasGeometry            <http://data.europa.eu/949/geometry/multipoint/6dd8a08d> .
 
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp740>
         rdf:type                   era:TemporalFeature , era:OperationalPoint;
         rdfs:label                 "Kudowa chranice"@en , "Kudowa chranice"@no;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc18>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -7881,7 +8152,8 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:netReference           <http://data.europa.eu/949/topology/netPointReferences/sl741_sloc01_9333>;
         era:opName                 "Kudowa chranice"@en , "Kudowa chranice"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/90>;
-        era:uopid                  "NOOXB";
+        era:referenceBorderPoint   <http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>;
+        era:uopid                  "EUOIB";
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/point/60ae92d0> .
 
@@ -7910,7 +8182,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp141>
         rdf:type                   era:OperationalPoint , era:TemporalFeature;
         rdfs:label                 "Arnau"@no , "Arnau"@en;
-        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc4>;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc1> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc4>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -7920,7 +8192,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOAR";
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
-        geo:hasGeometry            <http://data.europa.eu/949/geometry/geometrycollection/b795d29c> .
+        geo:hasGeometry            <http://data.europa.eu/949/geometry/geometrycollection/f85d17dd> .
 
 <http://data.europa.eu/949/functionalInfrastructure/platformEdges/ple392>
         rdf:type                   era:TemporalFeature , era:PlatformEdge;
@@ -7969,7 +8241,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>
         rdf:type                   era:OperationalPoint , era:TemporalFeature;
         rdfs:label                 "Cranz"@no , "Cranz"@en;
-        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc14> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc6> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc5> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc13> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc8>;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc14> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc6> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc5> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc8> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc13> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc11> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc12> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc7> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc3>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -8002,14 +8274,15 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/3a4612e3> .
 
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp190>
-        rdf:type                   era:TemporalFeature , era:OperationalPoint;
-        rdfs:label                 "Dunja"@en , "Dunja"@no;
+        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdfs:label                 "Dunja"@no , "Dunja"@en;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc9> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc10>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <http://data.europa.eu/949/topology/netPointReferences/sl191_sloc01_8176> , <http://data.europa.eu/949/topology/netPointReferences/sl192_sloc01_8176>;
-        era:opName                 "Dunja"@en , "Dunja"@no;
+        era:netReference           <http://data.europa.eu/949/topology/netPointReferences/sl192_sloc01_8176> , <http://data.europa.eu/949/topology/netPointReferences/sl191_sloc01_8176>;
+        era:opName                 "Dunja"@no , "Dunja"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/70>;
         era:uopid                  "NOODUN";
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -8040,7 +8313,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>
         rdf:type                   era:OperationalPoint , era:TemporalFeature;
         rdfs:label                 "Kudowa"@no , "Kudowa"@en;
-        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc20> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc25> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc31> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc24> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc21> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc26> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc27> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc28> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc23> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc30>;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc20> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc25> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc31> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc24> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc21> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc26> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc27> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc28> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc23> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc30> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc22> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc29> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc32>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -8077,7 +8350,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>
         rdf:type                   era:OperationalPoint , era:TemporalFeature;
         rdfs:label                 "Grestin"@no , "Grestin"@en;
-        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc35>;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc16> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc15> , <http://data.europa.eu/949/functionalInfrastructure/tracks/trc35>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -8087,7 +8360,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOGR";
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
-        geo:hasGeometry            <http://data.europa.eu/949/geometry/geometrycollection/446446b8> .
+        geo:hasGeometry            <http://data.europa.eu/949/geometry/geometrycollection/0ba2ae55> .
 
 <http://data.europa.eu/949/functionalInfrastructure/platformEdges/ple388>
         rdf:type                   era:TemporalFeature , era:PlatformEdge;
@@ -8102,6 +8375,7 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
 <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp376>
         rdf:type                   era:TemporalFeature , era:OperationalPoint;
         rdfs:label                 "Funera"@en , "Funera"@no;
+        era:hasPart                <http://data.europa.eu/949/functionalInfrastructure/tracks/trc36>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -8121,9 +8395,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:gaugingProfile              <http://data.europa.eu/949/concepts/gaugings/10>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp141>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc1>;
         era:maximumPermittedSpeed       40;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc1_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc1";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -8149,9 +8425,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:gaugingProfile              <http://data.europa.eu/949/concepts/gaugings/40>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp190>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc10>;
         era:maximumPermittedSpeed       160;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc10_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc10";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc440> , <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -8176,9 +8454,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:etcs                        <http://data.europa.eu/949/functionalInfrastructure/etcs/trp687>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc11>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc11_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc11";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde303> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde226> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde222> , <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde207>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -8195,14 +8475,16 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc12>
-        rdf:type                        era:Track , era:TemporalFeature , era:RunningTrack;
+        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc8>;
         era:etcs                        <http://data.europa.eu/949/functionalInfrastructure/etcs/trp772>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc12>;
         era:maximumPermittedSpeed       120;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc12_1>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc12";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -8226,9 +8508,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc877>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc15>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc15_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc15";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc877>;
@@ -8258,9 +8542,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc877>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp375>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc16>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc16_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc16";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc877>;
@@ -8286,20 +8572,23 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc17_2>;
         era:sidingId               "trc17";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trainDetectionSystem   <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde399>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/a6380a95> .
 
 <http://data.europa.eu/949/functionalInfrastructure/tracks/trc22>
-        rdf:type                        era:Track , era:TemporalFeature , era:RunningTrack;
-        rdfs:label                      "1"@no , "1"@en;
+        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc22>;
         era:maximumPermittedSpeed       60;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc22_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc22";
         era:trainDetectionSystem        <http://data.europa.eu/949/functionalInfrastructure/trainDetectionSystems/tde412>;
         era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
@@ -8321,8 +8610,10 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem      <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc438>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp580> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc29_2>;
         era:sidingId               "trc29";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/a59a9a5b> .
@@ -8334,9 +8625,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:etcs                        <http://data.europa.eu/949/functionalInfrastructure/etcs/trp772>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc3>;
         era:maximumPermittedSpeed       80;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc3_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc3";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -8360,8 +8653,10 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:contactLineSystem      <http://data.europa.eu/949/functionalInfrastructure/contactLineSystems/elc437>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf               <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp580> , <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp373>;
         era:netReference           <http://data.europa.eu/949/topology/netLinearReferences/trc32_2>;
         era:sidingId               "trc32";
+        era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <http://data.europa.eu/949/geometry/linestring/6fcb731b> .
@@ -8373,9 +8668,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:etcs                        <http://data.europa.eu/949/functionalInfrastructure/etcs/trp772>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp142>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc7>;
         era:maximumPermittedSpeed       120;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc7_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc7";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;
@@ -8401,9 +8698,11 @@ country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/co
         era:gaugingProfile              <http://data.europa.eu/949/concepts/gaugings/30>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
+        era:isPartOf                    <http://data.europa.eu/949/functionalInfrastructure/operationalPoints/opp190>;
         era:linesideDistanceIndication  <http://data.europa.eu/949/topology/linesideDistanceIndications/trc9>;
         era:maximumPermittedSpeed       160;
         era:netReference                <http://data.europa.eu/949/topology/netLinearReferences/trc9_2>;
+        era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc9";
         era:trackRaisedPantographsDistanceAndSpeed
                 <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc439> , <http://data.europa.eu/949/functionalInfrastructure/raisedPantographsDistanceAndSpeed/elc8>;

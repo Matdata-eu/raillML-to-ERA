@@ -13335,10 +13335,10 @@ xyz:Root  rdf:type         fx:root , <https://www.railml.org/schemas/3.2#railML>
 <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint>
         rdf:type         <https://www.railml.org/schemas/3.2#operationalPoint>;
         xyz:id           "opp740";
-        fx:designator    <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/4:designator> , <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/5:designator>;
+        fx:designator    <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/4:designator>;
         fx:gmlLocations  <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/3:gmlLocations>;
         fx:name          <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/1:name>;
-        fx:opOperations  <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/6:opOperations>;
+        fx:opOperations  <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/5:opOperations>;
         fx:order         10;
         fx:spotLocation  <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/2:spotLocation> .
 
@@ -13385,18 +13385,12 @@ xyz:Root  rdf:type         fx:root , <https://www.railml.org/schemas/3.2#railML>
         xyz:register  "_railML";
         fx:order      4 .
 
-<http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/5:designator>
-        rdf:type      <https://www.railml.org/schemas/3.2#designator>;
-        xyz:entry     "OXB";
-        xyz:register  "_railML";
-        fx:order      5 .
-
-<http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/6:opOperations>
+<http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/5:opOperations>
         rdf:type        <https://www.railml.org/schemas/3.2#opOperations>;
-        fx:opOperation  <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/6:opOperations/1:opOperation>;
-        fx:order        6 .
+        fx:opOperation  <http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/5:opOperations/1:opOperation>;
+        fx:order        5 .
 
-<http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/6:opOperations/1:opOperation>
+<http://sparql.xyz/facade-x/data/railML/3:infrastructure/3:functionalInfrastructure/12:operationalPoints/10:operationalPoint/5:opOperations/1:opOperation>
         rdf:type             <https://www.railml.org/schemas/3.2#opOperation>;
         xyz:operationalType  "borderPoint";
         fx:order             1 .
