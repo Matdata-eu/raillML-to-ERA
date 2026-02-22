@@ -1,4 +1,3 @@
-@prefix geo: <http://www.opengis.net/ont/geosparql#> .
 @prefix ns1: <https://github.com/DataTreehouse/maplib#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -7,44 +6,24 @@
 
 <urn:maplib:report> a sh:ValidationReport ;
     sh:conforms false ;
-    sh:result <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0>,
-        <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1>,
-        <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2>,
-        <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> .
+    sh:result <urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0>,
+        <urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> .
 
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> a sh:ValidationResult ;
-    sh:focusNode <http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740> ;
-    sh:resultMessage "A ReferenceBorderPoint must have exactly one geo:hasGeometry, and its value must be an instance of geo:Gemoetry. This error is due to having more than one, having none, or having a value that is not an istance of geo:Geometry."@en ;
-    sh:resultPath geo:hasGeometry ;
-    sh:resultSeverity sh:Violation ;
-    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape <http://data.europa.eu/949/shapes/ReferenceBorderPointGeometry> ;
-    ns1:resultConforms false .
-
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> a sh:ValidationResult ;
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> a sh:ValidationResult ;
     sh:focusNode <http://data.europa.eu/949/bridgeWindRestriction> ;
     sh:resultMessage "Resource must have at least one rdf:type" ;
     sh:resultPath rdf:type ;
     sh:resultSeverity sh:Warning ;
     sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:N6eff1fa2ec274740aac14ddec1c6561f ;
+    sh:sourceShape _:Nf226303b33814e20925ce9102e4dca56 ;
     ns1:resultConforms false .
 
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> a sh:ValidationResult ;
-    sh:focusNode <http://data.europa.eu/949/documents/regenbraking-conditions> ;
-    sh:resultMessage "Resource must have at least one rdf:type" ;
-    sh:resultPath rdf:type ;
-    sh:resultSeverity sh:Warning ;
-    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:N6eff1fa2ec274740aac14ddec1c6561f ;
-    ns1:resultConforms false .
-
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> a sh:ValidationResult ;
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> a sh:ValidationResult ;
     sh:focusNode prov: ;
     sh:resultMessage "Resource must have at least one rdf:type" ;
     sh:resultPath rdf:type ;
     sh:resultSeverity sh:Warning ;
     sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:N6eff1fa2ec274740aac14ddec1c6561f ;
+    sh:sourceShape _:Nf226303b33814e20925ce9102e4dca56 ;
     ns1:resultConforms false .
 

@@ -1,38 +1,20 @@
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/ns/shacl#resultMessage> "A ReferenceBorderPoint must have exactly one geo:hasGeometry, and its value must be an instance of geo:Gemoetry. This error is due to having more than one, having none, or having a value that is not an istance of geo:Geometry."@en .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Violation> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/ns/shacl#sourceShape> <http://data.europa.eu/949/shapes/ReferenceBorderPointGeometry> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/ns/shacl#sourceShape> _:d611342c0be63f54e969c6449f825592_3 .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/ns/shacl#sourceShape> _:d611342c0be63f54e969c6449f825592_3 .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/ns/shacl#sourceShape> _:d611342c0be63f54e969c6449f825592_3 .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/ns/shacl#resultPath> <http://www.opengis.net/ont/geosparql#hasGeometry> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
 <urn:maplib:report> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <http://www.w3.org/ns/shacl#focusNode> <http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <http://www.w3.org/ns/shacl#focusNode> <http://data.europa.eu/949/bridgeWindRestriction> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <http://www.w3.org/ns/shacl#focusNode> <http://data.europa.eu/949/documents/regenbraking-conditions> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <http://www.w3.org/ns/shacl#focusNode> <http://www.w3.org/ns/prov#> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_0> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_1> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_2> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trd984803d-9f70-4027-8dc6-64027d7e209a_3> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/ns/shacl#sourceShape> _:d8a96e579a54bcef05bf60b34102eb2c_3 .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/ns/shacl#sourceShape> _:d8a96e579a54bcef05bf60b34102eb2c_3 .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
 <urn:maplib:report> <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/ns/shacl#focusNode> <http://data.europa.eu/949/bridgeWindRestriction> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/ns/shacl#focusNode> <http://www.w3.org/ns/prov#> .
+<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> .
+<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
+<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .

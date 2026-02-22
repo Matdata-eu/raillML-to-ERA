@@ -28,5 +28,23 @@
     "language": "sparql",
     "value": "select * where {<urn:maplib:tr7364ba17-8139-4e64-a879-5db21b2ca403_130> ?p ?o }",
     "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "\r\n    PREFIX era: <http://data.europa.eu/949/>\r\n    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\n    SELECT DISTINCT $this ?clsLabel\r\n\t\t\tWHERE {\r\n                 $this era:trainDetectionSystemType ?tdsType.\r\n\t\t\t\tOPTIONAL{$this rdfs:label ?clsLabel} .\r\n                FILTER NOT EXISTS {$this era:trainDetectionSystemSpecificCheckDocument ?value} . \r\n            }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "    PREFIX era: <http://data.europa.eu/949/>\r\n    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\n    SELECT DISTINCT $this ?clsLabelNew\r\n\t\t\tWHERE {\r\n                $this era:contactLineSystemType <http://data.europa.eu/949/concepts/contact-line-systems/10>.\r\n\t\t\t\tOPTIONAL{$this rdfs:label ?clsLabel} .\r\n\t\t\t\tBIND(IF(BOUND(?clsLabel), ?clsLabel, \"No label\") AS ?clsLabelNew)\r\n                FILTER NOT EXISTS {$this era:conditionsAppliedRegenerativeBraking ?value} . \r\n            }",
+    "metadata": {}
+  },
+  {
+    "kind": 2,
+    "language": "sparql",
+    "value": "PREFIX gsp: <http://www.opengis.net/ont/geosparql#>\r\nPREFIX era: <http://data.europa.eu/949/>\r\n\r\nconstruct {\r\n    ?refBorderPoint gsp:hasGeometry ?geom .\r\n}\r\nWHERE {\r\n  ?eraOp a era:OperationalPoint ;\r\n         era:referenceBorderPoint ?refBorderPoint ;\r\n         gsp:hasGeometry ?geom ;\r\n         . \r\n}",
+    "metadata": {}
   }
 ]

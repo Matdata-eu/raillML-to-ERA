@@ -12,3 +12,4 @@ components.d.ts
 00-docs/
 04-validate/downloads/
 *.pyc
+06-create-topology/geografische-positie-van-alle-spoorsegmenten.csv
