@@ -2,13 +2,26 @@ PREFIX era: <http://data.europa.eu/949/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX time: <http://www.w3.org/2006/time#>
 
-# Add TemporalFeature to all InfrastructureElement instances
-# with validFrom date of 2025-01-01T00:00:00
+# Add a validity period to all InfrastructureElement instances.
+#
+# Correct ERA temporal model:
+#   ?element era:validity ?interval .          (era:Feature → era:TemporalFeature)
+#   ?interval a time:Interval .                (time:Interval ⊂ time:TemporalEntity ⊂ era:TemporalFeature)
+#   ?interval time:hasBeginning ?begin .
+#   ?begin a time:Instant ;
+#          time:inXSDDate "2025-01-01"^^xsd:date .
+#
+# era:Feature and era:TemporalFeature are owl:disjointWith, so the element itself
+# must NOT be typed as era:TemporalFeature.  The interval is a separate resource.
 
 INSERT {
-  ?element a era:TemporalFeature ;
-    era:validFrom "2025-01-01T00:00:00"^^xsd:dateTime .
+  ?element era:validity ?interval .
+  ?interval a era:TemporalFeature, time:TemporalEntity, time:Interval ;
+    time:hasBeginning ?begin .
+  ?begin a time:Instant ;
+    time:inXSDDate "2025-01-01"^^xsd:date .
 }
 WHERE {
   # Find all instances whose type is a subclass of InfrastructureElement
@@ -34,9 +47,13 @@ WHERE {
     era:Tunnel
   }
   ?element a ?type .
-    
-  # Only add if no temporal feature exists yet (idempotent)
+
+  # Only add if no validity link exists yet (idempotent)
   FILTER NOT EXISTS {
-    ?element era:temporalFeature ?existingTemporal .
+    ?element era:validity ?existingValidity .
   }
+
+  # Mint deterministic IRIs for the interval and begin instant
+  BIND(IRI(CONCAT("https://data.matdata.eu/_validity_2025-01-01")) AS ?interval)
+  BIND(IRI(CONCAT("https://data.matdata.eu/_validity_2025-01-01_begin")) AS ?begin)
 }
