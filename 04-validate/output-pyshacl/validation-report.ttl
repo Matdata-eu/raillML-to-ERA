@@ -1,0 +1,95 @@
+@prefix era: <http://data.europa.eu/949/> .
+@prefix era-sh: <http://data.europa.eu/949/shapes/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a sh:ValidationReport ;
+    sh:conforms false ;
+    sh:result [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc6> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc32> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc6> ;
+            sh:resultMessage "trackRaisedPantographsDistanceAndSpeed (1.1.1.2.3.3): This error is due to the track or subset with common characteristics 21 , violating the rule: This parameter is applicable ('Y') only if “Overhead contact line (OCL)” is selected for 1.1.1.2.2.1.1." ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraint era-sh:TrackRaisedPantographDistanceAndSpeedApplicability ;
+            sh:sourceConstraintComponent sh:SPARQLConstraintComponent ;
+            sh:sourceShape era-sh:RunningTrackShape ;
+            sh:value <https://data.matdata.eu/_tracks_trc6> ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc19> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc31> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_contactLineSystems_elc439> ;
+            sh:resultMessage "conditionsAppliedRegenerativeBraking (1.1.1.2.2.4.1):The Contact Line System https://data.matdata.eu/_contactLineSystems_elc439 ({?clsLabel}), has a 'Overhead contact line (OCL)' type which makes the conditionsAppliedRegenerativeBraking parameter applicable. This error is due to https://data.matdata.eu/_contactLineSystems_elc439 not having a value for such a parameter." ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraint era-sh:ConditionsAppliedRegenerativeBrakingApplicability ;
+            sh:sourceConstraintComponent sh:SPARQLConstraintComponent ;
+            sh:sourceShape era-sh:ContactLineSystemShape ;
+            sh:value <https://data.matdata.eu/_contactLineSystems_elc439> ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc35> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc29> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc25> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc28> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc6> ;
+            sh:resultMessage "trackRaisedPantographsDistanceAndSpeed (1.1.1.2.3.3): This error is due to the track or subset with common characteristics 21 , violating the rule: This parameter is applicable ('Y') only if “Overhead contact line (OCL)” is selected for 1.1.1.2.2.1.1." ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraint era-sh:TrackRaisedPantographDistanceAndSpeedApplicability ;
+            sh:sourceConstraintComponent sh:SPARQLConstraintComponent ;
+            sh:sourceShape era-sh:RunningTrackShape ;
+            sh:value <https://data.matdata.eu/_tracks_trc6> ],
+        [ a sh:ValidationResult ;
+            sh:focusNode <https://data.matdata.eu/_tracks_trc17> ;
+            sh:resultMessage "trackId (1.1.1.3.3.3.3, 1.2.1.1.2.3.3): The identification of a track must be a string. This error may be due to having a track with no identification or with more than one value as identification, or having a value that is not a string."@en ;
+            sh:resultPath era:trackId ;
+            sh:resultSeverity sh:Violation ;
+            sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+            sh:sourceShape era-sh:TrackId ] .
+

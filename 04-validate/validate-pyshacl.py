@@ -1,6 +1,5 @@
 import time
-from maplib import Model
-import polars as pl
+import pyshacl
 import rdflib
 from rdflib import Graph
 import urllib.request
@@ -13,6 +12,8 @@ data_file = Path("../03-post-process/output/era-graph-enriched.ttl")
 download_dir = Path("downloads")
 download_dir.mkdir(exist_ok=True)
 shape_fixes_dir = Path("shape-fixes")
+output_dir = Path("output-pyshacl")
+output_dir.mkdir(exist_ok=True)
 
 # URLs for ERA SHACL shapes
 era_rinf_shapes_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/raw/72a053c51b87aab657f133dc175369e1337d1943/era-shacl/ERA-RINF-shapes.ttl?inline=false"
@@ -25,13 +26,12 @@ era_skos_base_url = "https://gitlab.com/era-europa-eu/public/interoperable-data-
 # Download SHACL shapes
 era_rinf_shapes_file = download_dir / "ERA-RINF-shapes.ttl"
 
-# Initialize mapping and load data
-m = Model()
+# Load main data file into rdflib graph
 print(f"\nLoading data from {data_file}...")
-
-# Load main data file
+data_graph = Graph()
 print("  Loading main data...")
-m.read(data_file, format='turtle')
+data_graph.parse(str(data_file), format='turtle')
+print(f"  Loaded {len(data_graph)} triples")
 
 if era_rinf_shapes_file.exists():
     print(f"ERA RINF SHACL shapes already exists at {era_rinf_shapes_file}")
@@ -94,35 +94,28 @@ except Exception as e:
     print("     Validation may be incomplete")
 
 
-# Load ERA ontology into data graph
+# Build ontology graph (ontology + SKOS) for pyshacl inference
+ont_graph = Graph()
 print("  Loading ERA ontology...")
 try:
-    m.read(str(era_ontology_file), format="turtle")
-    print(f"    ✓ Loaded ontology")
+    ont_graph.parse(str(era_ontology_file), format="turtle")
+    print(f"    ✓ Loaded ontology ({len(ont_graph)} triples)")
 except Exception as e:
     print(f"    ⚠️  Warning: Failed to load ontology: {e}")
 
-# Load SKOS files into data graph
+# Load SKOS files into ontology graph
 if skos_files:
-    print(f"  Merging {len(skos_files)} SKOS files...")
-    merged_skos_file = download_dir / "merged-skos.ttl"
-    skos_graph = rdflib.Graph()
+    print(f"  Loading {len(skos_files)} SKOS files into ontology graph...")
     for skos_file in skos_files:
-        print(f"    ... Merging {skos_file.name}")
+        print(f"    ... Loading {skos_file.name}")
         try:
-            skos_graph.parse(str(skos_file), format="turtle")
+            ont_graph.parse(str(skos_file), format="turtle")
         except Exception as e:
-            print(f"    ⚠️  Warning: Failed to merge {skos_file.name}: {e}")
-    skos_graph.serialize(destination=str(merged_skos_file), format="turtle")
-    print(f"  Loading merged SKOS file ({len(skos_graph)} triples)...")
-    try:
-        m.read(str(merged_skos_file), format="turtle")
-        print(f"  ✓ Loaded merged SKOS file")
-    except Exception as e:
-        print(f"  ⚠️  Warning: Failed to load merged SKOS file: {e}")
+            print(f"    ⚠️  Warning: Failed to load {skos_file.name}: {e}")
+    print(f"  Ontology graph: {len(ont_graph)} triples total")
 
 print("Data loaded successfully")
-print(f"  Total triples in data graph")
+print(f"  Data graph: {len(data_graph)} triples")
 
 # Filter SHACL shapes to remove unsupported GeoSPARQL constraints
 print("Filtering SHACL shapes to remove unsupported GeoSPARQL functions...")
@@ -180,38 +173,30 @@ else:
 shapes_graph.serialize(destination=str(filtered_shapes_file), format="turtle")
 print(f"Filtered shapes saved to {filtered_shapes_file}")
 
-# Load SHACL shapes into a specific graph
-shape_graph_uri = "https://data.europa.eu/949/era-shacl-shapes"
-print(f"Loading filtered SHACL shapes into graph {shape_graph_uri}...")
-m.read(str(filtered_shapes_file), graph=shape_graph_uri)
+print("\nRunning SHACL validation with pyshacl...")
+_t0 = time.perf_counter()
+conforms, results_graph, results_text = pyshacl.validate(
+    data_graph,
+    shacl_graph=shapes_graph,
+    ont_graph=ont_graph,
+    inference='rdfs',
+    abort_on_first=False,
+    advanced=True,
+    debug=False,
+)
+_t1 = time.perf_counter()
+print(f"Validation completed in {_t1 - _t0:.1f}s")
 
-df_count = m.query("SELECT (count(?s) as ?count) WHERE { ?s ?p ?o }")
-print("Total triples count: " + str(df_count["count"][0]))
+# Write validation report
+print("Writing validation report...")
+results_graph.serialize(destination=str(output_dir / "validation-report.ttl"), format="turtle")
+print(f"Validation report saved to {output_dir / 'validation-report.ttl'}")
 
-print("\nRunning SHACL validation...")
-print("NOTE: SHACL validation requires a valid maplib license from https://www.data-treehouse.com/\n")
+with open(output_dir / "validation-report.txt", 'w', encoding='utf-8') as f:
+    f.write(results_text)
+print(f"Validation text report saved to {output_dir / 'validation-report.txt'}")
 
-try:
-    _t0 = time.perf_counter()
-    report = m.validate(shape_graph=shape_graph_uri, include_shape_graph=False)
-    _t1 = time.perf_counter()
-    print(f"Validation completed in {_t1 - _t0:.1f}s")
-    validation_model = report.graph()
-
-    # Write validation report
-    print("Writing validation report...")
-    # Use N-Triples format for more robust serialization (avoid pretty-printing issues)
-    validation_model.write("output/validation-report.nt", format="ntriples")
-    print("Validation report saved to output/validation-report.nt")
-    
-    # Convert to Turtle format using rdflib for better readability
-    print("Converting to Turtle format using rdflib...")
-    g_validation = Graph()
-    g_validation.parse("output/validation-report.nt", format="ntriples")
-    g_validation.serialize(destination="output/validation-report.ttl", format="turtle")
-    print("Validation report saved to output/validation-report.ttl")
-
-    query = """
+query = """
     PREFIX sh: <http://www.w3.org/ns/shacl#>
     SELECT ?level ?sourceShape (SAMPLE(?path) AS ?path) (SAMPLE(?message) AS ?message) (SAMPLE(?sourceConstraintComponent) AS ?sourceConstraintComponent) (COUNT(?violation) AS ?violation_count) (SAMPLE(?focusNode) AS ?example)
     WHERE {
@@ -228,83 +213,60 @@ try:
     GROUP BY ?level ?sourceShape
     ORDER BY ?level ?sourceShape
     """
-    # Get query results
-    df = validation_model.query(query)
 
-    print("\n=== VALIDATION SUMMARY ===")
-    if len(df) == 0:
-        print("[OK] No validation violations found!")
-        summary_status = "✅ PASSED"
-        summary_message = "No validation violations found!"
+rows = list(results_graph.query(query))
+
+print("\n=== VALIDATION SUMMARY ===")
+if conforms:
+    print("[OK] No validation violations found!")
+    summary_status = "✅ PASSED"
+    summary_message = "No validation violations found!"
+else:
+    print(f"[VIOLATIONS] Found {len(rows)} types of violations:")
+    summary_status = "❌ FAILED"
+    summary_message = f"Found {len(rows)} types of violations"
+
+# Write summary to markdown file
+summary_file = output_dir / "validation-summary.md"
+print(f"\nWriting validation summary to {summary_file}...")
+
+with open(summary_file, 'w', encoding='utf-8') as f:
+    f.write("# SHACL Validation Summary\n\n")
+    f.write(f"**Status:** {summary_status}\n\n")
+    f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+
+    if conforms:
+        f.write(summary_message + "\n\n")
+        f.write("All ERA ontology constraints are satisfied.\n")
     else:
-        print(f"[VIOLATIONS] Found {len(df)} types of violations:\n")
-        print(df)
-        summary_status = "❌ FAILED"
-        summary_message = f"Found {len(df)} types of violations"
-    
-    # Write summary to markdown file
-    summary_file = Path("output/validation-summary.md")
-    print(f"\nWriting validation summary to {summary_file}...")
-    
-    with open(summary_file, 'w', encoding='utf-8') as f:
-        f.write("# SHACL Validation Summary\n\n")
-        f.write(f"**Status:** {summary_status}\n\n")
-        f.write(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-        
-        if len(df) == 0:
-            f.write(summary_message + "\n\n")
-            f.write("All ERA ontology constraints are satisfied.\n")
-        else:
-            f.write(f"{summary_message}\n\n")
-            f.write("## Violation Details\n\n")
-            f.write("| Level | Property Path | Constraint Component | Violations | Message | Example Node |\n")
-            f.write("|-------|---------------|---------------------|------------|---------|-------------|\n")
-            
-            for row in df.iter_rows(named=True):
-                level = row.get('level', 'N/A')
-                path = row.get('path', 'N/A')
-                constraint = row.get('sourceConstraintComponent', 'N/A')
-                count = row.get('violation_count', 0)
-                message = row.get('message', '')
-                example = row.get('example', 'N/A')
-                
-                # Format URIs for readability
-                level_str = str(level).replace('http://www.w3.org/ns/shacl#', 'sh:')
-                path_str = str(path).replace('http://data.europa.eu/949/', 'era:')
-                constraint_str = str(constraint).replace('http://www.w3.org/ns/shacl#', 'sh:')
-                example_str = str(example).replace('http://data.europa.eu/949/', 'era:')
-                
-                # Escape pipe characters in message
-                message_str = str(message).replace('|', '\\|') if message else ''
-                
-                f.write(f"| `{level_str}` | `{path_str}` | `{constraint_str}` | {count} | {message_str} | `{example_str}` |\n")
-            
-            f.write("\n## Recommendations\n\n")
-            f.write("1. Review the violations table above\n")
-            f.write("2. Check the full validation report in `validation-report.ttl`\n")
-            f.write("3. Update CONSTRUCT queries or add shape fixes as needed\n")
-            f.write("4. Re-run the validation after making corrections\n")
-    
-    print(f"Validation summary saved to {summary_file}")
-        
-except Exception as e:
-    print(f"\n[ERROR] SHACL validation failed: {type(e).__name__}")
-    print(f"Details: {str(e)}")
-    
-    # Check if it's a license issue
-    if "license" in str(e).lower():
-        print("\n[!] SHACL validation requires a licensed version of maplib.")
-        print("    Visit https://www.data-treehouse.com/ to obtain a license.")
-        print(f"\n    Data loading was successful ({df_count['count'][0]} triples loaded).")
-        print("    Once you have a license, re-run this script to perform validation.")
-    # Check if it's an unimplemented function
-    elif "not implemented" in str(e).lower() or "function" in str(e).lower():
-        print("\n[!] The validation encountered SPARQL constraints using functions")
-        print("    that are not yet implemented in maplib.")
-        print(f"\n    Data loading was successful ({df_count['count'][0]} triples loaded).")
-        print("    Consider updating the SHACL shapes or waiting for maplib updates.")
-    else:
-        print(f"\n    Data loading was successful ({df_count['count'][0]} triples loaded).")
-        print("    Check the error details above for more information.")
-    
-    raise
+        f.write(f"{summary_message}\n\n")
+        f.write("## Violation Details\n\n")
+        f.write("| Level | Property Path | Constraint Component | Violations | Message | Example Node |\n")
+        f.write("|-------|---------------|---------------------|------------|---------|-------------|\n")
+
+        for row in rows:
+            level = row.level
+            path = row.path
+            constraint = row.sourceConstraintComponent
+            count = row.violation_count
+            message = row.message
+            example = row.example
+
+            # Format URIs for readability
+            level_str = str(level).replace('http://www.w3.org/ns/shacl#', 'sh:')
+            path_str = str(path).replace('http://data.europa.eu/949/', 'era:')
+            constraint_str = str(constraint).replace('http://www.w3.org/ns/shacl#', 'sh:')
+            example_str = str(example).replace('http://data.europa.eu/949/', 'era:')
+
+            # Escape pipe characters in message
+            message_str = str(message).replace('|', '\\|') if message else ''
+
+            f.write(f"| `{level_str}` | `{path_str}` | `{constraint_str}` | {count} | {message_str} | `{example_str}` |\n")
+
+        f.write("\n## Recommendations\n\n")
+        f.write("1. Review the violations table above\n")
+        f.write("2. Check the full validation report in `validation-report.ttl`\n")
+        f.write("3. Update CONSTRUCT queries or add shape fixes as needed\n")
+        f.write("4. Re-run the validation after making corrections\n")
+
+print(f"Validation summary saved to {summary_file}")

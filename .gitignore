@@ -13,3 +13,9 @@ components.d.ts
 04-validate/downloads/
 *.pyc
 06-create-topology/geografische-positie-van-alle-spoorsegmenten.csv
+04-validate/small-test/
+*.sparqlbook
+upload-to-rinf.ps1
+validation-report-era.md
+getting-started-rinf-data-provisioning.md
+filter-validation-report.py

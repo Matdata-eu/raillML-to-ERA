@@ -6,24 +6,34 @@
 
 <urn:maplib:report> a sh:ValidationReport ;
     sh:conforms false ;
-    sh:result <urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0>,
-        <urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> .
+    sh:result <urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0>,
+        <urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1>,
+        <urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> .
 
-<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_0> a sh:ValidationResult ;
+<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> a sh:ValidationResult ;
+    sh:focusNode <https://data.matdata.eu/_contactLineSystems_elc439> ;
+    sh:resultMessage "conditionsAppliedRegenerativeBraking (1.1.1.2.2.4.1):The Contact Line System <https://data.matdata.eu/_contactLineSystems_elc439> ((?clsLabel was unbound)), has a 'Overhead contact line (OCL)' type which makes the conditionsAppliedRegenerativeBraking parameter applicable. This error is due to <https://data.matdata.eu/_contactLineSystems_elc439> not having a value for such a parameter."@en ;
+    sh:resultSeverity sh:Violation ;
+    sh:sourceConstraintComponent sh:SPARQLConstraintComponent ;
+    sh:sourceShape <http://data.europa.eu/949/shapes/ContactLineSystemShape> ;
+    sh:value <https://data.matdata.eu/_contactLineSystems_elc439> ;
+    ns1:resultConforms false .
+
+<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> a sh:ValidationResult ;
     sh:focusNode <http://data.europa.eu/949/bridgeWindRestriction> ;
     sh:resultMessage "Resource must have at least one rdf:type" ;
     sh:resultPath rdf:type ;
     sh:resultSeverity sh:Warning ;
     sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:Nf226303b33814e20925ce9102e4dca56 ;
+    sh:sourceShape _:N55937daac31946818de0650f95dab3ca ;
     ns1:resultConforms false .
 
-<urn:maplib:tr9f7c888d-40ee-45d4-92fe-1bf22465a1a2_1> a sh:ValidationResult ;
+<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> a sh:ValidationResult ;
     sh:focusNode prov: ;
     sh:resultMessage "Resource must have at least one rdf:type" ;
     sh:resultPath rdf:type ;
     sh:resultSeverity sh:Warning ;
     sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:Nf226303b33814e20925ce9102e4dca56 ;
+    sh:sourceShape _:N55937daac31946818de0650f95dab3ca ;
     ns1:resultConforms false .
 
