@@ -13,6 +13,20 @@ PREFIX skos:         <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd:          <http://www.w3.org/2001/XMLSchema#>
 PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
+<https://data.matdata.eu/_validity_2025-01-01_begin>
+        rdf:type  <http://www.w3.org/2006/time#Instant>;
+        <http://www.w3.org/2006/time#inXSDDate>
+                "2025-01-01"^^xsd:date .
+
+<https://data.matdata.eu/_validity_2025-01-01>
+        rdf:type  <http://www.w3.org/2006/time#TemporalEntity> , <http://www.w3.org/2006/time#Interval> , era:TemporalFeature;
+        <http://www.w3.org/2006/time#hasBeginning>
+                <https://data.matdata.eu/_validity_2025-01-01_begin> .
+
+<https://data.matdata.eu/_geometry_geometrycollection_b795d29c>
+        rdf:type   geo:Geometry;
+        geo:asWKT  "GEOMETRYCOLLECTION (POINT (3.0066 53.019), POINT (3.0070970562748456 53.017), MULTILINESTRING ((3 53.019, 3.011 53.019), (3 53.017, 3.009 53.017, 3.011 53.019), (3.011 53.019, 3.019 53.019)))"^^geo:wktLiteral .
+
 <https://data.matdata.eu/_geometry_multipoint_6dd8a08d>
         rdf:type   geo:Geometry;
         geo:asWKT  "MULTIPOINT ((3.00806436858812 53.001), (3.0079644921552435 53.003), (3.015534482758621 53.005), (3.016860964245772 53.007))"^^geo:wktLiteral .
@@ -36,10 +50,6 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 <https://data.matdata.eu/_geometry_geometrycollection_067814b6>
         rdf:type   geo:Geometry;
         geo:asWKT  "GEOMETRYCOLLECTION (MULTILINESTRING ((3.059 53.019, 3.062 53.019), (3.057 53.017, 3.062 53.017), (3.057 53.017, 3.059 53.019), (3.043 53.014, 3.044 53.015, 3.046 53.015), (3.046 53.017, 3.047 53.016), (3.046 53.017, 3.048 53.017), (3.048 53.015, 3.055 53.015, 3.057 53.017), (3.046 53.015, 3.047 53.016), (3.046 53.015, 3.048 53.015), (3.047 53.016, 3.048 53.015), (3.047 53.016, 3.048 53.017), (3.048 53.017, 3.057 53.017), (3.039 53.019, 3.043 53.019), (3.043 53.019, 3.045 53.017), (3.043 53.019, 3.059 53.019), (3.041 53.017, 3.045 53.017), (3.045 53.017, 3.046 53.017)), POINT (3.053176551724138 53.017), POINT (3.052182012847966 53.019), POINT (3.0536530401531308 53.015))"^^geo:wktLiteral .
-
-<https://data.matdata.eu/_geometry_geometrycollection_f85d17dd>
-        rdf:type   geo:Geometry;
-        geo:asWKT  "GEOMETRYCOLLECTION (MULTILINESTRING ((3 53.019, 3.011 53.019), (3 53.017, 3.009 53.017, 3.011 53.019), (3.011 53.019, 3.019 53.019)), POINT (3.0070970562748456 53.017), POINT (3.0066 53.019))"^^geo:wktLiteral .
 
 <https://data.matdata.eu/_geometry_point_7cf79ec8>
         rdf:type   geo:Geometry;
@@ -1039,7 +1049,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_475> .
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_294>
-        rdf:type                   era:TemporalFeature , era:SectionOfLine;
+        rdf:type                   era:SectionOfLine;
         rdfs:label                 "OGR-OXK"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc18> , <https://data.matdata.eu/_tracks_trc34>;
         era:inCountry              country:NOR;
@@ -1050,7 +1060,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opEnd                  <https://data.matdata.eu/_operationalPoints_opp373>;
         era:opStart                <https://data.matdata.eu/_operationalPoints_opp375>;
         era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multilinestring_d3523462> .
 
 <https://data.matdata.eu/_lps_9333>
@@ -1059,7 +1069,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:lineId  "9333" .
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_724>
-        rdf:type                   era:TemporalFeature , era:SectionOfLine;
+        rdf:type                   era:SectionOfLine;
         rdfs:label                 "OC-OGR"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc36>;
         era:inCountry              country:NOR;
@@ -1070,11 +1080,11 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opEnd                  <https://data.matdata.eu/_operationalPoints_opp375>;
         era:opStart                <https://data.matdata.eu/_operationalPoints_opp142>;
         era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multilinestring_7c751f36> .
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_16>
-        rdf:type                   era:TemporalFeature , era:SectionOfLine;
+        rdf:type                   era:SectionOfLine;
         rdfs:label                 "OAR-OC"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc2>;
         era:inCountry              country:NOR;
@@ -1085,7 +1095,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opEnd                  <https://data.matdata.eu/_operationalPoints_opp142>;
         era:opStart                <https://data.matdata.eu/_operationalPoints_opp141>;
         era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multilinestring_a4a06f19> .
 
 <https://data.matdata.eu/_lps_8176>
@@ -1094,7 +1104,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:lineId  "8176" .
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_471>
-        rdf:type                   era:TemporalFeature , era:SectionOfLine;
+        rdf:type                   era:SectionOfLine;
         rdfs:label                 "OXK-OGR"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc33>;
         era:inCountry              country:NOR;
@@ -1105,7 +1115,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opEnd                  <https://data.matdata.eu/_operationalPoints_opp375>;
         era:opStart                <https://data.matdata.eu/_operationalPoints_opp373>;
         era:solNature              <http://data.europa.eu/949/concepts/sol-natures/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multilinestring_6d3a21ae> .
 
 <https://data.matdata.eu/_lps_2444>
@@ -1146,12 +1156,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM> .
 
 <https://data.matdata.eu/_levelCrossings_lcr28>
-        rdf:type                   era:TemporalFeature , era:LevelCrossing;
+        rdf:type                   era:LevelCrossing;
         rdfs:label                 "Joyce lane"@no , "Joyce lane"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_lcr28_on_ne_16>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_de83ce89> .
 
 <https://data.matdata.eu/_netPointReferences_lcr28_on_ne_16>
@@ -1165,13 +1175,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_16> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_2.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  2.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_tunnels_tun199>
-        rdf:type                      era:Tunnel , era:TemporalFeature;
+        rdf:type                      era:Tunnel;
         rdfs:label                    "Dunjahill tunnel"@no , "Dunjahill tunnel"@en;
         era:complianceInfTsi          true;
         era:crossSectionArea          50;
@@ -1190,7 +1200,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference              <https://data.matdata.eu/_netAreaReferences_tun199>;
         era:rollingStockFireCategory  <http://data.europa.eu/949/concepts/rolling-stock-fire/10>;
         era:tunnelIdentification      "tun199";
-        era:validFrom                 "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                  <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry               <https://data.matdata.eu/_geometry_multilinestring_1519c876> .
 
 <https://data.matdata.eu/_documents_skienstunnelen>
@@ -1280,10 +1290,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_10.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  10.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_tun199_segment_1_ne_565_start_LPS_8176_10250.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -1307,7 +1317,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  950.0e0 .
 
 <https://data.matdata.eu/_bridges_bri200>
-        rdf:type                        era:TemporalFeature , era:Bridge;
+        rdf:type                        era:Bridge;
         rdfs:label                      "Princess Anne bridge"@no , "Princess Anne bridge"@en;
         era:existBridgeWindRestriction  false;
         era:existOpeningHoursLimitation
@@ -1315,7 +1325,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference                <https://data.matdata.eu/_netAreaReferences_bri200>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_multilinestring_74f985d0> .
 
 <https://data.matdata.eu/_netAreaReferences_bri200>
@@ -1417,10 +1427,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_13.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  13.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_bri200_segment_1_ne_565_end_LPS_8176_13100.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -2184,14 +2194,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trainDetectionSystemType  <http://data.europa.eu/949/concepts/train-detection/10> .
 
 <https://data.matdata.eu/_signals_sig180>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69B1"@no , "69B1"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig180_on_ne_156>;
-        era:signalId               "sig180";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_3c5ab3d6> .
 
 <https://data.matdata.eu/_netPointReferences_sig180_on_ne_156>
@@ -2212,14 +2221,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  598.0e0 .
 
 <https://data.matdata.eu/_signals_sig179>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69B2"@no , "69B2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig179_on_ne_147>;
-        era:signalId               "sig179";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_40f92c5f> .
 
 <https://data.matdata.eu/_netPointReferences_sig179_on_ne_147>
@@ -2240,14 +2248,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  598.0e0 .
 
 <https://data.matdata.eu/_signals_sig100>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69N1"@no , "69N1"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig100_on_ne_258>;
-        era:signalId               "sig100";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_023db339> .
 
 <https://data.matdata.eu/_netPointReferences_sig100_on_ne_258>
@@ -2268,14 +2275,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  0.0e0 .
 
 <https://data.matdata.eu/_signals_sig93>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69P1"@no , "69P1"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig93_on_ne_258>;
-        era:signalId               "sig93";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_fdd8870e> .
 
 <https://data.matdata.eu/_netPointReferences_sig93_on_ne_258>
@@ -2296,14 +2302,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  401.0e0 .
 
 <https://data.matdata.eu/_signals_sig81>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "71C"@no , "71C"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig81_on_ne_77>;
-        era:signalId               "sig81";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/12>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_36140437> .
 
 <https://data.matdata.eu/_netPointReferences_sig81_on_ne_77>
@@ -2324,14 +2329,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  255.0e0 .
 
 <https://data.matdata.eu/_signals_sig74>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69N2"@no , "69N2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig74_on_ne_64>;
-        era:signalId               "sig74";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_c8f323ce> .
 
 <https://data.matdata.eu/_netPointReferences_sig74_on_ne_64>
@@ -2352,14 +2356,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  0.0e0 .
 
 <https://data.matdata.eu/_signals_sig67>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69P2"@no , "69P2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig67_on_ne_64>;
-        era:signalId               "sig67";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_c477c792> .
 
 <https://data.matdata.eu/_netPointReferences_sig67_on_ne_64>
@@ -2380,14 +2383,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  383.0e0 .
 
 <https://data.matdata.eu/_signals_sig204>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69C"@no , "69C"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig204_on_ne_172>;
-        era:signalId               "sig204";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_0e7a647a> .
 
 <https://data.matdata.eu/_netPointReferences_sig204_on_ne_172>
@@ -2408,14 +2410,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  800.0e0 .
 
 <https://data.matdata.eu/_signals_sig206>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69P3"@no , "69P3"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig206_on_ne_240>;
-        era:signalId               "sig206";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_b93a99fd> .
 
 <https://data.matdata.eu/_netPointReferences_sig206_on_ne_240>
@@ -2436,14 +2437,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  400.0e0 .
 
 <https://data.matdata.eu/_signals_sig220>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "69N3"@no , "69N3"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig220_on_ne_240>;
-        era:signalId               "sig220";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_8beef24e> .
 
 <https://data.matdata.eu/_netPointReferences_sig220_on_ne_240>
@@ -2464,14 +2464,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  800.0e0 .
 
 <https://data.matdata.eu/_signals_sig394>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "70A"@no , "70A"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig394_on_ne_724>;
-        era:signalId               "sig394";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_1fb55f39> .
 
 <https://data.matdata.eu/_netPointReferences_sig394_on_ne_724>
@@ -2492,14 +2491,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  0.0e0 .
 
 <https://data.matdata.eu/_signals_sig402>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "70B"@no , "70B"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig402_on_ne_287>;
-        era:signalId               "sig402";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_d08a0645> .
 
 <https://data.matdata.eu/_netPointReferences_sig402_on_ne_287>
@@ -2520,14 +2518,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  721.0e0 .
 
 <https://data.matdata.eu/_signals_sig410>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "A"@no , "A"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig410_on_ne_328>;
-        era:signalId               "sig410";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_1f048389> .
 
 <https://data.matdata.eu/_netPointReferences_sig410_on_ne_328>
@@ -2548,14 +2545,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  67.0e0 .
 
 <https://data.matdata.eu/_signals_sig417>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "1a"@no , "1a"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig417_on_ne_336>;
-        era:signalId               "sig417";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/02>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_fbf2e300> .
 
 <https://data.matdata.eu/_netPointReferences_sig417_on_ne_336>
@@ -2576,14 +2572,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  14.0e0 .
 
 <https://data.matdata.eu/_signals_sig419>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "3b"@no , "3b"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig419_on_ne_340>;
-        era:signalId               "sig419";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/02>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_b94a571f> .
 
 <https://data.matdata.eu/_netPointReferences_sig419_on_ne_340>
@@ -2604,14 +2599,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  659.0e0 .
 
 <https://data.matdata.eu/_signals_sig785>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "6935"@no , "6935"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig785_on_ne_565>;
-        era:signalId               "sig785";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/06>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_1e68b645> .
 
 <https://data.matdata.eu/_netPointReferences_sig785_on_ne_565>
@@ -2632,14 +2626,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  0.0e0 .
 
 <https://data.matdata.eu/_signals_sig786>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "6946"@no , "6946"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig786_on_ne_561>;
-        era:signalId               "sig786";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/06>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_08e7415a> .
 
 <https://data.matdata.eu/_netPointReferences_sig786_on_ne_561>
@@ -2655,10 +2648,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_561> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_11.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  11.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig786_LPS_8176_11000.0e0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -2666,14 +2659,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  0.0e0 .
 
 <https://data.matdata.eu/_signals_sig812>
-        rdf:type                   era:TemporalFeature , era:Signal;
+        rdf:type                   era:Signal;
         rdfs:label                 "Zs2"@no , "Zs2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig812_on_ne_258>;
-        era:signalId               "sig812";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/12>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_fdd8870e> .
 
 <https://data.matdata.eu/_netPointReferences_sig812_on_ne_258>
@@ -2694,13 +2686,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  401.0e0 .
 
 <https://data.matdata.eu/_switches_cro160>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W08cd"@no , "69W08cd"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_cro160_on_ne_156>;
-        era:switchId               "cro160";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_cbc3179c> .
 
 <https://data.matdata.eu/_netPointReferences_cro160_on_ne_156>
@@ -2714,13 +2705,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_156> .
 
 <https://data.matdata.eu/_switches_cro160a>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W08cd"@no , "69W08cd"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_cro160a_on_ne_156>;
-        era:switchId               "cro160a";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_cbc3179c> .
 
 <https://data.matdata.eu/_netPointReferences_cro160a_on_ne_156>
@@ -2735,13 +2725,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_156> .
 
 <https://data.matdata.eu/_switches_cro160b>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W08cd"@no , "69W08cd"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_cro160b_on_ne_258>;
-        era:switchId               "cro160b";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_cbc3179c> .
 
 <https://data.matdata.eu/_netPointReferences_cro160b_on_ne_258>
@@ -2756,13 +2745,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_258> .
 
 <https://data.matdata.eu/_switches_cro341>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W06cd"@no , "W06cd"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_cro341_on_ne_325>;
-        era:switchId               "cro341";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_15922a15> .
 
 <https://data.matdata.eu/_netPointReferences_cro341_on_ne_325>
@@ -2776,13 +2764,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_325> .
 
 <https://data.matdata.eu/_switches_cro341a>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W06cd"@no , "W06cd"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_cro341a_on_ne_325>;
-        era:switchId               "cro341a";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_15922a15> .
 
 <https://data.matdata.eu/_netPointReferences_cro341a_on_ne_325>
@@ -2797,13 +2784,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_325> .
 
 <https://data.matdata.eu/_switches_cro341b>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W06cd"@no , "W06cd"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_cro341b_on_ne_340>;
-        era:switchId               "cro341b";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_15922a15> .
 
 <https://data.matdata.eu/_netPointReferences_cro341b_on_ne_340>
@@ -2818,13 +2804,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_340> .
 
 <https://data.matdata.eu/_switches_swi122>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "68W02"@no , "68W02"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi122_on_ne_55>;
-        era:switchId               "swi122";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_06d26a6d> .
 
 <https://data.matdata.eu/_netPointReferences_swi122_on_ne_55>
@@ -2839,19 +2824,18 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_55> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_1.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  1.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_switches_swi123>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W03"@no , "69W03"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi123_on_ne_64>;
-        era:switchId               "swi123";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_730746df> .
 
 <https://data.matdata.eu/_netPointReferences_swi123_on_ne_64>
@@ -2866,13 +2850,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_64> .
 
 <https://data.matdata.eu/_switches_swi124>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W04"@no , "69W04"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi124_on_ne_90>;
-        era:switchId               "swi124";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_857c172b> .
 
 <https://data.matdata.eu/_netPointReferences_swi124_on_ne_90>
@@ -2887,13 +2870,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_90> .
 
 <https://data.matdata.eu/_switches_swi127>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W05"@no , "69W05"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi127_on_ne_147>;
-        era:switchId               "swi127";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_dc3ed2ba> .
 
 <https://data.matdata.eu/_netPointReferences_swi127_on_ne_147>
@@ -2908,13 +2890,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_147> .
 
 <https://data.matdata.eu/_switches_swi237>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W06"@no , "69W06"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi237_on_ne_236>;
-        era:switchId               "swi237";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_293dcc63> .
 
 <https://data.matdata.eu/_netPointReferences_swi237_on_ne_236>
@@ -2929,13 +2910,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_236> .
 
 <https://data.matdata.eu/_switches_swi241>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W09"@no , "69W09"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi241_on_ne_240>;
-        era:switchId               "swi241";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_613c3a81> .
 
 <https://data.matdata.eu/_netPointReferences_swi241_on_ne_240>
@@ -2950,13 +2930,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_240> .
 
 <https://data.matdata.eu/_switches_swi248>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W10"@no , "69W10"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi248_on_ne_247>;
-        era:switchId               "swi248";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_a118f2b3> .
 
 <https://data.matdata.eu/_netPointReferences_swi248_on_ne_247>
@@ -2971,13 +2950,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_247> .
 
 <https://data.matdata.eu/_switches_swi259>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "69W07"@no , "69W07"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi259_on_ne_258>;
-        era:switchId               "swi259";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_e1dfd154> .
 
 <https://data.matdata.eu/_netPointReferences_swi259_on_ne_258>
@@ -2992,13 +2970,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_258> .
 
 <https://data.matdata.eu/_switches_swi283>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "70W01"@no , "70W01"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi283_on_ne_282>;
-        era:switchId               "swi283";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_a5fbfb27> .
 
 <https://data.matdata.eu/_netPointReferences_swi283_on_ne_282>
@@ -3013,13 +2990,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_282> .
 
 <https://data.matdata.eu/_switches_swi288>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "70W02"@no , "70W02"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi288_on_ne_287>;
-        era:switchId               "swi288";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_c3840cc1> .
 
 <https://data.matdata.eu/_netPointReferences_swi288_on_ne_287>
@@ -3034,13 +3010,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_287> .
 
 <https://data.matdata.eu/_switches_swi295>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "71W01"@no , "71W01"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi295_on_ne_294>;
-        era:switchId               "swi295";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_96a51dea> .
 
 <https://data.matdata.eu/_netPointReferences_swi295_on_ne_294>
@@ -3055,13 +3030,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_294> .
 
 <https://data.matdata.eu/_switches_swi302>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "71W02"@no , "71W02"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi302_on_ne_291>;
-        era:switchId               "swi302";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_6ee9ae5b> .
 
 <https://data.matdata.eu/_netPointReferences_swi302_on_ne_291>
@@ -3076,13 +3050,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_291> .
 
 <https://data.matdata.eu/_switches_swi316>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W04"@no , "W04"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi316_on_ne_315>;
-        era:switchId               "swi316";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_91043008> .
 
 <https://data.matdata.eu/_netPointReferences_swi316_on_ne_315>
@@ -3097,13 +3070,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_315> .
 
 <https://data.matdata.eu/_switches_swi322>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W02"@no , "W02"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi322_on_ne_321>;
-        era:switchId               "swi322";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_80908f73> .
 
 <https://data.matdata.eu/_netPointReferences_swi322_on_ne_321>
@@ -3118,13 +3090,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_321> .
 
 <https://data.matdata.eu/_switches_swi329>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W05"@no , "W05"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi329_on_ne_328>;
-        era:switchId               "swi329";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_81eeec1e> .
 
 <https://data.matdata.eu/_netPointReferences_swi329_on_ne_328>
@@ -3139,13 +3110,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_328> .
 
 <https://data.matdata.eu/_switches_swi337>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W03"@no , "W03"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi337_on_ne_336>;
-        era:switchId               "swi337";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_9663de8f> .
 
 <https://data.matdata.eu/_netPointReferences_swi337_on_ne_336>
@@ -3160,13 +3130,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_336> .
 
 <https://data.matdata.eu/_switches_swi352>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W01"@no , "W01"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi352_on_ne_351>;
-        era:switchId               "swi352";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_cbd159c9> .
 
 <https://data.matdata.eu/_netPointReferences_swi352_on_ne_351>
@@ -3181,13 +3150,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_351> .
 
 <https://data.matdata.eu/_switches_swi359>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W12"@no , "W12"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi359_on_ne_365>;
-        era:switchId               "swi359";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_6b60b608> .
 
 <https://data.matdata.eu/_netPointReferences_swi359_on_ne_365>
@@ -3202,13 +3170,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_365> .
 
 <https://data.matdata.eu/_switches_swi366>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "W11"@no , "W11"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi366_on_ne_348>;
-        era:switchId               "swi366";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_6e22f15b> .
 
 <https://data.matdata.eu/_netPointReferences_swi366_on_ne_348>
@@ -3223,13 +3190,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_348> .
 
 <https://data.matdata.eu/_switches_swi595>
-        rdf:type                   era:TemporalFeature , era:Switch;
+        rdf:type                   era:Switch;
         rdfs:label                 "swi595"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_swi595_on_ne_594>;
-        era:switchId               "swi595";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_fc7646dd> .
 
 <https://data.matdata.eu/_netPointReferences_swi595_on_ne_594>
@@ -3327,10 +3293,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_7>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  7.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_ple194_1_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -3822,143 +3788,143 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  900.0e0 .
 
 <https://data.matdata.eu/_platformEdges_ple193>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple193_1>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/30>;
         era:platformId             "Missing";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_73a8ad61> .
 
 <https://data.matdata.eu/_platformEdges_ple194>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple194_1>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/30>;
         era:platformId             "Missing";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_3a4612e3> .
 
 <https://data.matdata.eu/_platformEdges_ple388>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple388_1>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Missing";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_fbbe9175> .
 
 <https://data.matdata.eu/_platformEdges_ple390>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "1"@no , "1"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple390_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "1";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_fba2eae1> .
 
 <https://data.matdata.eu/_platformEdges_ple391>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "2"@no , "2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple391_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/30>;
         era:platformId             "2";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_a7d6755c> .
 
 <https://data.matdata.eu/_platformEdges_ple392>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "1"@no , "1"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple392_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/30>;
         era:platformId             "1";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_d9f35000> .
 
 <https://data.matdata.eu/_platformEdges_ple428>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "3"@no , "3"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple428_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Platform 1/3";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_50bc2948> .
 
 <https://data.matdata.eu/_platformEdges_ple429>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "1"@no , "1"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple429_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Platform 1/3";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_c9a1f9e6> .
 
 <https://data.matdata.eu/_platformEdges_ple47>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "2"@no , "2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple47_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Platform 2/3";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_46ed4550> .
 
 <https://data.matdata.eu/_platformEdges_ple70>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "2"@no , "2"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple70_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "2";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_f766f4ec> .
 
 <https://data.matdata.eu/_platformEdges_ple742>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "11"@no , "11"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple742_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Platform 11/12";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_534501a4> .
 
 <https://data.matdata.eu/_platformEdges_ple9>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "3"@no , "3"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple9_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Platform 2/3";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_93fe8c63> .
 
 <https://data.matdata.eu/_platformEdges_ple96>
-        rdf:type                   era:TemporalFeature , era:PlatformEdge;
+        rdf:type                   era:PlatformEdge;
         rdfs:label                 "12"@no , "12"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple96_2>;
         era:platformHeight         <http://data.europa.eu/949/concepts/platform-heights/40>;
         era:platformId             "Platform 11/12";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_e78326ca> .
 
 <https://data.matdata.eu/_netPointReferences_sl11_sloc01_8176>
@@ -4069,10 +4035,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_7.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  7.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sl192_sloc01_8176_LPS_8176_7800.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -4160,10 +4126,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  905.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_7.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  7.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netPointReferences_sl379_sloc01_9333>
         rdf:type               era:NetPointReference;
@@ -4326,10 +4292,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  203.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_8.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  8.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netAreaReferences_opp141_ne_ms_141>
         rdf:type         era:NetAreaReference;
@@ -4832,10 +4798,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  692.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_-1.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  -1.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netAreaReferences_opp142_ne_ms_142_list_8>
         rdf:type   rdf:List;
@@ -4931,10 +4897,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_247> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_0.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  0.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_247_end_LPS_9333_417.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5068,10 +5034,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_258> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_0.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  0.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_258_start_LPS_8176_527.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5128,10 +5094,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  965.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_3.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  3.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netPointReferences_opp142_ne_31_end>
         rdf:type               era:NetPointReference;
@@ -5243,10 +5209,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_64> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_5.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  5.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_64_end_LPS_8176_5198.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5347,10 +5313,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_90> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_4.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  4.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_90_end_LPS_8176_4328.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5750,10 +5716,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_336> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_54.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
         era:kilometer  54.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp373_ne_336_end_LPS_2444_54020.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5854,10 +5820,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_344> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_53.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
         era:kilometer  53.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp373_ne_344_end_LPS_2444_53665.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6154,10 +6120,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_365> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_52.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
         era:kilometer  52.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp373_ne_365_end_LPS_2444_52277.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6394,10 +6360,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_591> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_5.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  5.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp375_ne_591_start_LPS_9333_5385.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6465,10 +6431,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_594> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_6.0e0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  6.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp375_ne_594_end_LPS_9333_6505.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6476,7 +6442,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  505.0e0 .
 
 <https://data.matdata.eu/_operationalPoints_opp141>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Arnau"@no , "Arnau"@en;
         era:hasPart                <https://data.matdata.eu/_tracks_trc4> , <https://data.matdata.eu/_tracks_trc1>;
         era:hasSchematicOverviewOPDigitalForm
@@ -6487,13 +6453,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Arnau"@no , "Arnau"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOAR";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
-        geo:hasGeometry            <https://data.matdata.eu/_geometry_geometrycollection_f85d17dd> .
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
+        geo:hasGeometry            <https://data.matdata.eu/_geometry_geometrycollection_b795d29c> .
 
 <https://data.matdata.eu/_operationalPoints_opp142>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Cranz"@no , "Cranz"@en;
-        era:hasPart                <https://data.matdata.eu/_tracks_trc11> , <https://data.matdata.eu/_tracks_trc12> , <https://data.matdata.eu/_tracks_trc13> , <https://data.matdata.eu/_tracks_trc14> , <https://data.matdata.eu/_tracks_trc3> , <https://data.matdata.eu/_tracks_trc5> , <https://data.matdata.eu/_tracks_trc6> , <https://data.matdata.eu/_tracks_trc8> , <https://data.matdata.eu/_tracks_trc7>;
+        era:hasPart                <https://data.matdata.eu/_tracks_trc11> , <https://data.matdata.eu/_tracks_trc12> , <https://data.matdata.eu/_tracks_trc13> , <https://data.matdata.eu/_tracks_trc14> , <https://data.matdata.eu/_tracks_trc3> , <https://data.matdata.eu/_tracks_trc5> , <https://data.matdata.eu/_tracks_trc8> , <https://data.matdata.eu/_tracks_trc7> , <https://data.matdata.eu/_tracks_trc6>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -6502,28 +6468,28 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Cranz"@no , "Cranz"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOC";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_geometrycollection_067814b6> .
 
 <https://data.matdata.eu/_operationalPoints_opp190>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
-        rdfs:label                 "Dunja"@no , "Dunja"@en;
-        era:hasPart                <https://data.matdata.eu/_tracks_trc9> , <https://data.matdata.eu/_tracks_trc10>;
+        rdf:type                   era:OperationalPoint;
+        rdfs:label                 "Dunja"@en , "Dunja"@no;
+        era:hasPart                <https://data.matdata.eu/_tracks_trc10> , <https://data.matdata.eu/_tracks_trc9>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_sl192_sloc01_8176> , <https://data.matdata.eu/_netPointReferences_sl191_sloc01_8176>;
-        era:opName                 "Dunja"@no , "Dunja"@en;
+        era:netReference           <https://data.matdata.eu/_netPointReferences_sl191_sloc01_8176> , <https://data.matdata.eu/_netPointReferences_sl192_sloc01_8176>;
+        era:opName                 "Dunja"@en , "Dunja"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/70>;
         era:uopid                  "NOODUN";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multipoint_842ea946> .
 
 <https://data.matdata.eu/_operationalPoints_opp373>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Kudowa"@no , "Kudowa"@en;
-        era:hasPart                <https://data.matdata.eu/_tracks_trc20> , <https://data.matdata.eu/_tracks_trc21> , <https://data.matdata.eu/_tracks_trc22> , <https://data.matdata.eu/_tracks_trc23> , <https://data.matdata.eu/_tracks_trc24> , <https://data.matdata.eu/_tracks_trc25> , <https://data.matdata.eu/_tracks_trc26> , <https://data.matdata.eu/_tracks_trc27> , <https://data.matdata.eu/_tracks_trc28> , <https://data.matdata.eu/_tracks_trc29> , <https://data.matdata.eu/_tracks_trc30> , <https://data.matdata.eu/_tracks_trc31> , <https://data.matdata.eu/_tracks_trc32>;
+        era:hasPart                <https://data.matdata.eu/_tracks_trc20> , <https://data.matdata.eu/_tracks_trc21> , <https://data.matdata.eu/_tracks_trc22> , <https://data.matdata.eu/_tracks_trc23> , <https://data.matdata.eu/_tracks_trc24> , <https://data.matdata.eu/_tracks_trc25> , <https://data.matdata.eu/_tracks_trc26> , <https://data.matdata.eu/_tracks_trc27> , <https://data.matdata.eu/_tracks_trc28> , <https://data.matdata.eu/_tracks_trc29> , <https://data.matdata.eu/_tracks_trc30> , <https://data.matdata.eu/_tracks_trc32> , <https://data.matdata.eu/_tracks_trc31>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -6532,11 +6498,11 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Kudowa"@no , "Kudowa"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOXK";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_geometrycollection_8d1879e8> .
 
 <https://data.matdata.eu/_operationalPoints_opp374>
-        rdf:type                   era:TemporalFeature , era:OperationalPoint;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Instersee"@en , "Instersee"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc18>;
         era:hasSchematicOverviewOPDigitalForm
@@ -6547,11 +6513,11 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Instersee"@en , "Instersee"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/80>;
         era:uopid                  "NOOINA";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_96a51dea> .
 
 <https://data.matdata.eu/_operationalPoints_opp375>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Grestin"@no , "Grestin"@en;
         era:hasPart                <https://data.matdata.eu/_tracks_trc35> , <https://data.matdata.eu/_tracks_trc16> , <https://data.matdata.eu/_tracks_trc15>;
         era:hasSchematicOverviewOPDigitalForm
@@ -6562,11 +6528,11 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Grestin"@no , "Grestin"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOGR";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_geometrycollection_3050e625> .
 
 <https://data.matdata.eu/_operationalPoints_opp376>
-        rdf:type                   era:TemporalFeature , era:OperationalPoint;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Funera"@en , "Funera"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc36>;
         era:hasSchematicOverviewOPDigitalForm
@@ -6577,28 +6543,28 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Funera"@en , "Funera"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/70>;
         era:uopid                  "NOOFN";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_ac167fbc> .
 
 <https://data.matdata.eu/_operationalPoints_opp580>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
-        rdfs:label                 "Kudowa freight"@no , "Kudowa freight"@en;
-        era:hasPart                <https://data.matdata.eu/_tracks_trc32> , <https://data.matdata.eu/_tracks_trc29>;
+        rdf:type                   era:OperationalPoint;
+        rdfs:label                 "Kudowa freight"@en , "Kudowa freight"@no;
+        era:hasPart                <https://data.matdata.eu/_tracks_trc29> , <https://data.matdata.eu/_tracks_trc32>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_sl583_sloc01_2444> , <https://data.matdata.eu/_netPointReferences_sl582_sloc01_2444>;
-        era:opName                 "Kudowa freight"@no , "Kudowa freight"@en;
+        era:netReference           <https://data.matdata.eu/_netPointReferences_sl582_sloc01_2444> , <https://data.matdata.eu/_netPointReferences_sl583_sloc01_2444>;
+        era:opName                 "Kudowa freight"@en , "Kudowa freight"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOXK G";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multipoint_776df48c> .
 
 <https://data.matdata.eu/_operationalPoints_opp581>
-        rdf:type                   era:OperationalPoint , era:TemporalFeature;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Kudowa passenger"@no , "Kudowa passenger"@en;
-        era:hasPart                <https://data.matdata.eu/_tracks_trc21> , <https://data.matdata.eu/_tracks_trc23> , <https://data.matdata.eu/_tracks_trc28> , <https://data.matdata.eu/_tracks_trc27>;
+        era:hasPart                <https://data.matdata.eu/_tracks_trc21> , <https://data.matdata.eu/_tracks_trc28> , <https://data.matdata.eu/_tracks_trc27> , <https://data.matdata.eu/_tracks_trc23>;
         era:hasSchematicOverviewOPDigitalForm
                 true;
         era:inCountry              country:NOR;
@@ -6607,11 +6573,11 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opName                 "Kudowa passenger"@no , "Kudowa passenger"@en;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/10>;
         era:uopid                  "NOOXK P";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_multipoint_6dd8a08d> .
 
 <https://data.matdata.eu/_operationalPoints_opp740>
-        rdf:type                   era:TemporalFeature , era:OperationalPoint;
+        rdf:type                   era:OperationalPoint;
         rdfs:label                 "Kudowa chranice"@en , "Kudowa chranice"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc18>;
         era:hasSchematicOverviewOPDigitalForm
@@ -6623,7 +6589,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:opType                 <http://data.europa.eu/949/concepts/op-types/90>;
         era:referenceBorderPoint   <http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>;
         era:uopid                  "EUOIB";
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_60ae92d0> .
 
 <https://data.matdata.eu/_netLinearReferences_trc1_2>
@@ -6779,10 +6745,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  692.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_-1>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  -1.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netLinearReferences_trc12_1>
         rdf:type         era:NetLinearReference;
@@ -7118,10 +7084,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  203.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_8>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  8.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netLinearReferences_trc19_2>
         rdf:type         era:NetLinearReference;
@@ -7608,10 +7574,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_344> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_53>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
         era:kilometer  53.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc28_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7691,10 +7657,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_31> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_3>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  3.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc3_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7860,10 +7826,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_365> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_52>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
         era:kilometer  52.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc32_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7910,10 +7876,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_471> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_54>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
         era:kilometer  54.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc33_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7960,10 +7926,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_475> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_7>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  7.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc34_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8010,10 +7976,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_591> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_6>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  6.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc35_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8044,10 +8010,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_724> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  0.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc36_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8066,10 +8032,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_724> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_5>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
         era:kilometer  5.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc36_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8116,10 +8082,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_39> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_0>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  0.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc4_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8238,10 +8204,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_90> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_4>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  4.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc7_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8347,10 +8313,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_163> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_5>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  5.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc9_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8374,10 +8340,10 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_561> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_14>
-        rdf:type       era:TemporalFeature , era:KilometricPost;
+        rdf:type       era:KilometricPost;
         era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
         era:kilometer  14.0e0;
-        era:validFrom  "2025-01-01T00:00:00"^^xsd:dateTime .
+        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc9_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8385,7 +8351,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  0.0e0 .
 
 <https://data.matdata.eu/_tracks_trc1>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "2"@en , "2"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp679>;
@@ -8401,7 +8367,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde14> , <https://data.matdata.eu/_trainDetectionSystems_tde58>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_f68c2ef7> .
 
@@ -8415,7 +8381,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc10>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc440> , <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
@@ -8430,8 +8396,8 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackId                     "trc10";
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc440> , <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
-        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde764> , <https://data.matdata.eu/_trainDetectionSystems_tde766> , <https://data.matdata.eu/_trainDetectionSystems_tde767> , <https://data.matdata.eu/_trainDetectionSystems_tde770>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde766> , <https://data.matdata.eu/_trainDetectionSystems_tde767> , <https://data.matdata.eu/_trainDetectionSystems_tde770> , <https://data.matdata.eu/_trainDetectionSystems_tde764>;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_c6ee886d> .
 
@@ -8445,7 +8411,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc11>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "3"@en , "3"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc432>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp687>;
@@ -8458,7 +8424,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc11";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde303> , <https://data.matdata.eu/_trainDetectionSystems_tde226> , <https://data.matdata.eu/_trainDetectionSystems_tde222> , <https://data.matdata.eu/_trainDetectionSystems_tde207>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_52831772> .
 
@@ -8472,7 +8438,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc12>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
         era:inCountry                   country:NOR;
@@ -8486,7 +8452,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde262>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_f14fda7c> .
 
@@ -8500,7 +8466,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc13>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:Track , era:RunningTrack;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc432>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp687>;
         era:inCountry                   country:NOR;
@@ -8512,7 +8478,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc13";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde261>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_575ee9af> .
 
@@ -8526,7 +8492,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc14>
-        rdf:type                        era:Track , era:TemporalFeature , era:RunningTrack;
+        rdf:type                        era:Track , era:RunningTrack;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc432>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp687>;
         era:inCountry                   country:NOR;
@@ -8537,7 +8503,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc14_1>;
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc14";
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_d4999ac9> .
 
@@ -8551,7 +8517,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc15>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "2"@en , "2"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc877>;
         era:inCountry                   country:NOR;
@@ -8565,7 +8531,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc877>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde407> , <https://data.matdata.eu/_trainDetectionSystems_tde405>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_b971b8b1> .
 
@@ -8579,7 +8545,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc16>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc877>;
         era:inCountry                   country:NOR;
@@ -8593,7 +8559,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc877>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde408> , <https://data.matdata.eu/_trainDetectionSystems_tde406> , <https://data.matdata.eu/_trainDetectionSystems_tde404>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_fc2be4fc> .
 
@@ -8607,7 +8573,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc17>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "2"@no , "2"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc433>;
         era:inCountry              country:NOR;
@@ -8616,17 +8582,17 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:sidingId               "trc17";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trainDetectionSystem   <https://data.matdata.eu/_trainDetectionSystems_tde399>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_a6380a95> .
 
 <https://data.matdata.eu/_tracks_trc18>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc877>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_294> , <https://data.matdata.eu/_operationalPoints_opp374> , <https://data.matdata.eu/_operationalPoints_opp740>;
+        era:isPartOf                    <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_294> , <https://data.matdata.eu/_operationalPoints_opp740> , <https://data.matdata.eu/_operationalPoints_opp374>;
         era:linesideDistanceIndication  <https://data.matdata.eu/_linesideDistanceIndications_trc18>;
         era:maximumPermittedSpeed       80;
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc18_2>;
@@ -8635,7 +8601,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc877>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde400>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_897903c0> .
 
@@ -8649,7 +8615,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc19>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "2"@no , "2"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc433>;
         era:inCountry              country:NOR;
@@ -8657,12 +8623,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc19_2>;
         era:sidingId               "trc19";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_86a5e7d8> .
 
 <https://data.matdata.eu/_tracks_trc2>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "H"@en , "H"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp679>;
@@ -8678,7 +8644,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde20> , <https://data.matdata.eu/_trainDetectionSystems_tde149> , <https://data.matdata.eu/_trainDetectionSystems_tde150>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_899ae3a2> .
 
@@ -8692,8 +8658,8 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc20>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
-        rdfs:label                      "40"@en , "40"@no;
+        rdf:type                        era:Track , era:RunningTrack;
+        rdfs:label                      "40"@no , "40"@en;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
@@ -8703,7 +8669,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc20_2>;
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc20";
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_f2226f9c> .
 
@@ -8717,19 +8683,19 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc21>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "2"@en , "2"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <https://data.matdata.eu/_operationalPoints_opp373> , <https://data.matdata.eu/_operationalPoints_opp581>;
+        era:isPartOf                    <https://data.matdata.eu/_operationalPoints_opp581> , <https://data.matdata.eu/_operationalPoints_opp373>;
         era:linesideDistanceIndication  <https://data.matdata.eu/_linesideDistanceIndications_trc21>;
         era:maximumPermittedSpeed       60;
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc21_2>;
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc21";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde424> , <https://data.matdata.eu/_trainDetectionSystems_tde414>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_5ddbead5> .
 
@@ -8743,7 +8709,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc22>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
@@ -8755,7 +8721,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc22";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde412>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_1a7988dd> .
 
@@ -8769,19 +8735,19 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc23>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1b"@en , "1b"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <https://data.matdata.eu/_operationalPoints_opp373> , <https://data.matdata.eu/_operationalPoints_opp581>;
+        era:isPartOf                    <https://data.matdata.eu/_operationalPoints_opp581> , <https://data.matdata.eu/_operationalPoints_opp373>;
         era:linesideDistanceIndication  <https://data.matdata.eu/_linesideDistanceIndications_trc23>;
         era:maximumPermittedSpeed       60;
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc23_2>;
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc23";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde425> , <https://data.matdata.eu/_trainDetectionSystems_tde423>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_70575791> .
 
@@ -8795,7 +8761,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc24>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "3a"@en , "3a"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc435>;
         era:inCountry                   country:NOR;
@@ -8807,7 +8773,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc24";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde422> , <https://data.matdata.eu/_trainDetectionSystems_tde413>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_3fcc1446> .
 
@@ -8821,7 +8787,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc25>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "3-1"@no , "3-1"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc436>;
         era:inCountry              country:NOR;
@@ -8830,12 +8796,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc25_2>;
         era:sidingId               "trc25";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_32d6cd28> .
 
 <https://data.matdata.eu/_tracks_trc26>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1a"@en , "1a"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
@@ -8847,7 +8813,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc26";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde415>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_0a15dda3> .
 
@@ -8861,7 +8827,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc27>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "3b"@en , "3b"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc435>;
         era:inCountry                   country:NOR;
@@ -8873,7 +8839,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc27";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde420>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_d8f658a5> .
 
@@ -8887,22 +8853,22 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc28>
-        rdf:type                   era:Siding , era:TemporalFeature , era:Track;
-        rdfs:label                 "5"@en , "5"@no;
+        rdf:type                   era:Track , era:Siding;
+        rdfs:label                 "5"@no , "5"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc436>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf               <https://data.matdata.eu/_operationalPoints_opp581> , <https://data.matdata.eu/_operationalPoints_opp373>;
+        era:isPartOf               <https://data.matdata.eu/_operationalPoints_opp373> , <https://data.matdata.eu/_operationalPoints_opp581>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc28_2>;
         era:sidingId               "trc28";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trainDetectionSystem   <https://data.matdata.eu/_trainDetectionSystems_tde421>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_5a03df92> .
 
 <https://data.matdata.eu/_tracks_trc29>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "41"@no , "41"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc438>;
         era:inCountry              country:NOR;
@@ -8911,12 +8877,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc29_2>;
         era:sidingId               "trc29";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_a59a9a5b> .
 
 <https://data.matdata.eu/_tracks_trc3>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "2"@en , "2"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
@@ -8930,8 +8896,8 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackId                     "trc3";
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
-        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde178> , <https://data.matdata.eu/_trainDetectionSystems_tde69> , <https://data.matdata.eu/_trainDetectionSystems_tde215> , <https://data.matdata.eu/_trainDetectionSystems_tde210> , <https://data.matdata.eu/_trainDetectionSystems_tde36> , <https://data.matdata.eu/_trainDetectionSystems_tde38>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde178> , <https://data.matdata.eu/_trainDetectionSystems_tde215> , <https://data.matdata.eu/_trainDetectionSystems_tde210> , <https://data.matdata.eu/_trainDetectionSystems_tde36> , <https://data.matdata.eu/_trainDetectionSystems_tde38> , <https://data.matdata.eu/_trainDetectionSystems_tde69>;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_6d3af335> .
 
@@ -8945,7 +8911,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc30>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
@@ -8957,7 +8923,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc30";
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde426>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_e441133e> .
 
@@ -8971,7 +8937,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc31>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "44"@no , "44"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc437>;
         era:inCountry              country:NOR;
@@ -8980,12 +8946,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc31_2>;
         era:sidingId               "trc31";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_21fff072> .
 
 <https://data.matdata.eu/_tracks_trc32>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "42"@no , "42"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc437>;
         era:inCountry              country:NOR;
@@ -8994,13 +8960,13 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc32_2>;
         era:sidingId               "trc32";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_6fcb731b> .
 
 <https://data.matdata.eu/_tracks_trc33>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
-        rdfs:label                      "1"@en , "1"@no;
+        rdf:type                        era:Track , era:RunningTrack;
+        rdfs:label                      "1"@no , "1"@en;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc434>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
@@ -9010,7 +8976,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc33_2>;
         era:trackDirection              <http://data.europa.eu/949/concepts/track-running-directions/10>;
         era:trackId                     "trc33";
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_b7a7de5a> .
 
@@ -9024,7 +8990,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc34>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc877>;
         era:inCountry                   country:NOR;
@@ -9038,7 +9004,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc877>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde401>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_8005fdb1> .
 
@@ -9052,7 +9018,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc35>
-        rdf:type                   era:Track , era:TemporalFeature , era:Siding;
+        rdf:type                   era:Track , era:Siding;
         rdfs:label                 "31"@no , "31"@en;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc600>;
         era:inCountry              country:NOR;
@@ -9061,17 +9027,17 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netLinearReferences_trc35_2>;
         era:sidingId               "trc35";
         era:trackDirection         <http://data.europa.eu/949/concepts/track-running-directions/10>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_6c419b89> .
 
 <https://data.matdata.eu/_tracks_trc36>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "3"@en , "3"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc877>;
         era:inCountry                   country:NOR;
         era:infrastructureManager       <http://data.europa.eu/949/organisations/0076_IM>;
-        era:isPartOf                    <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_724> , <https://data.matdata.eu/_operationalPoints_opp376>;
+        era:isPartOf                    <https://data.matdata.eu/_operationalPoints_opp376> , <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_724>;
         era:linesideDistanceIndication  <https://data.matdata.eu/_linesideDistanceIndications_trc36>;
         era:maximumPermittedSpeed       80;
         era:netReference                <https://data.matdata.eu/_netLinearReferences_trc36_2>;
@@ -9080,7 +9046,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc877>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde409>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_7f2d40c7> .
 
@@ -9094,7 +9060,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc4>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc46>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp680>;
@@ -9110,7 +9076,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc46>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde52>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_368d0d1a> .
 
@@ -9124,7 +9090,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc5>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1-2"@en , "1-2"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
@@ -9139,7 +9105,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde152>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_d93c0aa1> .
 
@@ -9153,7 +9119,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc6>
-        rdf:type                   era:Siding , era:TemporalFeature , era:Track;
+        rdf:type                   era:Siding , era:Track;
         rdfs:label                 "21"@en , "21"@no;
         era:contactLineSystem      <https://data.matdata.eu/_contactLineSystems_elc442> , <https://data.matdata.eu/_contactLineSystems_elc430>;
         era:gaugingProfile         <http://data.europa.eu/949/concepts/gaugings/70>;
@@ -9166,12 +9132,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc442>;
         era:trainDetectionSystem   <https://data.matdata.eu/_trainDetectionSystems_tde187>;
-        era:validFrom              "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge          <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_linestring_a609972e> .
 
 <https://data.matdata.eu/_tracks_trc7>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "1"@en , "1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
@@ -9185,8 +9151,8 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackId                     "trc7";
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
-        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde95> , <https://data.matdata.eu/_trainDetectionSystems_tde225> , <https://data.matdata.eu/_trainDetectionSystems_tde214> , <https://data.matdata.eu/_trainDetectionSystems_tde209> , <https://data.matdata.eu/_trainDetectionSystems_tde63>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde225> , <https://data.matdata.eu/_trainDetectionSystems_tde214> , <https://data.matdata.eu/_trainDetectionSystems_tde209> , <https://data.matdata.eu/_trainDetectionSystems_tde63> , <https://data.matdata.eu/_trainDetectionSystems_tde95>;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_80f80e68> .
 
@@ -9200,7 +9166,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc8>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "2-1"@en , "2-1"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc732>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp687>;
@@ -9215,7 +9181,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc732>;
         era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde211>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_10a0734c> .
 
@@ -9229,7 +9195,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc9>
-        rdf:type                        era:RunningTrack , era:TemporalFeature , era:Track;
+        rdf:type                        era:RunningTrack , era:Track;
         rdfs:label                      "2"@en , "2"@no;
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc439> , <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
@@ -9244,8 +9210,8 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:trackId                     "trc9";
         era:trackRaisedPantographsDistanceAndSpeed
                 <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc439> , <https://data.matdata.eu/_raisedPantographsDistanceAndSpeed_elc8>;
-        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde763> , <https://data.matdata.eu/_trainDetectionSystems_tde765> , <https://data.matdata.eu/_trainDetectionSystems_tde768> , <https://data.matdata.eu/_trainDetectionSystems_tde769>;
-        era:validFrom                   "2025-01-01T00:00:00"^^xsd:dateTime;
+        era:trainDetectionSystem        <https://data.matdata.eu/_trainDetectionSystems_tde765> , <https://data.matdata.eu/_trainDetectionSystems_tde768> , <https://data.matdata.eu/_trainDetectionSystems_tde769> , <https://data.matdata.eu/_trainDetectionSystems_tde763>;
+        era:validity                    <https://data.matdata.eu/_validity_2025-01-01>;
         era:wheelSetGauge               <http://data.europa.eu/949/concepts/nominal-track-gauges/30>;
         geo:hasGeometry                 <https://data.matdata.eu/_geometry_linestring_ee1253b4> .
 

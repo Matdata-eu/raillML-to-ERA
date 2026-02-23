@@ -1,29 +1,20 @@
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
-<urn:maplib:report> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Violation> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/ns/shacl#sourceShape> _:c0310f5573e129d2b0ccfbe1932ca9a1_3 .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/ns/shacl#sourceShape> _:c0310f5573e129d2b0ccfbe1932ca9a1_3 .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/ns/shacl#sourceShape> <http://data.europa.eu/949/shapes/ContactLineSystemShape> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 <urn:maplib:report> <http://www.w3.org/ns/shacl#conforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <https://github.com/DataTreehouse/maplib#resultConforms> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/ns/shacl#value> <https://data.matdata.eu/_contactLineSystems_elc439> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> .
-<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/ns/shacl#focusNode> <https://data.matdata.eu/_contactLineSystems_elc439> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/ns/shacl#focusNode> <http://data.europa.eu/949/bridgeWindRestriction> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/ns/shacl#focusNode> <http://www.w3.org/ns/prov#> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/ns/shacl#resultMessage> "conditionsAppliedRegenerativeBraking (1.1.1.2.2.4.1):The Contact Line System <https://data.matdata.eu/_contactLineSystems_elc439> ((?clsLabel was unbound)), has a 'Overhead contact line (OCL)' type which makes the conditionsAppliedRegenerativeBraking parameter applicable. This error is due to <https://data.matdata.eu/_contactLineSystems_elc439> not having a value for such a parameter."@en .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_0> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#SPARQLConstraintComponent> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_1> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
-<urn:maplib:trb2609cc8-da32-445f-b88d-d0522751d77c_2> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/ns/shacl#resultSeverity> <http://www.w3.org/ns/shacl#Warning> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/ns/shacl#sourceConstraintComponent> <http://www.w3.org/ns/shacl#MinCountConstraintComponent> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/ns/shacl#resultPath> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/ns/shacl#focusNode> <http://data.europa.eu/949/bridgeWindRestriction> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/ns/shacl#focusNode> <http://www.w3.org/ns/prov#> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/ns/shacl#sourceShape> _:a05080ae2ad9e93dae3a7850a845448c_3 .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/ns/shacl#sourceShape> _:a05080ae2ad9e93dae3a7850a845448c_3 .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/ns/shacl#resultMessage> "Resource must have at least one rdf:type" .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
+<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationResult> .
+<urn:maplib:report> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport> .
+<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> .
+<urn:maplib:report> <http://www.w3.org/ns/shacl#result> <urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> .

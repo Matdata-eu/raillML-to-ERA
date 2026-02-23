@@ -6938,8 +6938,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "swi595"@en;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi595_on_ne_594>;
-        era:switchId               "swi595" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi595_on_ne_594> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi366_ne_348_0>
         rdf:type              era:TopologicalCoordinate;
@@ -6956,8 +6955,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W11"@en , "W11"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi366_on_ne_348>;
-        era:switchId               "swi366" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi366_on_ne_348> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi359_ne_365_0>
         rdf:type              era:TopologicalCoordinate;
@@ -6974,8 +6972,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W12"@en , "W12"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi359_on_ne_365>;
-        era:switchId               "swi359" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi359_on_ne_365> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi352_ne_351_0>
         rdf:type              era:TopologicalCoordinate;
@@ -6992,8 +6989,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W01"@en , "W01"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi352_on_ne_351>;
-        era:switchId               "swi352" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi352_on_ne_351> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi337_ne_336_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7010,8 +7006,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W03"@en , "W03"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi337_on_ne_336>;
-        era:switchId               "swi337" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi337_on_ne_336> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi329_ne_328_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7028,8 +7023,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W05"@en , "W05"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi329_on_ne_328>;
-        era:switchId               "swi329" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi329_on_ne_328> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_52.0e0>
         rdf:type       era:KilometricPost;
@@ -7051,8 +7045,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W02"@en , "W02"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi322_on_ne_321>;
-        era:switchId               "swi322" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi322_on_ne_321> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi316_ne_315_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7069,8 +7062,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W04"@en , "W04"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi316_on_ne_315>;
-        era:switchId               "swi316" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi316_on_ne_315> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi302_ne_291_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7087,8 +7079,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "71W02"@en , "71W02"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi302_on_ne_291>;
-        era:switchId               "swi302" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi302_on_ne_291> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_8.0e0>
         rdf:type       era:KilometricPost;
@@ -7110,8 +7101,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "71W01"@en , "71W01"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi295_on_ne_294>;
-        era:switchId               "swi295" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi295_on_ne_294> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_7.0e0>
         rdf:type       era:KilometricPost;
@@ -7133,8 +7123,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "70W02"@en , "70W02"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi288_on_ne_287>;
-        era:switchId               "swi288" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi288_on_ne_287> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_5.0e0>
         rdf:type       era:KilometricPost;
@@ -7156,8 +7145,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "70W01"@en , "70W01"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi283_on_ne_282>;
-        era:switchId               "swi283" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi283_on_ne_282> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi259_ne_258_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7174,8 +7162,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W07"@en , "69W07"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi259_on_ne_258>;
-        era:switchId               "swi259" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi259_on_ne_258> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi248_ne_247_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7192,8 +7179,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W10"@en , "69W10"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi248_on_ne_247>;
-        era:switchId               "swi248" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi248_on_ne_247> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_0.0e0>
         rdf:type       era:KilometricPost;
@@ -7215,8 +7201,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W09"@en , "69W09"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi241_on_ne_240>;
-        era:switchId               "swi241" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi241_on_ne_240> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi237_ne_236_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7233,8 +7218,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W06"@en , "69W06"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi237_on_ne_236>;
-        era:switchId               "swi237" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi237_on_ne_236> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi127_ne_147_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7251,8 +7235,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W05"@en , "69W05"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi127_on_ne_147>;
-        era:switchId               "swi127" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi127_on_ne_147> .
 
 <https://data.matdata.eu/_topologicalCoordinates_swi124_ne_90_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7269,8 +7252,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W04"@en , "69W04"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi124_on_ne_90>;
-        era:switchId               "swi124" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi124_on_ne_90> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_4.0e0>
         rdf:type       era:KilometricPost;
@@ -7292,8 +7274,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W03"@en , "69W03"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi123_on_ne_64>;
-        era:switchId               "swi123" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi123_on_ne_64> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_1.0e0>
         rdf:type       era:KilometricPost;
@@ -7315,8 +7296,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "68W02"@en , "68W02"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_swi122_on_ne_55>;
-        era:switchId               "swi122" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_swi122_on_ne_55> .
 
 <https://data.matdata.eu/_topologicalCoordinates_cro341b_ne_340_1211>
         rdf:type              era:TopologicalCoordinate;
@@ -7333,8 +7313,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W06cd"@en , "W06cd"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_cro341b_on_ne_340>;
-        era:switchId               "cro341b" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_cro341b_on_ne_340> .
 
 <https://data.matdata.eu/_topologicalCoordinates_cro341a_ne_325_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7351,8 +7330,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W06cd"@en , "W06cd"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_cro341a_on_ne_325>;
-        era:switchId               "cro341a" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_cro341a_on_ne_325> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_54.0e0>
         rdf:type       era:KilometricPost;
@@ -7373,8 +7351,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "W06cd"@en , "W06cd"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_cro341_on_ne_325>;
-        era:switchId               "cro341" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_cro341_on_ne_325> .
 
 <https://data.matdata.eu/_topologicalCoordinates_cro160b_ne_258_725>
         rdf:type              era:TopologicalCoordinate;
@@ -7391,8 +7368,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W08cd"@en , "69W08cd"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_cro160b_on_ne_258>;
-        era:switchId               "cro160b" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_cro160b_on_ne_258> .
 
 <https://data.matdata.eu/_topologicalCoordinates_cro160a_ne_156_0>
         rdf:type              era:TopologicalCoordinate;
@@ -7409,8 +7385,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W08cd"@en , "69W08cd"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_cro160a_on_ne_156>;
-        era:switchId               "cro160a" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_cro160a_on_ne_156> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_5.0e0>
         rdf:type       era:KilometricPost;
@@ -7431,8 +7406,7 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         rdfs:label                 "69W08cd"@en , "69W08cd"@no;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
-        era:netReference           <https://data.matdata.eu/_netPointReferences_cro160_on_ne_156>;
-        era:switchId               "cro160" .
+        era:netReference           <https://data.matdata.eu/_netPointReferences_cro160_on_ne_156> .
 
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
 PREFIX era:     <http://data.europa.eu/949/>
@@ -7466,7 +7440,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig812_on_ne_258>;
-        era:signalId               "sig812";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/12> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig786_LPS_8176_11000.0e0>
@@ -7491,7 +7464,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig786_on_ne_561>;
-        era:signalId               "sig786";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/06> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_11.0e0>
@@ -7521,7 +7493,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig785_on_ne_565>;
-        era:signalId               "sig785";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/06> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_53.0e0>
@@ -7551,7 +7522,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig419_on_ne_340>;
-        era:signalId               "sig419";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/02> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig417_LPS_2444_54014.0e0>
@@ -7576,7 +7546,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig417_on_ne_336>;
-        era:signalId               "sig417";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/02> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_54.0e0>
@@ -7606,7 +7575,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig410_on_ne_328>;
-        era:signalId               "sig410";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_6.0e0>
@@ -7636,7 +7604,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig402_on_ne_287>;
-        era:signalId               "sig402";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_5.0e0>
@@ -7666,7 +7633,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig394_on_ne_724>;
-        era:signalId               "sig394";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_-1.0e0>
@@ -7696,7 +7662,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig220_on_ne_240>;
-        era:signalId               "sig220";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig206_LPS_9333_400.0e0>
@@ -7721,7 +7686,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig206_on_ne_240>;
-        era:signalId               "sig206";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_0.0e0>
@@ -7751,7 +7715,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig204_on_ne_172>;
-        era:signalId               "sig204";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig67_LPS_8176_4383.0e0>
@@ -7776,7 +7739,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig67_on_ne_64>;
-        era:signalId               "sig67";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig74_LPS_8176_5000.0e0>
@@ -7801,7 +7763,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig74_on_ne_64>;
-        era:signalId               "sig74";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig81_LPS_8176_4255.0e0>
@@ -7826,7 +7787,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig81_on_ne_77>;
-        era:signalId               "sig81";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/12> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_4.0e0>
@@ -7856,7 +7816,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig93_on_ne_258>;
-        era:signalId               "sig93";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig100_LPS_8176_5000.0e0>
@@ -7881,7 +7840,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig100_on_ne_258>;
-        era:signalId               "sig100";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/04> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig179_LPS_8176_5598.0e0>
@@ -7906,7 +7864,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig179_on_ne_147>;
-        era:signalId               "sig179";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_5.0e0>
@@ -7936,7 +7893,6 @@ PREFIX xyz:     <http://sparql.xyz/facade-x/data/>
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netPointReferences_sig180_on_ne_156>;
-        era:signalId               "sig180";
         era:signalType             <http://data.europa.eu/949/concepts/signal-types/01> .
 
 PREFIX country: <http://publications.europa.eu/resource/authority/country/>
