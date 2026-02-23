@@ -45,8 +45,7 @@ Performs SHACL validation on the enriched ERA graph.
 - `../03-post-process/era-graph-enriched.ttl` - The enriched ERA ontology graph
 
 **SHACL Shapes (downloaded automatically):**
-- [ERA-RINF-shapes.ttl](https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/ERA-RINF-shapes.ttl)
-- [SKOS-shapes.ttl](https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/SKOS-shapes.ttl)
+- [ERA-RINF-shapes.ttl](https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/ERA-RINF-shapes.ttl) — includes SKOS concept validation constraints (previously a separate `SKOS-shapes.ttl`, now merged)
 
 **Output:**
 - `validation-report.ttl` - Detailed SHACL validation report (only with valid license)
