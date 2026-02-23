@@ -63,7 +63,6 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 #   Geometry: https://data.matdata.eu/_geometry_{lon}/{lat} (using decimal coordinates)
 CONSTRUCT {
   ?eraSignal a era:Signal ;
-             era:signalId ?signalId ;
              rdfs:label ?signalName , ?finalSignalNameEn ;
              era:signalType ?eraSignalType ;
              era:inCountry country:NOR ;
