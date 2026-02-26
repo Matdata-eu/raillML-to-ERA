@@ -41,8 +41,24 @@ To add a new fix, create a `.sparql` file with a SPARQL UPDATE query (DELETE/INS
 
 Performs SHACL validation on the enriched ERA graph.
 
+## Data Graph Resources
+
+The following resources are loaded into the data graph before validation is executed. All downloads are cached under `downloads/` and only re-fetched when the cached file is absent. To force a refresh, delete the corresponding file from `downloads/`.
+
+| # | Resource | Source | Cached file | Purpose |
+|---|----------|--------|-------------|---------|
+| 1 | **Enriched ERA graph** | `../03-post-process/output/era-graph-enriched.ttl` | *(not cached — read directly)* | The transformed railML data being validated |
+| 2 | **ERA ReferenceBorderPoint instances** | SPARQL CONSTRUCT on `https://data-interop.era.europa.eu/api/sparql` — all `era:ReferenceBorderPoint` triples | `downloads/reference-border-points.ttl` | Required for `era:referenceBorderPoint` constraints (the referenced resources are managed by ERA, not locally) |
+| 3 | **ERA OWL ontology** | `https://gitlab.com/era-europa-eu/.../ontology.ttl` (main branch) | `downloads/era-ontology.ttl` | Provides class/property definitions needed for type-checking constraints |
+| 4 | **ERA SKOS concept schemes** | All `*.ttl` files under `era-skos/` in the ERA ontology GitLab repository, merged into a single file | `downloads/merged-skos.ttl` (individual files as `downloads/skos-*.ttl`) | Required for SKOS vocabulary constraints (e.g. `era:opType`, `era:trainDetectionSystem` must reference known SKOS concepts) |
+
+**SHACL Shapes (loaded into a named graph, not the data graph):**
+- [ERA-RINF-shapes.ttl](https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/ERA-RINF-shapes.ttl) — pinned to a specific commit; cached as `downloads/ERA-RINF-shapes.ttl`
+
+---
+
 **Input:**
-- `../03-post-process/era-graph-enriched.ttl` - The enriched ERA ontology graph
+- `../03-post-process/output/era-graph-enriched.ttl` - The enriched ERA ontology graph
 
 **SHACL Shapes (downloaded automatically):**
 - [ERA-RINF-shapes.ttl](https://gitlab.com/era-europa-eu/public/interoperable-data-programme/era-ontology/era-ontology/-/blob/main/era-shacl/ERA-RINF-shapes.ttl) — includes SKOS concept validation constraints (previously a separate `SKOS-shapes.ttl`, now merged)
