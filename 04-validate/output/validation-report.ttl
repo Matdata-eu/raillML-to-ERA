@@ -6,24 +6,24 @@
 
 <urn:maplib:report> a sh:ValidationReport ;
     sh:conforms false ;
-    sh:result <urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0>,
-        <urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> .
+    sh:result <urn:maplib:treccab908-9b00-4aef-a0ea-c064685bbb77_0>,
+        <urn:maplib:treccab908-9b00-4aef-a0ea-c064685bbb77_1> .
 
-<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_0> a sh:ValidationResult ;
-    sh:focusNode <http://data.europa.eu/949/bridgeWindRestriction> ;
-    sh:resultMessage "Resource must have at least one rdf:type" ;
-    sh:resultPath rdf:type ;
-    sh:resultSeverity sh:Warning ;
-    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:N2ffa0a9106d444cc9229b4c67f629ed1 ;
-    ns1:resultConforms false .
-
-<urn:maplib:tr4813ea0a-9509-42e8-8d74-06096ebf5b55_1> a sh:ValidationResult ;
+<urn:maplib:treccab908-9b00-4aef-a0ea-c064685bbb77_0> a sh:ValidationResult ;
     sh:focusNode prov: ;
     sh:resultMessage "Resource must have at least one rdf:type" ;
     sh:resultPath rdf:type ;
     sh:resultSeverity sh:Warning ;
     sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
-    sh:sourceShape _:N2ffa0a9106d444cc9229b4c67f629ed1 ;
+    sh:sourceShape _:N2f7c8c2731e442cc91d07566b3bc2008 ;
+    ns1:resultConforms false .
+
+<urn:maplib:treccab908-9b00-4aef-a0ea-c064685bbb77_1> a sh:ValidationResult ;
+    sh:focusNode <http://data.europa.eu/949/bridgeWindRestriction> ;
+    sh:resultMessage "Resource must have at least one rdf:type" ;
+    sh:resultPath rdf:type ;
+    sh:resultSeverity sh:Warning ;
+    sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+    sh:sourceShape _:N2f7c8c2731e442cc91d07566b3bc2008 ;
     ns1:resultConforms false .
 
