@@ -33,8 +33,57 @@ print(f"\nLoading data from {data_file}...")
 print("  Loading main data...")
 m.read(data_file, format='turtle')
 
+# Fetch ReferenceBorderPoint triples from the ERA endpoint and add to the data graph
+era_sparql_endpoint = "https://data-interop.era.europa.eu/api/sparql"
+reference_border_points_file = download_dir / "reference-border-points.ttl"
+
+if reference_border_points_file.exists():
+    print(f"\nReferenceBorderPoint data already exists at {reference_border_points_file}")
+else:
+    print("\nFetching ReferenceBorderPoint data from ERA endpoint...")
+    rbp_construct_query = """
+PREFIX gsp: <http://www.opengis.net/ont/geosparql#>
+PREFIX era: <http://data.europa.eu/949/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+CONSTRUCT {
+  ?s ?p ?o .
+  ?o ?pp ?oo .
+}
+WHERE {
+  ?s a era:ReferenceBorderPoint ;
+     ?p ?o .
+  OPTIONAL {
+    ?o ?pp ?oo .
+  }
+}
+"""
+    try:
+        response = requests.get(
+            era_sparql_endpoint,
+            params={"query": rbp_construct_query},
+            headers={"Accept": "text/turtle"},
+            timeout=60,
+        )
+        response.raise_for_status()
+        reference_border_points_file.write_bytes(response.content)
+        print(f"  ✓ Saved ReferenceBorderPoint data to {reference_border_points_file}")
+    except Exception as e:
+        print(f"  ⚠️  Warning: Failed to fetch ReferenceBorderPoint data: {e}")
+        print("     Validation of era:referenceBorderPoint may be incomplete")
+        reference_border_points_file = None
+
+if reference_border_points_file and reference_border_points_file.exists():
+    print("  Loading ReferenceBorderPoint data into data graph...")
+    try:
+        m.read(str(reference_border_points_file), format="turtle")
+        print("  ✓ Loaded ReferenceBorderPoint data")
+    except Exception as e:
+        print(f"  ⚠️  Warning: Failed to load ReferenceBorderPoint data: {e}")
+
 if era_rinf_shapes_file.exists():
-    print(f"ERA RINF SHACL shapes already exists at {era_rinf_shapes_file}")
+    print(f"\nERA RINF SHACL shapes already exists at {era_rinf_shapes_file}")
 else:
     print("Downloading ERA RINF SHACL shapes...")
     urllib.request.urlretrieve(era_rinf_shapes_url, era_rinf_shapes_file)
