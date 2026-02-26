@@ -1,0 +1,9 @@
+PREFIX era: <http://data.europa.eu/949/>
+
+INSERT {
+?netref a era:NetBasicReference.
+}
+WHERE {
+    VALUES ?subclass { era:NetPointReference era:NetLinearReference era:NetAreaReference }
+    ?netref a ?subclass .
+}
