@@ -41,6 +41,9 @@ CONSTRUCT {
          era:referenceBorderPoint ?refBorderPoint ;
          . 
          
+ # This should not be necesary since the reference border point is an ERA managed resource.
+ # Because we can't use an existing borderpoint from the ERA graph, we are declaring our own here.
+ # But you should reuse existing ERA resources for this.
  ?refBorderPoint a era:ReferenceBorderPoint ;
     era:borderPointId ?uopid ;
 }
