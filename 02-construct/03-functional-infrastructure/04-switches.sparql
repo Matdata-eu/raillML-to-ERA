@@ -85,7 +85,9 @@ CONSTRUCT {
   # KilometricPost (shared resource)
   ?kmPost a era:KilometricPost ;
           era:hasLRS ?eraLPS ;
-          era:kilometer ?kmNumber .
+          era:kilometer ?kmNumber ;
+          era:kmPostName ?kmString ;
+          rdfs:label ?kmLangString .
 }
 WHERE {
   # Get all switches
@@ -156,6 +158,8 @@ WHERE {
     
     BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", 
                      ?positioningSystemRef, "_km_", STR(?kmNumber))) AS ?kmPost)
+    BIND (STR(?kmNumber) AS ?kmString)
+    BIND (STRLANG(STR(?kmNumber), "en") AS ?kmLangString)
     
     BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystems_", 
                      ?positioningSystemRef)) AS ?eraLPS)

@@ -2,7 +2,7 @@
 
 **Status:** ❌ FAILED
 
-**Date:** 2026-02-25 23:47:02
+**Date:** 2026-02-27 23:35:22
 
 Found 1 types of violations
 
@@ -10,7 +10,7 @@ Found 1 types of violations
 
 | Level | Property Path | Constraint Component | Violations | Message | Example Node |
 |-------|---------------|---------------------|------------|---------|-------------|
-| `<sh:Warning>` | `<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>` | `<sh:MinCountConstraintComponent>` | 2 | Resource must have at least one rdf:type | `<http://www.w3.org/ns/prov#>` |
+| `<sh:Warning>` | `<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>` | `<sh:MinCountConstraintComponent>` | 2 | Resource must have at least one rdf:type | `<era:bridgeWindRestriction>` |
 
 ## Recommendations
 

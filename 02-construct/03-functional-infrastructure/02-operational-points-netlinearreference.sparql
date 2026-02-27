@@ -94,7 +94,9 @@ CONSTRUCT {
 
   ?startKmPost a era:KilometricPost ;
                era:hasLRS ?eraLPS ;
-               era:kilometer ?startKmNumber .
+               era:kilometer ?startKmNumber ;
+               era:kmPostName ?startKmString ;
+               rdfs:label ?startKmLangString .
 
   # End point
   ?endPointRef a era:NetPointReference ;
@@ -111,7 +113,9 @@ CONSTRUCT {
 
   ?endKmPost a era:KilometricPost ;
              era:hasLRS ?eraLPS ;
-             era:kilometer ?endKmNumber .
+             era:kilometer ?endKmNumber ;
+             era:kmPostName ?endKmString ;
+             rdfs:label ?endKmLangString .
 }
 WHERE {
   # Get all operational points
@@ -257,6 +261,10 @@ WHERE {
 
   BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?oppId, "_", ?microElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
   BIND (IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?posSystemRef, "_km_", STR(?endKmNumber))) AS ?endKmPost)
+  BIND (STR(?startKmNumber) AS ?startKmString)
+  BIND (STRLANG(STR(?startKmNumber), "en") AS ?startKmLangString)
+  BIND (STR(?endKmNumber) AS ?endKmString)
+  BIND (STRLANG(STR(?endKmNumber), "en") AS ?endKmLangString)
   
   # Dereference LinearPositioningSystem
   ?lps a railml:linearPositioningSystem ;

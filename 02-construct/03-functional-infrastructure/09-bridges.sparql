@@ -114,7 +114,9 @@ CONSTRUCT {
   # Start KilometricPost
   ?startKmPost a era:KilometricPost ;
                era:hasLRS ?eraLPS ;
-               era:kilometer ?startKmNumber .
+               era:kilometer ?startKmNumber ;
+               era:kmPostName ?startKmString ;
+               rdfs:label ?startKmLangString .
 
   # End point NetPointReference  
   ?endPointRef a era:NetPointReference ;
@@ -134,7 +136,9 @@ CONSTRUCT {
   # End KilometricPost
   ?endKmPost a era:KilometricPost ;
              era:hasLRS ?eraLPS ;
-             era:kilometer ?endKmNumber .
+             era:kilometer ?endKmNumber ;
+             era:kmPostName ?endKmString ;
+             rdfs:label ?endKmLangString .
 }
 WHERE {
   # Get all bridges (underCrossing with constructionType="bridge" or "movableBridge")
@@ -267,6 +271,10 @@ WHERE {
   
   # Mint end LinearPositioningSystemCoordinate URI (include netElementRef)
   BIND (IRI(CONCAT("https://data.matdata.eu/_linearPositioningSystemCoordinates_", ?bridgeId, "_segment_", STR(?sequence), "_", ?netElementRef, "_end_", ?posSystemRef, "_", STR(?endMeasure))) AS ?endLrsCoord)
+  BIND (STR(?startKmNumber) AS ?startKmString)
+  BIND (STRLANG(STR(?startKmNumber), "en") AS ?startKmLangString)
+  BIND (STR(?endKmNumber) AS ?endKmString)
+  BIND (STRLANG(STR(?endKmNumber), "en") AS ?endKmLangString)
 
 }
 ORDER BY ?bridgeId ?sequence

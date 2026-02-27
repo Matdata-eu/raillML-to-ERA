@@ -1,3 +1,4 @@
+PREFIX :             <workspace:/02-construct/03-functional-infrastructure/01-tracks-reference.sparql#>
 PREFIX country:      <http://publications.europa.eu/resource/authority/country/>
 PREFIX dct:          <http://purl.org/dc/terms/>
 PREFIX era:          <http://data.europa.eu/949/>
@@ -1050,7 +1051,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_294>
         rdf:type                   era:SectionOfLine;
-        rdfs:label                 "OGR-OXK"@no;
+        rdfs:label                 "OGR-OXK"@en , "OGR-OXK"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc18> , <https://data.matdata.eu/_tracks_trc34>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
@@ -1070,7 +1071,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_724>
         rdf:type                   era:SectionOfLine;
-        rdfs:label                 "OC-OGR"@no;
+        rdfs:label                 "OC-OGR"@en , "OC-OGR"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc36>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
@@ -1085,7 +1086,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_16>
         rdf:type                   era:SectionOfLine;
-        rdfs:label                 "OAR-OC"@no;
+        rdfs:label                 "OAR-OC"@en , "OAR-OC"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc2>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
@@ -1105,7 +1106,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_sectionsOfLine_ls_ne_ml_471>
         rdf:type                   era:SectionOfLine;
-        rdfs:label                 "OXK-OGR"@no;
+        rdfs:label                 "OXK-OGR"@en , "OXK-OGR"@no;
         era:hasPart                <https://data.matdata.eu/_tracks_trc33>;
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
@@ -1175,10 +1176,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_16> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_2.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  2.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "2.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   2.0e0;
+        era:kmPostName  "2.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_tunnels_tun199>
         rdf:type                      era:Tunnel;
@@ -1290,10 +1293,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_10.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  10.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "10.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   10.0e0;
+        era:kmPostName  "10.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_tun199_segment_1_ne_565_start_LPS_8176_10250.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -1427,10 +1432,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_13.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  13.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "13.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   13.0e0;
+        era:kmPostName  "13.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_bri200_segment_1_ne_565_end_LPS_8176_13100.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -2648,10 +2655,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_561> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_11.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  11.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "11.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   11.0e0;
+        era:kmPostName  "11.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sig786_LPS_8176_11000.0e0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -2824,10 +2833,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_55> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_1.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  1.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "1.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   1.0e0;
+        era:kmPostName  "1.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_switches_swi123>
         rdf:type                   era:Switch;
@@ -3293,10 +3304,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_7>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  7.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "7"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   7.0e0;
+        era:kmPostName  "7";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_ple194_1_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -3789,6 +3802,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_platformEdges_ple193>
         rdf:type                   era:PlatformEdge;
+        rdfs:label                 "ple193";
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple193_1>;
@@ -3799,6 +3813,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_platformEdges_ple194>
         rdf:type                   era:PlatformEdge;
+        rdfs:label                 "ple194";
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple194_1>;
@@ -3809,6 +3824,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_platformEdges_ple388>
         rdf:type                   era:PlatformEdge;
+        rdfs:label                 "ple388";
         era:inCountry              country:NOR;
         era:infrastructureManager  <http://data.europa.eu/949/organisations/0076_IM>;
         era:netReference           <https://data.matdata.eu/_netLinearReferences_ple388_1>;
@@ -4035,10 +4051,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_565> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_7.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  7.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "7.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   7.0e0;
+        era:kmPostName  "7.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_sl192_sloc01_8176_LPS_8176_7800.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -4126,10 +4144,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  905.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_7.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  7.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "7.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   7.0e0;
+        era:kmPostName  "7.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netPointReferences_sl379_sloc01_9333>
         rdf:type               era:NetBasicReference , era:NetPointReference;
@@ -4292,10 +4312,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  203.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_8.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  8.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "8.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   8.0e0;
+        era:kmPostName  "8.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netAreaReferences_opp141_ne_ms_141>
         rdf:type         era:NetBasicReference , era:NetAreaReference;
@@ -4798,10 +4820,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  692.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_-1.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  -1.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "-1.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   -1.0e0;
+        era:kmPostName  "-1.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netAreaReferences_opp142_ne_ms_142_list_8>
         rdf:type   rdf:List;
@@ -4897,10 +4921,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_247> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_0.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  0.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "0.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   0.0e0;
+        era:kmPostName  "0.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_247_end_LPS_9333_417.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5034,10 +5060,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_258> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_0.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  0.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "0.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   0.0e0;
+        era:kmPostName  "0.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_258_start_LPS_8176_527.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5094,10 +5122,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  965.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_3.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  3.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "3.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   3.0e0;
+        era:kmPostName  "3.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netPointReferences_opp142_ne_31_end>
         rdf:type               era:NetBasicReference , era:NetPointReference;
@@ -5209,10 +5239,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_64> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_5.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  5.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "5.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   5.0e0;
+        era:kmPostName  "5.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_64_end_LPS_8176_5198.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5313,10 +5345,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_90> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_4.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  4.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "4.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   4.0e0;
+        era:kmPostName  "4.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp142_ne_90_end_LPS_8176_4328.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5716,10 +5750,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_336> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_54.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
-        era:kilometer  54.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "54.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
+        era:kilometer   54.0e0;
+        era:kmPostName  "54.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp373_ne_336_end_LPS_2444_54020.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -5820,10 +5856,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_344> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_53.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
-        era:kilometer  53.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "53.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
+        era:kilometer   53.0e0;
+        era:kmPostName  "53.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp373_ne_344_end_LPS_2444_53665.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6120,10 +6158,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_365> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_52.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
-        era:kilometer  52.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "52.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
+        era:kilometer   52.0e0;
+        era:kmPostName  "52.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp373_ne_365_end_LPS_2444_52277.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6360,10 +6400,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_591> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_5.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  5.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "5.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   5.0e0;
+        era:kmPostName  "5.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp375_ne_591_start_LPS_9333_5385.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6431,10 +6473,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_594> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_6.0e0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  6.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "6.0e0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   6.0e0;
+        era:kmPostName  "6.0e0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_opp375_ne_594_end_LPS_9333_6505.0>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -6587,7 +6631,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:netReference           <https://data.matdata.eu/_netPointReferences_sl741_sloc01_9333>;
         era:opName                 "Kudowa chranice"@en , "Kudowa chranice"@no;
         era:opType                 <http://data.europa.eu/949/concepts/op-types/90>;
-        era:referenceBorderPoint   <http://data.europa.eu/949/referenceBorderPoints/EU00107>;
+        era:referenceBorderPoint   <http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>;
         era:uopid                  "EUOIB";
         era:validity               <https://data.matdata.eu/_validity_2025-01-01>;
         geo:hasGeometry            <https://data.matdata.eu/_geometry_point_60ae92d0> .
@@ -6745,10 +6789,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  692.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_-1>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  -1.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "-1"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   -1.0e0;
+        era:kmPostName  "-1";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netLinearReferences_trc12_1>
         rdf:type         era:NetBasicReference , era:NetLinearReference;
@@ -7084,10 +7130,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:offsetFromKilometricPost  203.0e0 .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_8>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  8.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "8"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   8.0e0;
+        era:kmPostName  "8";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_netLinearReferences_trc19_2>
         rdf:type         era:NetBasicReference , era:NetLinearReference;
@@ -7574,10 +7622,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_344> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_53>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
-        era:kilometer  53.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "53"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
+        era:kilometer   53.0e0;
+        era:kmPostName  "53";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc28_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7657,10 +7707,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_31> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_3>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  3.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "3"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   3.0e0;
+        era:kmPostName  "3";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc3_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7826,10 +7878,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_365> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_52>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
-        era:kilometer  52.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "52"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
+        era:kilometer   52.0e0;
+        era:kmPostName  "52";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc32_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7876,10 +7930,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_471> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_2444_km_54>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
-        era:kilometer  54.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "54"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_2444>;
+        era:kilometer   54.0e0;
+        era:kmPostName  "54";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc33_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7926,10 +7982,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_475> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_7>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  7.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "7"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   7.0e0;
+        era:kmPostName  "7";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc34_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -7976,10 +8034,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_591> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_6>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  6.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "6"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   6.0e0;
+        era:kmPostName  "6";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc35_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8010,10 +8070,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_724> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  0.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   0.0e0;
+        era:kmPostName  "0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc36_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8032,10 +8094,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_724> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_9333_km_5>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
-        era:kilometer  5.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "5"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_9333>;
+        era:kilometer   5.0e0;
+        era:kmPostName  "5";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc36_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8082,10 +8146,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_39> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_0>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  0.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "0"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   0.0e0;
+        era:kmPostName  "0";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc4_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8204,10 +8270,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_90> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_4>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  4.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "4"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   4.0e0;
+        era:kmPostName  "4";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc7_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8313,10 +8381,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_163> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_5>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  5.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "5"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   5.0e0;
+        era:kmPostName  "5";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc9_2_start>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8340,10 +8410,12 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         era:onLinearElement   <https://data.matdata.eu/_netElements_ne_561> .
 
 <https://data.matdata.eu/_kilometricPosts_LPS_8176_km_14>
-        rdf:type       era:KilometricPost;
-        era:hasLRS     <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
-        era:kilometer  14.0e0;
-        era:validity   <https://data.matdata.eu/_validity_2025-01-01> .
+        rdf:type        era:KilometricPost;
+        rdfs:label      "14"@en;
+        era:hasLRS      <https://data.matdata.eu/_linearPositioningSystems_LPS_8176>;
+        era:kilometer   14.0e0;
+        era:kmPostName  "14";
+        era:validity    <https://data.matdata.eu/_validity_2025-01-01> .
 
 <https://data.matdata.eu/_linearPositioningSystemCoordinates_trc9_2_end>
         rdf:type                      era:LinearPositioningSystemCoordinate;
@@ -8439,6 +8511,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_tracks_trc12>
         rdf:type                        era:RunningTrack , era:Track;
+        rdfs:label                      "trc12";
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc8>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp772>;
         era:inCountry                   country:NOR;
@@ -8466,7 +8539,8 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
                 <http://data.europa.eu/949/concepts/lineside-distance-indication-positioning/02> .
 
 <https://data.matdata.eu/_tracks_trc13>
-        rdf:type                        era:Track , era:RunningTrack;
+        rdf:type                        era:RunningTrack , era:Track;
+        rdfs:label                      "trc13";
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc432>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp687>;
         era:inCountry                   country:NOR;
@@ -8493,6 +8567,7 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
 
 <https://data.matdata.eu/_tracks_trc14>
         rdf:type                        era:Track , era:RunningTrack;
+        rdfs:label                      "trc14";
         era:contactLineSystem           <https://data.matdata.eu/_contactLineSystems_elc432>;
         era:etcs                        <https://data.matdata.eu/_etcs_trp687>;
         era:inCountry                   country:NOR;
@@ -10495,6 +10570,11 @@ PREFIX xyz:          <http://sparql.xyz/facade-x/data/>
         rdf:type        era:LinearPositioningSystem;
         rdfs:label      "2444"@en;
         dct:identifier  "LPS_2444" .
+
+<http://data.europa.eu/949/functionalInfrastructure/borderpoint/opp740>
+        rdf:type           era:ReferenceBorderPoint;
+        era:borderPointId  "EUOIB";
+        geo:hasGeometry    <https://data.matdata.eu/_geometry_point_60ae92d0> .
 
 country:NOR  skos:inScheme  <http://publications.europa.eu/resource/authority/country> .
 

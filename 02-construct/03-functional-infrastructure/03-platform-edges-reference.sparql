@@ -78,7 +78,9 @@ CONSTRUCT {
   # Start KilometricPost
   ?startKmPost a era:KilometricPost ;
                era:hasLRS ?startEraLPS ;
-               era:kilometer ?startKmNumber .
+               era:kilometer ?startKmNumber ;
+               era:kmPostName ?startKmString ;
+               rdfs:label ?startKmLangString .
 
 
 
@@ -100,7 +102,9 @@ CONSTRUCT {
   # End KilometricPost
   ?endKmPost a era:KilometricPost ;
              era:hasLRS ?endEraLPS ;
-             era:kilometer ?endKmNumber .
+             era:kilometer ?endKmNumber ;
+             era:kmPostName ?endKmString ;
+             rdfs:label ?endKmLangString .
 }
 WHERE {
   # Get all platform edges
@@ -168,6 +172,8 @@ WHERE {
   BIND (IF(?assocNodeOrder = 1, xsd:integer(FLOOR(?startMeasureDouble / 1000.0)), ?UNDEF) AS ?startKmNumber)
   BIND (IF(?assocNodeOrder = 1, ?startMeasureDouble - (?startKmNumber * 1000.0), ?UNDEF) AS ?startKmOffset)
   BIND (IF(?assocNodeOrder = 1, IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?startPositioningSystemRef, "_km_", STR(?startKmNumber))), ?UNDEF) AS ?startKmPost)
+  BIND (IF(?assocNodeOrder = 1, STR(?startKmNumber), ?UNDEF) AS ?startKmString)
+  BIND (IF(?assocNodeOrder = 1, STRLANG(STR(?startKmNumber), "en"), ?UNDEF) AS ?startKmLangString)
 
   # Dereference LinearPositioningSystem
   ?startLps a railml:linearPositioningSystem ;
@@ -197,6 +203,8 @@ WHERE {
   BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, xsd:integer(FLOOR(?endMeasureDouble / 1000.0)), ?UNDEF) AS ?endKmNumber)
   BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, ?endMeasureDouble - (?endKmNumber * 1000.0), ?UNDEF) AS ?endKmOffset)
   BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, IRI(CONCAT("https://data.matdata.eu/_kilometricPosts_", ?endPositioningSystemRef, "_km_", STR(?endKmNumber))), ?UNDEF) AS ?endKmPost)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, STR(?endKmNumber), ?UNDEF) AS ?endKmString)
+  BIND (IF(?assocNodeOrder = ?maxAssocNodeOrder, STRLANG(STR(?endKmNumber), "en"), ?UNDEF) AS ?endKmLangString)
 
   # Dereference LinearPositioningSystem
   ?endLps a railml:linearPositioningSystem ;
