@@ -31,7 +31,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 CONSTRUCT {
   ?eraSol a era:SectionOfLine ;
-          rdfs:label ?lineName;
+          rdfs:label ?lineName, ?lineNameEn;
           era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
           era:inCountry country:NOR ;
           era:solNature ?eraSolNature ;
@@ -57,6 +57,7 @@ WHERE {
       ?nameNode xyz:language ?lang
     }
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?lineName)
+    BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?lineNameEn)
   }
 
   # Mint ERA SectionOfLine URI

@@ -47,7 +47,7 @@ CONSTRUCT {
   ?eraTrack a ?trackClass, era:Track ;
             era:trackId ?runningTrackId ; 
             era:sidingId ?sidingTrackId ;
-            rdfs:label ?trackName , ?trackNameEn ;
+            rdfs:label ?trackName , ?trackNameEn, ?trackNameEnFallback ;
             era:inCountry country:NOR ;
             era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> ;
             era:linesideDistanceIndication ?ldi ;
@@ -102,6 +102,7 @@ WHERE {
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?trackName)
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?trackNameEn) # need an English name
   }
+  BIND(IF(BOUND(?trackNameEn), ?UNDEF, STR(?trackId)) AS ?trackNameEnFallback) # fallback to trackId as name if no name provided
 
   # Get loading gauge via shared netElement references (optional)
   # Tracks and loading gauges are linked via common netElementRef values

@@ -73,7 +73,7 @@ CONSTRUCT {
   # Platform Edge resource
   ?eraPlatformEdge a era:PlatformEdge ;
                    era:platformId ?finalPlatformId ;
-                   rdfs:label ?platformEdgeName , ?platformEdgeNameEn ;
+                   rdfs:label ?platformEdgeName , ?platformEdgeNameEn, ?platformEdgeNameEnFallback ;
                    era:platformHeight ?platformHeightConcept ;
                    era:inCountry country:NOR ;
                    era:infrastructureManager <http://data.europa.eu/949/organisations/0076_IM> .
@@ -118,6 +118,7 @@ WHERE {
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,?lang),?nameValue) AS ?platformEdgeName)
     BIND (IF(BOUND(?lang),STRLANG(?nameValue,"en"),?nameValue) AS ?platformEdgeNameEn) # need an English name
   }
+  BIND(IF(BOUND(?platformEdgeNameEn), ?UNDEF, STR(?platformEdgeId)) AS ?platformEdgeNameEnFallback) # fallback to platformEdgeId as name if no name provided
 
   # Get platform name via belongsToPlatform relationship (optional)
   OPTIONAL {
